@@ -2,9 +2,9 @@
 
 Team Members:
 
-* Tegan Thomas
-* Jack Weitzner
-* Nina Latimore
+* [Tegan Thomas]([https://github.com/thomas-03])
+* [Jack Weitzner]([https://github.com/JackWeitzner])
+* [Nina Latimore]([https://github.com/nnltmr])
 *
 
 For each iteration you should answer the following:
