@@ -2,9 +2,9 @@
 
 Team Members:
 
-*
-*
-*
+* Tegan Thomas
+* Jack Weitzner
+* Nina Latimore
 *
 
 For each iteration you should answer the following:
