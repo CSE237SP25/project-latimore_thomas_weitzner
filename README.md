@@ -5,7 +5,7 @@ Team Members:
 * [Tegan Thomas]([https://github.com/thomas-03])
 * [Jack Weitzner]([https://github.com/JackWeitzner])
 * [Nina Latimore]([https://github.com/nnltmr])
-*
+* [Peyton Rodriguez](https://github.com/PeytonRod)
 
 For each iteration you should answer the following:
 
