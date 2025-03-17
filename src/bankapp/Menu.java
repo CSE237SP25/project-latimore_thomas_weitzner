@@ -17,7 +17,7 @@ public class Menu {
 
 	public Menu(){
 		this.inputScanner = new Scanner(System.in);
-		this.userAccount = new BankAccount();
+		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
 		System.out.println("Hello! Welcome to our bank app!");
 	}
 
@@ -60,7 +60,7 @@ public class Menu {
 	}
 	
 	public void createAccount() {
-		this.userAccount = new BankAccount();
+		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
