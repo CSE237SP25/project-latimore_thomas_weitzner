@@ -1,10 +1,13 @@
 package bankapp;
 
 public class BankAccount {
-
+	
+	private static int nextAccountNumber = 1;
+	private int accountNumber;
 	private double balance;
 	
 	public BankAccount() {
+		this.accountNumber = nextAccountNumber++;
 		this.balance = 0;
 	}
 	
@@ -17,5 +20,9 @@ public class BankAccount {
 	
 	public double getCurrentBalance() {
 		return this.balance;
+	}
+	
+	public int getAccountNumber() {
+		return this.accountNumber;
 	}
 }

@@ -24,6 +24,7 @@ public class Menu {
 	public void provideUserChoices(){
 		System.out.println("Would you like to: ");
 		System.out.println("a.) Deposit money");
+		System.out.println("b.) Create a new account");
 	}
 
 	public String getUserInput(){
@@ -34,6 +35,9 @@ public class Menu {
 		switch(userInput.toLowerCase()){
 			case "a":
 				deposit();
+				break;
+			case "b":
+				createAccount();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -53,5 +57,11 @@ public class Menu {
 				}
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
+	}
+	
+	public void createAccount() {
+		this.userAccount = new BankAccount();
+		System.out.println("Your new account has been created");
+		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
 }
