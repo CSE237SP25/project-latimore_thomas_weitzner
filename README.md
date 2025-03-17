@@ -2,10 +2,10 @@
 
 Team Members:
 
-* [Tegan Thomas]([https://github.com/thomas-03])
-* [Jack Weitzner]([https://github.com/JackWeitzner])
-* [Nina Latimore]([https://github.com/nnltmr])
-* [Peyton Rodriguez](https://github.com/PeytonRod)
+* [Tegan Thomas](https://github.com/thomas-03) [203-200-9122]
+* [Jack Weitzner](https://github.com/JackWeitzner) [301-337-1008]
+* [Nina Latimore](https://github.com/nnltmr) [815-909-4472]
+* [Peyton Rodriguez](https://github.com/PeytonRod) [224-545-4178]
 
 For each iteration you should answer the following:
 
