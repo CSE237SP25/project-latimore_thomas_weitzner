@@ -24,6 +24,7 @@ public class Menu {
 	public void provideUserChoices(){
 		System.out.println("Would you like to: ");
 		System.out.println("a.) Deposit money");
+		System.out.println("b.) Check Balance");
 	}
 
 	public String getUserInput(){
@@ -34,6 +35,9 @@ public class Menu {
 		switch(userInput.toLowerCase()){
 			case "a":
 				deposit();
+				break;
+			case "b":
+				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
