@@ -24,7 +24,8 @@ public class Menu {
 	public void provideUserChoices(){
 		System.out.println("Would you like to: ");
 		System.out.println("a.) Deposit money");
-		System.out.println("b.) Create a new account");
+		System.out.println("b.) Check Balance");
+		System.out.println("c.) Create a new account");
 	}
 
 	public String getUserInput(){
@@ -37,6 +38,9 @@ public class Menu {
 				deposit();
 				break;
 			case "b":
+				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+				break;
+			case "c":
 				createAccount();
 				break;
 			default:
