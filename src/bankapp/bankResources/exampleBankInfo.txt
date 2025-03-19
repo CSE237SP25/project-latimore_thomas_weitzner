@@ -1,0 +1,3 @@
+John Doe,1,100.0
+Jane Doe,2,17.50
+Jack Doe,3,2000.0
