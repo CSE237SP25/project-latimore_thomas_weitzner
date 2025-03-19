@@ -20,6 +20,7 @@ public class Menu {
 		this.inputScanner = new Scanner(System.in);
 		this.bank = new Bank(); // Initialize the bank object
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		bank.addAccount(userAccount);
 		System.out.println("Hello! Welcome to our bank app!");
 	}
 

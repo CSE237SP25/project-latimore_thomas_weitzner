@@ -1,1 +1,4 @@
-something
+Placeholder Name,1,14.0
+Placeholder Name,2,19.0
+Placeholder Name,3,200.0
+Placeholder Name,4,9.0
