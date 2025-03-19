@@ -18,10 +18,13 @@ public class Menu {
 		}
 	}
 
-	public Menu(){
-		this.inputScanner = new Scanner(System.in);
-		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
-		System.out.println("Hello! Welcome to our bank app!");
+	
+	public Menu() {
+	    this.inputScanner = new Scanner(System.in);
+	    this.userAccount = new BankAccount("Placeholder Name");
+	    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
+	    this.user.addAccount(userAccount);
+	    System.out.println("Hello! Welcome to our bank app!");
 	}
 
 	public void provideUserChoices(){
