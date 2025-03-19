@@ -38,4 +38,8 @@ public class BankAccount {
 	public String getAccountHolderName() {
 		return this.accountHolderName;
 	}
+	
+	public String setAccountHolderName(String accountHolderName) {
+		return this.accountHolderName = accountHolderName;
+	}
 }
