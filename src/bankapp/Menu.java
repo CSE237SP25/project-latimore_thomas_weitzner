@@ -17,7 +17,7 @@ public class Menu {
 
 	public Menu(){
 		this.inputScanner = new Scanner(System.in);
-		this.userAccount = new BankAccount();
+		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
 		System.out.println("Hello! Welcome to our bank app!");
 	}
 
@@ -25,6 +25,8 @@ public class Menu {
 		System.out.println("Would you like to: ");
 		System.out.println("a.) Deposit money");
 		System.out.println("b.) Withdraw money");
+		System.out.println("c.) Check Balance");
+		System.out.println("d.) Create a new account");
 	}
 
 	public String getUserInput(){
@@ -38,6 +40,12 @@ public class Menu {
 				break;
 			case "b":
 				withdraw();
+				break;
+			case "c":
+				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+				break;
+			case "d":
+				createAccount();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -58,7 +66,13 @@ public class Menu {
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
-
+	
+	public void createAccount() {
+		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		System.out.println("Your new account has been created");
+		System.out.println("Your account number is: " + userAccount.getAccountNumber());
+	}
+	
 	public void withdraw(){
 		System.out.println("How much would you like to withdraw?");
 		boolean validWithdraw = false;

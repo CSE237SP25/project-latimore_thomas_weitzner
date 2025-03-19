@@ -1,11 +1,16 @@
 package bankapp;
 
 public class BankAccount {
-
-	private double balance;
 	
-	public BankAccount() {
+	private static int nextAccountNumber = 1;
+	private int accountNumber;
+	private double balance;
+	private String accountHolderName;
+	
+	public BankAccount(String accountHolderName) {
+		this.accountNumber = nextAccountNumber++;
 		this.balance = 0;
+		this.accountHolderName = accountHolderName;
 	}
 	
 	public void deposit(double amount) {
@@ -24,5 +29,13 @@ public class BankAccount {
 	
 	public double getCurrentBalance() {
 		return this.balance;
+	}
+	
+	public int getAccountNumber() {
+		return this.accountNumber;
+	}
+	
+	public String getAccountHolderName() {
+		return this.accountHolderName;
 	}
 }
