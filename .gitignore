@@ -27,3 +27,4 @@ replay_pid*
 #Jack added this stuff
 README.md
 *.project
+/bin/
