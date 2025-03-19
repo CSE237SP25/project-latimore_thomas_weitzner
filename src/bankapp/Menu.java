@@ -1,10 +1,13 @@
 package bankapp;
 import java.util.Scanner;
+import bankapp.BankAccount;
+import bankapp.User;
 
 public class Menu {
 
 	private Scanner inputScanner;
 	private BankAccount userAccount;
+	private User user;
 
 	public static void main(String[] args) {
 		Menu menu = new Menu();
@@ -27,6 +30,7 @@ public class Menu {
 		System.out.println("b.) Withdraw money");
 		System.out.println("c.) Check Balance");
 		System.out.println("d.) Create a new account");
+		System.out.println("e.) Display all accounts");
 	}
 
 	public String getUserInput(){
@@ -47,8 +51,20 @@ public class Menu {
 			case "d":
 				createAccount();
 				break;
+			case "e":
+				displayAccounts();
+				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
+		}
+	}
+	
+	private void displayAccounts() {
+		for (BankAccount account : user.getAccounts()) {
+			System.out.println("Account number: " + account.getAccountNumber());
+			System.out.println("Account name: " + account.getAccountName());
+			System.out.println("Balance: " + account.getCurrentBalance());
+			System.out.println();
 		}
 	}
 
