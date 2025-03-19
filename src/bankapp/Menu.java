@@ -63,6 +63,11 @@ public class Menu {
 	}
 	
 	private void displayAccounts() {
+	    if (user == null) {
+	        System.out.println("Error: No user is currently logged in!");
+	        return;
+	    }
+	    System.out.println("Here are all of your accounts: ");
 		for (BankAccount account : user.getAccounts()) {
 			System.out.println("Account number: " + account.getAccountNumber());
 			System.out.println("Account name: " + account.getAccountName());
@@ -88,6 +93,7 @@ public class Menu {
 	
 	public void createAccount() {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		this.user.addAccount(userAccount);
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
