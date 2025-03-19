@@ -27,6 +27,7 @@ public class Menu {
 		System.out.println("b.) Withdraw money");
 		System.out.println("c.) Check Balance");
 		System.out.println("d.) Create a new account");
+		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
 	}
 
 	public String getUserInput(){
@@ -46,6 +47,9 @@ public class Menu {
 				break;
 			case "d":
 				createAccount();
+				break;
+			case "f":
+				renameAccount();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -87,5 +91,12 @@ public class Menu {
 				}
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
+	}
+	
+	public void renameAccount() {
+		System.out.println("What would you like to rename your account to?");
+		String newName = getUserInput();
+		userAccount.setAccountHolderName(newName);
+		System.out.println("Your account has been renamed to: " + newName);
 	}
 }
