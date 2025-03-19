@@ -5,6 +5,7 @@ public class Menu {
 
 	private Scanner inputScanner;
 	private BankAccount userAccount;
+	private final Bank bank; // Assuming you have a Bank class to manage accounts
 
 	public static void main(String[] args) {
 		Menu menu = new Menu();
@@ -17,6 +18,7 @@ public class Menu {
 
 	public Menu(){
 		this.inputScanner = new Scanner(System.in);
+		this.bank = new Bank(); // Initialize the bank object
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
 		System.out.println("Hello! Welcome to our bank app!");
 	}
@@ -55,6 +57,7 @@ public class Menu {
 			try {
 					double depositAmount = Double.parseDouble(getUserInput());
 					userAccount.deposit(depositAmount);
+					bank.saveAccountsToFile(); // Save the updated account info to file
 					validDeposit = true;
 				} catch (IllegalArgumentException e) {
 					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0.");
@@ -65,6 +68,7 @@ public class Menu {
 	
 	public void createAccount() {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		bank.addAccount(userAccount); // Add the new account to the bank
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
