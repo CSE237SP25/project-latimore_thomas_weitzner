@@ -24,8 +24,9 @@ public class Menu {
 	public void provideUserChoices(){
 		System.out.println("Would you like to: ");
 		System.out.println("a.) Deposit money");
-		System.out.println("b.) Check Balance");
-		System.out.println("c.) Create a new account");
+		System.out.println("b.) Withdraw money");
+		System.out.println("c.) Check Balance");
+		System.out.println("d.) Create a new account");
 	}
 
 	public String getUserInput(){
@@ -38,9 +39,12 @@ public class Menu {
 				deposit();
 				break;
 			case "b":
-				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+				withdraw();
 				break;
 			case "c":
+				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+				break;
+			case "d":
 				createAccount();
 				break;
 			default:
@@ -67,5 +71,21 @@ public class Menu {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
+	}
+	
+	public void withdraw(){
+		System.out.println("How much would you like to withdraw?");
+		boolean validWithdraw = false;
+		while (!validWithdraw) { 
+			try {
+					double withdrawAmount = Double.parseDouble(getUserInput());
+					userAccount.withdraw(withdrawAmount);
+					validWithdraw = true;
+				} catch (IllegalArgumentException e) {
+					double currentBalance = userAccount.getCurrentBalance();
+					System.out.println("Invalid withdrawal amount. Please enter a positive withdrawal amount less than or equal to your current balance of: $" + currentBalance);
+				}
+			}
+		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
 }
