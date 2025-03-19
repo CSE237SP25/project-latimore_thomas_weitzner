@@ -94,8 +94,51 @@ public class Menu {
 	}
 	
 	public void renameAccount() {
-		System.out.println("What would you like to rename your account to?");
+		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
+		if (newName.equals("")) {
+			System.out.println("Invalid account name. Please enter a non-empty name.");
+			renameAccount();
+			return;
+		}
+		if (newName.equals(userAccount.getAccountHolderName())) {
+            System.out.println("Your account name is already " + newName);
+            return;
+        }
+		if (newName.length() > 25) {
+            System.out.println("Invalid account name. Please enter a name with 25 characters or less.");
+            renameAccount();
+            return;
+        }
+		if (newName.contains("(") || 
+				newName.contains(")") || 
+				newName.contains(",") || 
+				newName.contains(";") ||
+				newName.contains(":") ||
+				newName.contains("[") ||
+				newName.contains("]") ||
+				newName.contains("{") ||
+				newName.contains("}") ||
+				newName.contains("<") ||
+				newName.contains(">") ||
+				newName.contains("=") ||
+				newName.contains("?") ||
+				newName.contains("!") ||
+				newName.contains("@") ||
+				newName.contains("#") ||
+				newName.contains("$") ||
+				newName.contains("%") ||
+				newName.contains("^") ||
+				newName.contains("*") ||
+				newName.contains("+") ||
+				newName.contains("/") ||
+				newName.contains("`") ||
+				newName.contains("~")) 
+		{
+			System.out.println("Invalid account name. Please enter a name without special charachters.");
+			renameAccount();
+			return;
+		}
 		userAccount.setAccountHolderName(newName);
 		System.out.println("Your account has been renamed to: " + newName);
 	}
