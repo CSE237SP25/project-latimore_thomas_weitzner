@@ -20,6 +20,13 @@ public class Bank {
 		this.accounts.add(account);
 	}
 	
+	public void removeAccount(BankAccount account) {
+		if (!this.accounts.contains(account)) {
+            throw new IllegalArgumentException("Account does not exist");
+            }
+		this.accounts.remove(account);
+	}
+	
 	public List<BankAccount> getAccounts() {
 		return this.accounts;
 	}

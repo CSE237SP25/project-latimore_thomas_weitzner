@@ -5,6 +5,7 @@ public class Menu {
 
 	private Scanner inputScanner;
 	private BankAccount userAccount;
+	private Bank bank;
 
 	public static void main(String[] args) {
 		Menu menu = new Menu();
@@ -18,6 +19,8 @@ public class Menu {
 	public Menu(){
 		this.inputScanner = new Scanner(System.in);
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		this.bank = new Bank();
+		bank.addAccount(userAccount);
 		System.out.println("Hello! Welcome to our bank app!");
 	}
 
@@ -27,6 +30,7 @@ public class Menu {
 		System.out.println("b.) Withdraw money");
 		System.out.println("c.) Check Balance");
 		System.out.println("d.) Create a new account");
+		System.out.println("g.) Remove an account");
 	}
 
 	public String getUserInput(){
@@ -46,6 +50,9 @@ public class Menu {
 				break;
 			case "d":
 				createAccount();
+				break;
+			case "g":
+				removeAccount();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -71,6 +78,23 @@ public class Menu {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
+	}
+	
+	public void removeAccount() {
+		System.out.println("Are you sure you want to remove your account? (y/n)");
+		String userInput = getUserInput();
+		if (userInput.equals("n")) {
+			System.out.println("Account removal cancelled");
+			return;
+		}
+		if (userInput.equals("y")) {
+			try {
+				bank.removeAccount(userAccount);
+				System.out.println("Your account has been removed");
+			} catch (IllegalArgumentException e) {
+				System.out.println("Account does not exist");
+			}
+		}
 	}
 	
 	public void withdraw(){
