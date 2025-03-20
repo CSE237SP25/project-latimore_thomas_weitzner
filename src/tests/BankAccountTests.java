@@ -136,4 +136,25 @@ public class BankAccountTests {
 		}
 	}
 	
+	@Test
+	public void testRemoveAccount() {
+		Bank bank = new Bank();
+		BankAccount account = new BankAccount("John Doe");
+		bank.addAccount(account);
+		bank.removeAccount(account);
+		assertEquals(0, bank.getAccounts().size());
+	}
+	
+	@Test
+	public void testRemoveAccountNotThere() {
+		Bank bank = new Bank();
+		BankAccount account = new BankAccount("John Doe");
+		try {
+			bank.removeAccount(account);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		}
+	}
+	
 }
