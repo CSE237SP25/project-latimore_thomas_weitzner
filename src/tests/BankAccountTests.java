@@ -35,6 +35,7 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
+<<<<<<< HEAD
 	
 	@Test
     public void testAddNewAccount() {
@@ -136,4 +137,7 @@ public class BankAccountTests {
 		}
 	}
 	
+=======
+	//will make overdraft and negative with drawal tests.
+>>>>>>> overdraft
 }

@@ -66,6 +66,7 @@ public class Menu {
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
+<<<<<<< HEAD
 	
 	public void createAccount() {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
@@ -86,6 +87,21 @@ public class Menu {
 					System.out.println("Invalid withdrawal amount. Please enter a positive withdrawal amount less than or equal to your current balance of: $" + currentBalance);
 				}
 			}
+=======
+
+	public void withdraw(){
+		System.out.println("How much would you like to withdraw?");
+		boolean validWithdraw = false;
+		while (!validWithdraw){
+			try{
+				double withdrawAmount = Double.parseDouble(getUserInput());
+				userAccount.withdraw(withdrawAmount);
+				validWithdraw = true;
+			} catch (IllegalArgumentException e){
+				System.out.println("Invalid withdrawal amount, check accountbalance and try again.")
+			}
+		}
+>>>>>>> overdraft
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
 }
