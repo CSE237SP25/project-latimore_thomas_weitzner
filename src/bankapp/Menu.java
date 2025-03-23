@@ -54,4 +54,19 @@ public class Menu {
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
+
+	public void withdraw(){
+		System.out.println("How much would you like to withdraw?");
+		boolean validWithdraw = false;
+		while (!validWithdraw){
+			try{
+				double withdrawAmount = Double.parseDouble(getUserInput());
+				userAccount.withdraw(withdrawAmount);
+				validWithdraw = true;
+			} catch (IllegalArgumentException e){
+				System.out.println("Invalid withdrawal amount, check accountbalance and try again.")
+			}
+		}
+		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
+	}
 }
