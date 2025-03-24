@@ -3,6 +3,7 @@ package bankapp;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -11,14 +12,14 @@ import java.util.List;
 public class Bank {
 	//NOTE: This is the entire bank, should only be ONE BANK OBJECT IN THE PROJECT
 	private List<BankAccount> accounts;
-	private List<String> accountInfoList; // List to hold account info strings
+	private List<String> accountInfoList = new ArrayList<>(); // List to hold account info strings
 	private List<User> users = new ArrayList<>();// List to hold users (if needed)
 	private String bankFilePath;
 	
 	public Bank() {
 		this.accounts = new ArrayList<>();
-		this.bankFilePath = "bankResources/bankPastInfo.txt"; // Default file path for account info
-		File f=new File("bankResources/bankPastInfo.txt");
+		this.bankFilePath = "./bankResources/bankPastInfo.txt"; // Default file path for account info
+		File f=new File("./bankResources/bankPastInfo.txt");
 		Path fullPath = f.toPath();
 		try {
 			this.accountInfoList = Files.readAllLines(fullPath);
