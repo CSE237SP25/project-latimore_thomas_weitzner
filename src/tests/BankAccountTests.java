@@ -35,6 +35,7 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
+
 	
 	@Test
     public void testAddNewAccount() {
