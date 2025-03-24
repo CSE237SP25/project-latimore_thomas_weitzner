@@ -6,12 +6,12 @@ public class BankAccount {
 	private static int nextAccountNumber = 1;
 	private int accountNumber;
 	private double balance;
-	private String accountHolderName;
+	private String accountName;
 	
-	public BankAccount(String accountHolderName) {
+	public BankAccount(String accountName) {
 		this.accountNumber = nextAccountNumber++;
 		this.balance = 0;
-		this.accountHolderName = accountHolderName;
+		this.accountName = accountName;
 	}
 	
 	public void deposit(double amount) {
@@ -36,8 +36,8 @@ public class BankAccount {
 		return this.accountNumber;
 	}
 	
-	public String getAccountHolderName() {
-		return this.accountHolderName;
+	public String getAccountName() {
+		return this.accountName;
 	}
 }
 =======

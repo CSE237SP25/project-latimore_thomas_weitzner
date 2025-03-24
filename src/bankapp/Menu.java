@@ -1,10 +1,13 @@
 package bankapp;
 import java.util.Scanner;
+import bankapp.BankAccount;
+import bankapp.User;
 
 public class Menu {
 
 	private Scanner inputScanner;
 	private BankAccount userAccount;
+	private User user;
 
 	public static void main(String[] args) {
 		Menu menu = new Menu();
@@ -15,10 +18,13 @@ public class Menu {
 		}
 	}
 
-	public Menu(){
-		this.inputScanner = new Scanner(System.in);
-		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
-		System.out.println("Hello! Welcome to our bank app!");
+	
+	public Menu() {
+	    this.inputScanner = new Scanner(System.in);
+	    this.userAccount = new BankAccount("Placeholder Name");
+	    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
+	    this.user.addAccount(userAccount);
+	    System.out.println("Hello! Welcome to our bank app!");
 	}
 
 	public void provideUserChoices(){
@@ -27,6 +33,7 @@ public class Menu {
 		System.out.println("b.) Withdraw money");
 		System.out.println("c.) Check Balance");
 		System.out.println("d.) Create a new account");
+		System.out.println("e.) Display all accounts");
 	}
 
 	public String getUserInput(){
@@ -47,8 +54,25 @@ public class Menu {
 			case "d":
 				createAccount();
 				break;
+			case "e":
+				displayAccounts();
+				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
+		}
+	}
+	
+	private void displayAccounts() {
+	    if (user == null) {
+	        System.out.println("Error: No user is currently logged in!");
+	        return;
+	    }
+	    System.out.println("Here are all of your accounts: ");
+		for (BankAccount account : user.getAccounts()) {
+			System.out.println("Account number: " + account.getAccountNumber());
+			System.out.println("Account name: " + account.getAccountName());
+			System.out.println("Balance: " + account.getCurrentBalance());
+			System.out.println();
 		}
 	}
 
@@ -70,6 +94,7 @@ public class Menu {
 	
 	public void createAccount() {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		this.user.addAccount(userAccount);
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
