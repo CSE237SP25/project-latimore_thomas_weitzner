@@ -60,9 +60,11 @@ public class Menu {
 				break;
 			case "f":
 				renameAccount();
+				break;
 			case "e":
 				displayAccounts();
-      case "g":
+				break;
+      		case "g":
 				removeAccount();
 				break;
 			default:

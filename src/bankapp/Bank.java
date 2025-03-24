@@ -12,7 +12,7 @@ public class Bank {
 	//NOTE: This is the entire bank, should only be ONE BANK OBJECT IN THE PROJECT
 	private List<BankAccount> accounts;
 	private List<String> accountInfoList; // List to hold account info strings
-	private List<User> users; // List to hold users (if needed)
+	private List<User> users = new ArrayList<>();// List to hold users (if needed)
 	private String bankFilePath;
 	
 	public Bank() {
