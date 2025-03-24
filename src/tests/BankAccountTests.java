@@ -48,7 +48,7 @@ public class BankAccountTests {
 
         // Verify the account was added
         assertEquals(1, bank.getAccounts().size());
-        assertEquals("John Doe", bank.getAccounts().get(0).getAccountHolderName());
+        assertEquals("John Doe", bank.getAccounts().get(0).getAccountName());
 	}
 	
 	@Test
@@ -64,8 +64,8 @@ public class BankAccountTests {
 
         // Verify the accounts were added
         assertEquals(2, bank.getAccounts().size());
-        assertEquals("John Doe", bank.getAccounts().get(0).getAccountHolderName());
-        assertEquals("Jane Smith", bank.getAccounts().get(1).getAccountHolderName());
+        assertEquals("John Doe", bank.getAccounts().get(0).getAccountName());
+        assertEquals("Jane Smith", bank.getAccounts().get(1).getAccountName());
     }
 	
 	
@@ -141,21 +141,21 @@ public class BankAccountTests {
 	public void testChangeAccountName() {
 		BankAccount account = new BankAccount("John Doe");
 		account.setAccountHolderName("Jane Smith");
-		assertEquals(account.getAccountHolderName(), "Jane Smith");
+		assertEquals(account.getAccountName(), "Jane Smith");
 	}
 	
 	@Test
 	public void testChangeAccountNameToEmpty() {
 		BankAccount account = new BankAccount("John Doe");
 		account.setAccountHolderName("");
-		assertEquals(account.getAccountHolderName(), "");
+		assertEquals(account.getAccountName(), "");
 	}
 	
 	@Test
 	public void testChangeAccountNameToLong() {
 		BankAccount account = new BankAccount("John Doe");
 		account.setAccountHolderName("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		assertEquals(account.getAccountHolderName(), "John Doe");
+		assertEquals(account.getAccountName(), "John Doe");
 	}
 	
 	@Test
@@ -163,7 +163,10 @@ public class BankAccountTests {
 		BankAccount account = new BankAccount("John Doe");
 		for (char c : "!@#$%^&*()_+-=[]{}|;':,.<>?/".toCharArray()) {
 			account.setAccountHolderName("John Doe" + c);
-			assertEquals(account.getAccountHolderName(), "John Doe");
+			assertEquals(account.getAccountName(), "John Doe");
+			}
+		}
+	
 	public void testRemoveAccount() {
 		Bank bank = new Bank();
 		BankAccount account = new BankAccount("John Doe");
