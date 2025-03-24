@@ -1,20 +1,18 @@
 package bankapp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
-import java.io.FileReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Bank {
 	//NOTE: This is the entire bank, should only be ONE BANK OBJECT IN THE PROJECT
 	private List<BankAccount> accounts;
 	private List<String> accountInfoList; // List to hold account info strings
+	private List<User> users; // List to hold users (if needed)
 	private String bankFilePath;
 	
 	public Bank() {
@@ -54,12 +52,20 @@ public class Bank {
 		this.accounts.add(account);
 		saveAccountsToFile(); // Save the updated account info to file
 	}
-	
+
+	public void addUser(User user){
+		this.users.add(user); // Add a new user to the list
+		for (BankAccount account : user.getAccounts()) { // Add user's accounts to the bank
+			addAccount(account);
+		}
+	}
 
 	public void saveAccountsToFile() {
 		try (FileWriter writer = new FileWriter(bankFilePath)) {
-			for (BankAccount account : accounts) {
-				writer.write(account.getAccountHolderName() + "," + account.getAccountNumber() + "," + account.getCurrentBalance() + "\n");
+			for(User user : users) { // Save user info if needed
+				for (BankAccount account : user.getAccounts()) {
+					writer.write(user.getUsername() + "," + user.getPassword()+"," +account.getAccountName() + "," + account.getAccountNumber() + "," + account.getCurrentBalance() + "\n");
+				}
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving accounts to file: " + e.getMessage());
@@ -74,19 +80,43 @@ public class Bank {
 	
 	public void makeAccountFromFile(String accountInfo){
 		String[] parts = accountInfo.split(",");
-		if (parts.length != 3) {
+		if (parts.length != 5) {
 			throw new IllegalArgumentException("Invalid account info format");
 		}
-		String name = parts[0];
-		int accountNumber = Integer.parseInt(parts[1]);
-		double balance = Double.parseDouble(parts[2]);
+		String Username = parts[0];
+		String password = parts[1];
+		String AccountName = parts[2];
+		int accountNumber = Integer.parseInt(parts[3]);
+		double balance = Double.parseDouble(parts[4]);
+
+		List<String> usernames = new ArrayList<>(); // List to check if the user already exists
+		User currentUser = null;
+		for(User user : this.users){
+			usernames.add(user.getUsername());
+		}
 		
-		BankAccount account = new BankAccount(name);
+		if (!usernames.contains(Username)) {
+			currentUser = new User(Username,password);
+			this.users.add(currentUser); // Add new user to the list
+		}else{
+			for(User user : this.users){
+				if(user.getUsername().equals(Username)){
+					currentUser = user; // Get the existing user
+				}
+			}
+		}
+
+		BankAccount account = new BankAccount(AccountName);
 		account.deposit(balance); //use deposit method to set the initial balance
 		addAccount(account);
+		currentUser.addAccount(account); // Add the account to the user
 	}
 
 	public List<BankAccount> getAccounts() {
 		return this.accounts;
+	}
+
+	public List<User> getUsers(){
+		return this.users;
 	}
 }
