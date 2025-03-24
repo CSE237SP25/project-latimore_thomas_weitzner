@@ -138,6 +138,32 @@ public class BankAccountTests {
 	}
 	
 	@Test
+	public void testChangeAccountName() {
+		BankAccount account = new BankAccount("John Doe");
+		account.setAccountHolderName("Jane Smith");
+		assertEquals(account.getAccountHolderName(), "Jane Smith");
+	}
+	
+	@Test
+	public void testChangeAccountNameToEmpty() {
+		BankAccount account = new BankAccount("John Doe");
+		account.setAccountHolderName("");
+		assertEquals(account.getAccountHolderName(), "");
+	}
+	
+	@Test
+	public void testChangeAccountNameToLong() {
+		BankAccount account = new BankAccount("John Doe");
+		account.setAccountHolderName("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		assertEquals(account.getAccountHolderName(), "John Doe");
+	}
+	
+	@Test
+	public void testChangeAccountNameToSpecialCharacters() {
+		BankAccount account = new BankAccount("John Doe");
+		for (char c : "!@#$%^&*()_+-=[]{}|;':,.<>?/".toCharArray()) {
+			account.setAccountHolderName("John Doe" + c);
+			assertEquals(account.getAccountHolderName(), "John Doe");
 	public void testRemoveAccount() {
 		Bank bank = new Bank();
 		BankAccount account = new BankAccount("John Doe");
@@ -155,6 +181,7 @@ public class BankAccountTests {
 			fail();
 		} catch (IllegalArgumentException e) {
 			assertTrue(e != null);
+
 		}
 	}
 	

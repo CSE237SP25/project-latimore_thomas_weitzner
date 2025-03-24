@@ -36,6 +36,7 @@ public class Menu {
 		System.out.println("b.) Withdraw money");
 		System.out.println("c.) Check Balance");
 		System.out.println("d.) Create a new account");
+		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 	}
@@ -58,6 +59,8 @@ public class Menu {
 			case "d":
 				createAccount();
 				break;
+			case "f":
+				renameAccount();
 			case "e":
 				displayAccounts();
       case "g":
@@ -136,5 +139,55 @@ public class Menu {
 			}
 
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
+	}
+	
+	public void renameAccount() {
+		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
+		String newName = getUserInput();
+		if (newName.equals("")) {
+			System.out.println("Invalid account name. Please enter a non-empty name.");
+			renameAccount();
+			return;
+		}
+		if (newName.equals(userAccount.getAccountHolderName())) {
+            System.out.println("Your account name is already " + newName);
+            return;
+        }
+		if (newName.length() > 25) {
+            System.out.println("Invalid account name. Please enter a name with 25 characters or less.");
+            renameAccount();
+            return;
+        }
+		if (newName.contains("(") || 
+				newName.contains(")") || 
+				newName.contains(",") || 
+				newName.contains(";") ||
+				newName.contains(":") ||
+				newName.contains("[") ||
+				newName.contains("]") ||
+				newName.contains("{") ||
+				newName.contains("}") ||
+				newName.contains("<") ||
+				newName.contains(">") ||
+				newName.contains("=") ||
+				newName.contains("?") ||
+				newName.contains("!") ||
+				newName.contains("@") ||
+				newName.contains("#") ||
+				newName.contains("$") ||
+				newName.contains("%") ||
+				newName.contains("^") ||
+				newName.contains("*") ||
+				newName.contains("+") ||
+				newName.contains("/") ||
+				newName.contains("`") ||
+				newName.contains("~")) 
+		{
+			System.out.println("Invalid account name. Please enter a name without special charachters.");
+			renameAccount();
+			return;
+		}
+		userAccount.setAccountHolderName(newName);
+		System.out.println("Your account has been renamed to: " + newName);
 	}
 }
