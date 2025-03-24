@@ -35,6 +35,7 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
+
 	
 	@Test
     public void testAddNewAccount() {
@@ -163,6 +164,24 @@ public class BankAccountTests {
 		for (char c : "!@#$%^&*()_+-=[]{}|;':,.<>?/".toCharArray()) {
 			account.setAccountHolderName("John Doe" + c);
 			assertEquals(account.getAccountHolderName(), "John Doe");
+	public void testRemoveAccount() {
+		Bank bank = new Bank();
+		BankAccount account = new BankAccount("John Doe");
+		bank.addAccount(account);
+		bank.removeAccount(account);
+		assertEquals(0, bank.getAccounts().size());
+	}
+	
+	@Test
+	public void testRemoveAccountNotThere() {
+		Bank bank = new Bank();
+		BankAccount account = new BankAccount("John Doe");
+		try {
+			bank.removeAccount(account);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+
 		}
 	}
 	
