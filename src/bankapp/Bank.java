@@ -3,7 +3,6 @@ package bankapp;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -18,8 +17,8 @@ public class Bank {
 	
 	public Bank() {
 		this.accounts = new ArrayList<>();
-		this.bankFilePath = "./bankResources/bankPastInfo.txt"; // Default file path for account info
-		File f=new File("./bankResources/bankPastInfo.txt");
+		this.bankFilePath = "./bankapp/bankResources/bankPastInfo.txt"; // Default file path for account info
+		File f=new File("./bankapp/bankResources/bankPastInfo.txt");
 		Path fullPath = f.toPath();
 		try {
 			this.accountInfoList = Files.readAllLines(fullPath);
