@@ -8,6 +8,7 @@ public class Menu {
 	private final Bank bank;
 	private User user;
 
+
 	public static void main(String[] args) {
 		Menu menu = new Menu();
 		while (true) { 
@@ -34,6 +35,8 @@ public class Menu {
 		System.out.println("b.) Withdraw money");
 		System.out.println("c.) Check Balance");
 		System.out.println("d.) Create a new account");
+		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
+		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 	}
 
@@ -55,8 +58,12 @@ public class Menu {
 			case "d":
 				createAccount();
 				break;
+			case "f":
+				renameAccount();
 			case "e":
 				displayAccounts();
+      case "g":
+				removeAccount();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -101,6 +108,23 @@ public class Menu {
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
 	
+	public void removeAccount() {
+		System.out.println("Are you sure you want to remove your account? (y/n)");
+		String userInput = getUserInput();
+		if (userInput.equals("n")) {
+			System.out.println("Account removal cancelled");
+			return;
+		}
+		if (userInput.equals("y")) {
+			try {
+				bank.removeAccount(userAccount);
+				System.out.println("Your account has been removed");
+			} catch (IllegalArgumentException e) {
+				System.out.println("Account does not exist");
+			}
+		}
+	}
+	
 	public void withdraw(){
 		System.out.println("How much would you like to withdraw?");
 		boolean validWithdraw = false;
@@ -115,6 +139,57 @@ public class Menu {
 					System.out.println("Invalid withdrawal amount. Please enter a positive withdrawal amount less than or equal to your current balance of: $" + currentBalance);
 				}
 			}
+
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
+	}
+	
+	public void renameAccount() {
+		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
+		String newName = getUserInput();
+		if (newName.equals("")) {
+			System.out.println("Invalid account name. Please enter a non-empty name.");
+			renameAccount();
+			return;
+		}
+		if (newName.equals(userAccount.getAccountName())) {
+            System.out.println("Your account name is already " + newName);
+            return;
+        }
+		if (newName.length() > 25) {
+            System.out.println("Invalid account name. Please enter a name with 25 characters or less.");
+            renameAccount();
+            return;
+        }
+		if (newName.contains("(") || 
+				newName.contains(")") || 
+				newName.contains(",") || 
+				newName.contains(";") ||
+				newName.contains(":") ||
+				newName.contains("[") ||
+				newName.contains("]") ||
+				newName.contains("{") ||
+				newName.contains("}") ||
+				newName.contains("<") ||
+				newName.contains(">") ||
+				newName.contains("=") ||
+				newName.contains("?") ||
+				newName.contains("!") ||
+				newName.contains("@") ||
+				newName.contains("#") ||
+				newName.contains("$") ||
+				newName.contains("%") ||
+				newName.contains("^") ||
+				newName.contains("*") ||
+				newName.contains("+") ||
+				newName.contains("/") ||
+				newName.contains("`") ||
+				newName.contains("~")) 
+		{
+			System.out.println("Invalid account name. Please enter a name without special charachters.");
+			renameAccount();
+			return;
+		}
+		userAccount.setAccountHolderName(newName);
+		System.out.println("Your account has been renamed to: " + newName);
 	}
 }

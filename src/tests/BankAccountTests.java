@@ -35,7 +35,7 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
-<<<<<<< HEAD
+
 	
 	@Test
     public void testAddNewAccount() {
@@ -137,7 +137,52 @@ public class BankAccountTests {
 		}
 	}
 	
-=======
-	//will make overdraft and negative with drawal tests.
->>>>>>> overdraft
+	@Test
+	public void testChangeAccountName() {
+		BankAccount account = new BankAccount("John Doe");
+		account.setAccountHolderName("Jane Smith");
+		assertEquals(account.getAccountHolderName(), "Jane Smith");
+	}
+	
+	@Test
+	public void testChangeAccountNameToEmpty() {
+		BankAccount account = new BankAccount("John Doe");
+		account.setAccountHolderName("");
+		assertEquals(account.getAccountHolderName(), "");
+	}
+	
+	@Test
+	public void testChangeAccountNameToLong() {
+		BankAccount account = new BankAccount("John Doe");
+		account.setAccountHolderName("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		assertEquals(account.getAccountHolderName(), "John Doe");
+	}
+	
+	@Test
+	public void testChangeAccountNameToSpecialCharacters() {
+		BankAccount account = new BankAccount("John Doe");
+		for (char c : "!@#$%^&*()_+-=[]{}|;':,.<>?/".toCharArray()) {
+			account.setAccountHolderName("John Doe" + c);
+			assertEquals(account.getAccountHolderName(), "John Doe");
+	public void testRemoveAccount() {
+		Bank bank = new Bank();
+		BankAccount account = new BankAccount("John Doe");
+		bank.addAccount(account);
+		bank.removeAccount(account);
+		assertEquals(0, bank.getAccounts().size());
+	}
+	
+	@Test
+	public void testRemoveAccountNotThere() {
+		Bank bank = new Bank();
+		BankAccount account = new BankAccount("John Doe");
+		try {
+			bank.removeAccount(account);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+
+		}
+	}
+	
 }

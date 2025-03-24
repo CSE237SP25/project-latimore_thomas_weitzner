@@ -112,6 +112,14 @@ public class Bank {
 		currentUser.addAccount(account); // Add the account to the user
 	}
 
+	public void removeAccount(BankAccount account) {
+		if (!this.accounts.contains(account)) {
+            throw new IllegalArgumentException("Account does not exist");
+            }
+		this.accounts.remove(account);
+		saveAccountsToFile();
+	}
+	
 	public List<BankAccount> getAccounts() {
 		return this.accounts;
 	}
