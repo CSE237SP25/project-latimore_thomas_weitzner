@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,22 @@ public class Bank {
 	
 	public Bank() {
 		this.accounts = new ArrayList<>();
-		this.bankFilePath = "./bankapp/bankResources/bankPastInfo.txt"; // Default file path for account info
-		File f=new File("./bankapp/bankResources/bankPastInfo.txt");
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String[] pathParts = s.split("/");
+
+		if(pathParts[pathParts.length-1].equals("bankapp")) {
+			this.bankFilePath = "./bankResources/bankPastInfo.txt"; // Default file path for account info
+		}else if(pathParts[pathParts.length-1].equals("src")) {
+			this.bankFilePath = "./bankapp/bankResources/bankPastInfo.txt"; // Default file path for account info
+		}else if(pathParts[pathParts.length-1].equals("project-latimore_thomas_weitzner")) {
+			this.bankFilePath = "./src/bankapp/bankResources/bankPastInfo.txt"; // Default file path for account info
+		}else{
+			System.out.println("Please run the bankapp from the project-latimore_thomas_weitzner, bankapp, or src directories.");
+			System.out.println("The bankapp will not be able to save account information.");
+		}
+
+		File f=new File(this.bankFilePath);
 		Path fullPath = f.toPath();
 		try {
 			this.accountInfoList = Files.readAllLines(fullPath);
