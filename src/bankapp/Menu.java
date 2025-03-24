@@ -7,7 +7,9 @@ public class Menu {
 
 	private Scanner inputScanner;
 	private BankAccount userAccount;
+	private Bank bank;
 	private User user;
+
 
 	public static void main(String[] args) {
 		Menu menu = new Menu();
@@ -18,14 +20,15 @@ public class Menu {
 		}
 	}
 
-	
-	public Menu() {
-	    this.inputScanner = new Scanner(System.in);
-	    this.userAccount = new BankAccount("Placeholder Name");
-	    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
-	    this.user.addAccount(userAccount);
-	    System.out.println("Hello! Welcome to our bank app!");
-	}
+
+	public Menu(){
+		this.inputScanner = new Scanner(System.in);
+		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		this.bank = new Bank();
+    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
+		bank.addAccount(userAccount);
+		System.out.println("Hello! Welcome to our bank app!");
+  }
 
 	public void provideUserChoices(){
 		System.out.println("Would you like to: ");
@@ -33,6 +36,7 @@ public class Menu {
 		System.out.println("b.) Withdraw money");
 		System.out.println("c.) Check Balance");
 		System.out.println("d.) Create a new account");
+		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 	}
 
@@ -56,6 +60,8 @@ public class Menu {
 				break;
 			case "e":
 				displayAccounts();
+      case "g":
+				removeAccount();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -90,13 +96,29 @@ public class Menu {
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
-<<<<<<< HEAD
 	
 	public void createAccount() {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
 		this.user.addAccount(userAccount);
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
+	}
+	
+	public void removeAccount() {
+		System.out.println("Are you sure you want to remove your account? (y/n)");
+		String userInput = getUserInput();
+		if (userInput.equals("n")) {
+			System.out.println("Account removal cancelled");
+			return;
+		}
+		if (userInput.equals("y")) {
+			try {
+				bank.removeAccount(userAccount);
+				System.out.println("Your account has been removed");
+			} catch (IllegalArgumentException e) {
+				System.out.println("Account does not exist");
+			}
+		}
 	}
 	
 	public void withdraw(){
@@ -112,21 +134,7 @@ public class Menu {
 					System.out.println("Invalid withdrawal amount. Please enter a positive withdrawal amount less than or equal to your current balance of: $" + currentBalance);
 				}
 			}
-=======
 
-	public void withdraw(){
-		System.out.println("How much would you like to withdraw?");
-		boolean validWithdraw = false;
-		while (!validWithdraw){
-			try{
-				double withdrawAmount = Double.parseDouble(getUserInput());
-				userAccount.withdraw(withdrawAmount);
-				validWithdraw = true;
-			} catch (IllegalArgumentException e){
-				System.out.println("Invalid withdrawal amount, check accountbalance and try again.")
-			}
-		}
->>>>>>> overdraft
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
 }
