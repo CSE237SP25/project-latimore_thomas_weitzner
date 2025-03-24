@@ -1,13 +1,11 @@
 package bankapp;
 import java.util.Scanner;
-import bankapp.BankAccount;
-import bankapp.User;
 
 public class Menu {
 
 	private Scanner inputScanner;
 	private BankAccount userAccount;
-	private Bank bank;
+	private final Bank bank;
 	private User user;
 
 
@@ -20,15 +18,16 @@ public class Menu {
 		}
 	}
 
-
-	public Menu(){
-		this.inputScanner = new Scanner(System.in);
-		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
-		this.bank = new Bank();
-    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
-		bank.addAccount(userAccount);
-		System.out.println("Hello! Welcome to our bank app!");
-  }
+	
+	public Menu() {
+	    this.inputScanner = new Scanner(System.in);
+		this.bank = new Bank(); // Initialize the bank object
+	    this.userAccount = new BankAccount("Placeholder Name");
+	    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
+	    this.user.addAccount(userAccount);
+		bank.addUser(user); // Add the user to the bank
+	    System.out.println("Hello! Welcome to our bank app!");
+	}
 
 	public void provideUserChoices(){
 		System.out.println("Would you like to: ");
@@ -61,9 +60,11 @@ public class Menu {
 				break;
 			case "f":
 				renameAccount();
+				break;
 			case "e":
 				displayAccounts();
-      case "g":
+				break;
+      		case "g":
 				removeAccount();
 				break;
 			default:
@@ -92,6 +93,7 @@ public class Menu {
 			try {
 					double depositAmount = Double.parseDouble(getUserInput());
 					userAccount.deposit(depositAmount);
+					bank.saveAccountsToFile(); // Save the updated account info to file
 					validDeposit = true;
 				} catch (IllegalArgumentException e) {
 					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0.");
@@ -102,6 +104,7 @@ public class Menu {
 	
 	public void createAccount() {
 		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		bank.addAccount(userAccount); // Add the new account to the bank
 		this.user.addAccount(userAccount);
 		System.out.println("Your new account has been created");
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
@@ -131,6 +134,7 @@ public class Menu {
 			try {
 					double withdrawAmount = Double.parseDouble(getUserInput());
 					userAccount.withdraw(withdrawAmount);
+					bank.saveAccountsToFile(); // Save the updated account info to file
 					validWithdraw = true;
 				} catch (IllegalArgumentException e) {
 					double currentBalance = userAccount.getCurrentBalance();
@@ -149,7 +153,7 @@ public class Menu {
 			renameAccount();
 			return;
 		}
-		if (newName.equals(userAccount.getAccountHolderName())) {
+		if (newName.equals(userAccount.getAccountName())) {
             System.out.println("Your account name is already " + newName);
             return;
         }
