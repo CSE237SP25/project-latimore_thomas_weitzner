@@ -110,22 +110,40 @@ public class Menu {
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
 	
+
 	public void removeAccount() {
-		System.out.println("Are you sure you want to remove your account? (y/n)");
-		String userInput = getUserInput();
-		if (userInput.equals("n")) {
-			System.out.println("Account removal cancelled");
-			return;
-		}
-		if (userInput.equals("y")) {
-			try {
-				bank.removeAccount(userAccount);
-				System.out.println("Your account has been removed");
-			} catch (IllegalArgumentException e) {
-				System.out.println("Account does not exist");
-			}
-		}
+	    System.out.println("Here are all of your accounts: ");
+	    for (int i = 0; i < user.getAccounts().size(); i++) {
+	        BankAccount account = user.getAccounts().get(i);
+	        System.out.println((i + 1) + ". Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
+	    }
+	    System.out.println("Enter the number of the account you want to remove:");
+	    int accountIndex = Integer.parseInt(getUserInput()) - 1;
+	
+	    if (accountIndex < 0 || accountIndex >= user.getAccounts().size()) {
+	        System.out.println("Invalid account number. Account removal cancelled.");
+	        return;
+	    }
+	
+	    BankAccount accountToRemove = user.getAccounts().get(accountIndex);
+	
+	    System.out.println("Are you sure you want to remove the account: " + accountToRemove.getAccountName() + "? (y/n)");
+	    String userInput = getUserInput();
+	    if (userInput.equals("n")) {
+	        System.out.println("Account removal cancelled.");
+	        return;
+	    }
+	    if (userInput.equals("y")) {
+	        try {
+	            user.removeAccount(accountToRemove);
+	            bank.removeAccount(accountToRemove);
+	            System.out.println("Your account has been removed.");
+	        } catch (IllegalArgumentException e) {
+	            System.out.println("Account does not exist.");
+	        }
+	    }
 	}
+
 	
 	public void withdraw(){
 		System.out.println("How much would you like to withdraw?");
