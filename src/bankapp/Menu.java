@@ -92,14 +92,11 @@ public class Menu {
 		while (!validDeposit) { 
 			try {
 					double depositAmount = Double.parseDouble(getUserInput());
-					if(Double.isInfinite(depositAmount) || Double.isNaN(depositAmount)) {
-						throw new IllegalArgumentException();
-					}
 					userAccount.deposit(depositAmount);
 					bank.saveAccountsToFile(); // Save the updated account info to file
 					validDeposit = true;
 				} catch (IllegalArgumentException e) {
-					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0. You may only deposit less than $1*10^308 at any given time.");
+					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0. You may only have at most $1.79*10^308 within a bank account at any given time.");
 				}
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());

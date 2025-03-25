@@ -16,6 +16,8 @@ public class BankAccount {
 	public void deposit(double amount) {
 		if(amount < 0) {
 			throw new IllegalArgumentException();
+		}else if(Double.isInfinite(this.balance+amount) || Double.isNaN(this.balance+amount)) {
+			throw new IllegalArgumentException();
 		}
 		this.balance += amount;
 	}
