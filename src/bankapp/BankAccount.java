@@ -41,6 +41,10 @@ public class BankAccount {
 
 	}
 	
+	public void addTransactionHistory(String transaction) {
+		this.transactionHistory.add(transaction);
+	}
+	
 	public double getCurrentBalance() {
 		return this.balance;
 	}
@@ -54,6 +58,7 @@ public class BankAccount {
 	}
 	
 	public String setAccountHolderName(String accountHolderName) {
+		this.transactionHistory.add("Account name changed to: " + accountHolderName);
 		return this.accountName = accountHolderName;
 	}
 }
