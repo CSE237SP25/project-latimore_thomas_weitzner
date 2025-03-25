@@ -221,13 +221,7 @@ public class Menu {
 	
 	public Boolean loginToAccount() {
 		System.out.println("Enter Username:");
-		for(User u : bank.getUsers()) {
-			System.out.println(u.getUsername());
-			System.out.println(u.getPassword());
-		}
 		String username = getUserInput();
-		
-	
 		if(login.searchForProfile(username) == null) {
 			System.out.println("Profile does not exist");
 			return false;
@@ -241,6 +235,7 @@ public class Menu {
 				this.user = profile;
 				return true;
 			}
+			System.out.println("Passwords do not match");
 			return false;
 		}
 		
