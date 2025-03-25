@@ -16,7 +16,7 @@ public class Menu {
 		Boolean loggedIn = false;
 		while(!loggedIn) {
 			loggedIn = menu.loginInputChoices();
-			System.out.println(menu.user.getUsername());
+			System.out.println("Welcome: " + menu.user.getUsername());
 		}
 		while (true) { 
 			menu.provideUserChoices();
@@ -243,7 +243,7 @@ public class Menu {
 			System.out.println("Passwords do not match");
 			return false;
 		}
-		}
+	}
 
 
 	public void viewTransactionHistory() {
