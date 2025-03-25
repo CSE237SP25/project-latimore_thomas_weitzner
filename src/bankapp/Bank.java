@@ -21,7 +21,7 @@ public class Bank {
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		String[] pathParts = s.split("/");
-		if(pathParts.length == 0){
+		if(pathParts.length == 1){
 			pathParts = s.split("\\\\"); // For systems that use backslashes for file system
 		}
 
