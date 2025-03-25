@@ -80,10 +80,16 @@ public class Bank {
 
 	public void saveAccountsToFile() {
 		try (FileWriter writer = new FileWriter(bankFilePath)) {
-			for(User user : users) { // Save user info if needed
-				for (BankAccount account : user.getAccounts()) {
-					writer.write(user.getUsername() + "," + user.getPassword()+"," +account.getAccountName() + "," + account.getAccountNumber() + "," + account.getCurrentBalance() + "\n");
-				}
+			for(User user : users) {
+			    if(user.getAccounts().isEmpty()) {
+			        writer.write(user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
+			    } else {
+			        for (BankAccount account : user.getAccounts()) {
+			            writer.write(user.getUsername() + "," + user.getPassword() + "," +
+			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
+			                         account.getCurrentBalance() + "\n");
+			        }
+			    }
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving accounts to file: " + e.getMessage());
@@ -122,6 +128,10 @@ public class Bank {
 					currentUser = user; // Get the existing user
 				}
 			}
+		}
+		
+		if (AccountName.equals("EMPTY")) {
+			return;
 		}
 
 		BankAccount account = new BankAccount(AccountName);
