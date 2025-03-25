@@ -21,6 +21,9 @@ public class Bank {
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		String[] pathParts = s.split("/");
+		if(pathParts.length == 0){
+			pathParts = s.split("\\\\"); // For systems that use backslashes for file system
+		}
 
 		if(pathParts[pathParts.length-1].equals("bankapp")) {
 			this.bankFilePath = "./bankResources/bankPastInfo.txt"; // Default file path for account info
