@@ -16,8 +16,8 @@ public class Menu {
 		Boolean loggedIn = false;
 		while(!loggedIn) {
 			loggedIn = menu.loginInputChoices();
-			System.out.println("Welcome: " + menu.user.getUsername());
 		}
+		System.out.println("Welcome: " + menu.user.getUsername());
 		while (true) { 
 			menu.provideUserChoices();
 			String userInput = menu.getUserInput();
