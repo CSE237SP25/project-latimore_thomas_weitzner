@@ -243,9 +243,10 @@ public class Menu {
 			System.out.println("Passwords do not match");
 			return false;
 		}
+		}
 
 
-	public void viewTransactionHistory(){
+	public void viewTransactionHistory() {
 		if (userAccount == null){
 			System.out.println("No account selected!");
 			return;
