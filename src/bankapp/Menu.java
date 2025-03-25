@@ -1,5 +1,6 @@
 package bankapp;
 import java.util.Scanner;
+import java.util.List;
 
 public class Menu {
 
@@ -7,10 +8,16 @@ public class Menu {
 	private BankAccount userAccount;
 	private final Bank bank;
 	private User user;
+	private LoginMenu login;
 
 
 	public static void main(String[] args) {
 		Menu menu = new Menu();
+		Boolean loggedIn = false;
+		while(!loggedIn) {
+			loggedIn = menu.loginInputChoices();
+		}
+		System.out.println("Welcome: " + menu.user.getUsername());
 		while (true) { 
 			menu.provideUserChoices();
 			String userInput = menu.getUserInput();
@@ -21,7 +28,8 @@ public class Menu {
 	
 	public Menu() {
 	    this.inputScanner = new Scanner(System.in);
-		this.bank = new Bank(); // Initialize the bank object
+		this.bank = new Bank();// Initialize the bank object
+		this.login = new LoginMenu(bank.getUsers());
 	    this.userAccount = new BankAccount("Placeholder Name");
 	    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
 	    this.user.addAccount(userAccount);
@@ -38,6 +46,7 @@ public class Menu {
 		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
+		System.out.println("h.) View transaction history");
 	}
 
 	public String getUserInput(){
@@ -66,6 +75,9 @@ public class Menu {
 				break;
       		case "g":
 				removeAccount();
+				break;
+			case "h":
+				viewTransactionHistory();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -221,5 +233,62 @@ public class Menu {
 		}
 		userAccount.setAccountHolderName(newName);
 		System.out.println("Your account has been renamed to: " + newName);
+	}
+	
+	//Login Code
+	public Boolean loginInputChoices() {
+		login.displayChoices();
+		String userInput = getUserInput();
+		switch(userInput.toLowerCase()) {
+			case "a":
+				return loginToAccount();
+			case "b":
+				return false;
+			default:
+				System.out.println("Invalid Input");
+				return false;
+				
+		}
+		
+	}
+	
+	public Boolean loginToAccount() {
+		System.out.println("Enter Username:");
+		String username = getUserInput();
+		if(login.searchForProfile(username) == null) {
+			System.out.println("Profile does not exist");
+			return false;
+		}
+		else {
+			User profile = login.searchForProfile(username);
+			System.out.println("Enter Password:");
+			String password = getUserInput();
+			Boolean correctPassword = login.checkPassword(profile, password);
+			if(correctPassword) {
+				this.user = profile;
+				return true;
+			}
+			System.out.println("Passwords do not match");
+			return false;
+		}
+	}
+
+
+	public void viewTransactionHistory() {
+		if (userAccount == null){
+			System.out.println("No account selected!");
+			return;
+		}
+
+		List<String> history = userAccount.getTransactionHistory();
+		if (history.isEmpty()){
+			System.out.println("No transactions yet!");
+			return;
+		}
+
+		System.out.println("\n -- Transaction History -- \n");
+		for  (String transaction : history){
+			System.out.println(transaction);
+		}
 	}
 }

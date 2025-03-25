@@ -7,3 +7,8 @@ testedUser3,password3,Placeholder Name,6,8.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,7,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,8,0.0
 PlaceholderUsername,PlaceholderPassword,ThomasAccount,9,8.0
+PlaceholderUsername,PlaceholderPassword,nina,10,0.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,11,100.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,12,0.0
+PlaceholderUsername,PlaceholderPassword,nina,13,150.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,14,0.0
