@@ -1,5 +1,6 @@
 package bankapp;
 import java.util.Scanner;
+import java.util.List;
 
 public class Menu {
 
@@ -45,6 +46,7 @@ public class Menu {
 		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
+		System.out.println("h.) View transaction history");
 	}
 
 	public String getUserInput(){
@@ -73,6 +75,9 @@ public class Menu {
 				break;
       		case "g":
 				removeAccount();
+				break;
+			case "h":
+				viewTransactionHistory();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -238,7 +243,23 @@ public class Menu {
 			System.out.println("Passwords do not match");
 			return false;
 		}
-		
-		
+
+
+	public void viewTransactionHistory(){
+		if (userAccount == null){
+			System.out.println("No account selected!");
+			return;
+		}
+
+		List<String> history = userAccount.getTransactionHistory();
+		if (history.isEmpty()){
+			System.out.println("No transactions yet!");
+			return;
+		}
+
+		System.out.println("\n -- Transaction History -- \n");
+		for  (String transaction : history){
+			System.out.println(transaction);
+		}
 	}
 }
