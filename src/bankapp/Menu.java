@@ -111,21 +111,30 @@ public class Menu {
 	}
 	
 
+
 	public void removeAccount() {
 	    System.out.println("Here are all of your accounts: ");
-	    for (int i = 0; i < user.getAccounts().size(); i++) {
-	        BankAccount account = user.getAccounts().get(i);
-	        System.out.println((i + 1) + ". Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
+	    for (BankAccount account : user.getAccounts()) {
+	        System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
 	    }
-	    System.out.println("Enter the number of the account you want to remove:");
-	    int accountIndex = Integer.parseInt(getUserInput()) - 1;
+	    System.out.println("Enter the account number of the account you want to remove:");
+	    int input = Integer.parseInt(getUserInput());
+	    System.out.println("User input: " + input); // Debugging statement
 	
-	    if (accountIndex < 0 || accountIndex >= user.getAccounts().size()) {
+	    BankAccount accountToRemove = null;
+	    for (BankAccount account : user.getAccounts()) {
+	        if (account.getAccountNumber() == input) {
+	            accountToRemove = account;
+	            break;
+	        }
+	    }
+	
+	    if (accountToRemove == null) {
 	        System.out.println("Invalid account number. Account removal cancelled.");
 	        return;
 	    }
 	
-	    BankAccount accountToRemove = user.getAccounts().get(accountIndex);
+	    System.out.println("Selected account: " + accountToRemove.getAccountName() + ", Account number: " + accountToRemove.getAccountNumber()); // Debugging statement
 	
 	    System.out.println("Are you sure you want to remove the account: " + accountToRemove.getAccountName() + "? (y/n)");
 	    String userInput = getUserInput();
@@ -143,6 +152,7 @@ public class Menu {
 	        }
 	    }
 	}
+
 
 	
 	public void withdraw(){
