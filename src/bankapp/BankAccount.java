@@ -1,23 +1,32 @@
 package bankapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BankAccount {
 	
 	private static int nextAccountNumber = 1;
 	private int accountNumber;
 	private double balance;
 	private String accountName;
+	private List<String> transactionHistory;
 	
 	public BankAccount(String accountName) {
 		this.accountNumber = nextAccountNumber++;
 		this.balance = 0;
 		this.accountName = accountName;
+		this.transactionHistory = new ArrayList<>();
 	}
 	
+	public List<String> getTransactionHistory(){
+		return new ArrayList<>(this.transactionHistory);
+	}
 	public void deposit(double amount) {
 		if(amount < 0) {
 			throw new IllegalArgumentException();
 		}
 		this.balance += amount;
+		this.transactionHistory.add(String.format("Deposit: +$%.2f | Balance: $%.2f", amount, this.balance));
 	}
 
 	public void withdraw(double amount){
@@ -28,6 +37,8 @@ public class BankAccount {
 			throw new IllegalArgumentException("insufficient funds");
 		}
 		this.balance -= amount;
+		this.transactionHistory.add(String.format("Withdraw: +$%.2f | Balance: $%.2f", amount, this.balance));
+
 	}
 	
 	public double getCurrentBalance() {
