@@ -108,7 +108,7 @@ public class Menu {
 					bank.saveAccountsToFile(); // Save the updated account info to file
 					validDeposit = true;
 				} catch (IllegalArgumentException e) {
-					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0.");
+					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0. You may only have at most $1.79*10^308 within a bank account at any given time.");
 				}
 			}
 		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
