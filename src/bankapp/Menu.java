@@ -250,14 +250,23 @@ public class Menu {
 		System.out.println("Welcome! Let's get you set up with a profile!");
 		System.out.println("Enter a username: ");
 		String username = getUserInput();
-		//add input check
 		if(login.searchForProfile(username) != null) {
 			System.out.println("Username already exists");
 			System.out.println("Cancelling account creation...");
 			return false;
 		}
+		else if(username.isBlank() || username.length()>15) {
+			System.out.println("Invalid Username");
+			System.out.println("Cancelling account creation...");
+			return false;
+		}
 		System.out.println("Enter a password:");
 		String password = getUserInput();
+		if(password.isBlank()) {
+			System.out.println("Password may not be empty");
+			System.out.println("Cancelling account creation...");
+			return false;
+		}
 		System.out.println("Please confirm the information below is correct (y/n)");
 		System.out.println("Username: " + username + " Password: " + password);
 		if(getUserInput().toLowerCase().equals("y")){
