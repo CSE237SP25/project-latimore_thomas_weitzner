@@ -277,6 +277,11 @@ public class Menu {
 			System.out.println("Input is too long");
 			return false;
 		}
+		else if(input.isBlank()){
+			System.out.println("Input must not be blank");
+			return false;
+			
+		}
 		else if (input.contains("(") || 
 				input.contains(")") || 
 				input.contains(",") || 
@@ -315,16 +320,21 @@ public class Menu {
 		if(getUserInput().equals(user.getPassword())) {
 			System.out.println("Enter new Username");
 			String newUsername = getUserInput();
-			if(validInput(newUsername)) {
-				int index =login.existingUsers.indexOf(user);
-				user.changeUsername(newUsername);
-				login.existingUsers.remove(index);
-				login.existingUsers.add(index, user);
-				System.out.println("Username successfully changed to: " + user.getUsername());
-				//Update files (Will create a new issue for it
+			if(login.searchForProfile(newUsername) != null) {
+				System.out.println("Username is already taken");
 			}
 			else {
-				System.out.println("Username must contain no special characters and be less than 16 characters.");
+				if(validInput(newUsername)) {
+					int index =login.existingUsers.indexOf(user);
+					user.changeUsername(newUsername);
+					login.existingUsers.remove(index);
+					login.existingUsers.add(index, user);
+					System.out.println("Username successfully changed to: " + user.getUsername());
+					//Update files (Will create a new issue for it)
+				}
+				else {
+					System.out.println("Username must contain no special characters and be less than 16 characters.");
+				}
 			}
 		}
 		else {
