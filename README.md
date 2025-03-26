@@ -21,11 +21,11 @@ What user stories were completed this iteration?
 * A customer should be able to see thier transaction history	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/11
 * Customers should be able to see thier open accounts	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/17
 * Customers should be able to check account balance	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/3
+* Customer can create a profile	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/15
 
 What user stories do you intend to complete next iteration?
 
 * Accounts should earn interest on any deposited funds at a specified rate	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/7
-* Customer can create a profile	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/15
 * Accounts cannot have the same name	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/35
 * A single customer should be able to transfer an amount between their accounts	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/10
 * Tellers should be able to create an account	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/21
