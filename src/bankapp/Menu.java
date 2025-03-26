@@ -122,22 +122,58 @@ public class Menu {
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
 	
+
+
 	public void removeAccount() {
-		System.out.println("Are you sure you want to remove your account? (y/n)");
-		String userInput = getUserInput();
-		if (userInput.equals("n")) {
-			System.out.println("Account removal cancelled");
+		if (user == null) {
+			System.out.println("Error: No user is currently logged in!");
 			return;
 		}
-		if (userInput.equals("y")) {
-			try {
-				bank.removeAccount(userAccount);
-				System.out.println("Your account has been removed");
-			} catch (IllegalArgumentException e) {
-				System.out.println("Account does not exist");
-			}
+		
+		if (user.getAccounts().size() == 0) {
+			System.out.println("You don't have any open accounts.");
+			System.out.println();
+			return;
 		}
+		
+	    System.out.println("Here are all of your accounts: ");
+	    for (BankAccount account : user.getAccounts()) {
+	        System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
+	    }
+	    System.out.println("Enter the account number of the account you want to remove:");
+	    int input = Integer.parseInt(getUserInput());
+	
+	    BankAccount accountToRemove = null;
+	    for (BankAccount account : user.getAccounts()) {
+	        if (account.getAccountNumber() == input) {
+	            accountToRemove = account;
+	            break;
+	        }
+	    }
+	
+	    if (accountToRemove == null) {
+	        System.out.println("Invalid account number. Account removal cancelled.");
+	        return;
+	    }
+		
+	    System.out.println("Are you sure you want to remove the account: " + accountToRemove.getAccountName() + "? (y/n)");
+	    String userInput = getUserInput();
+	    if (userInput.equals("n")) {
+	        System.out.println("Account removal cancelled.");
+	        return;
+	    }
+	    if (userInput.equals("y")) {
+	        try {
+	            user.removeAccount(accountToRemove);
+	            bank.removeAccount(accountToRemove);
+	            System.out.println("Your account has been removed.");
+	        } catch (IllegalArgumentException e) {
+	            System.out.println("Account does not exist.");
+	        }
+	    }
 	}
+
+
 	
 	public void withdraw(){
 		System.out.println("How much would you like to withdraw?");
