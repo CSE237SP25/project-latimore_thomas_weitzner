@@ -216,6 +216,7 @@ public class Menu {
 	}
 	
 	public void renameAccount() {
+		userAccount = findAccount();
 		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
 		if (newName.equals("")) {
