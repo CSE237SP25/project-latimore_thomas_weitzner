@@ -47,6 +47,7 @@ public class Menu {
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 		System.out.println("h.) View transaction history");
+		System.out.println("i.) Logout");
 	}
 
 	public String getUserInput(){
@@ -79,9 +80,25 @@ public class Menu {
 			case "h":
 				viewTransactionHistory();
 				break;
+			case "i":
+                logout();
+                break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 		}
+	}
+	
+	private void logout() {
+		System.out.println("Logging out...");
+		this.user = null;
+		this.userAccount = null;
+		Boolean loggedIn = false;
+		while (!loggedIn) {
+			loggedIn = loginInputChoices();
+		}
+		this.userAccount = this.user.getAccounts().get(0);
+		System.out.println("Welcome: " + user.getUsername());
+		System.out.println();
 	}
 	
 	private void displayAccounts() {
@@ -251,7 +268,7 @@ public class Menu {
 			case "a":
 				return loginToAccount();
 			case "b":
-				return false;
+				return createProfile();
 			default:
 				System.out.println("Invalid Input");
 				return false;
@@ -279,6 +296,46 @@ public class Menu {
 			System.out.println("Passwords do not match");
 			return false;
 		}
+	}
+	
+	//creating new Profile
+	public Boolean createProfile(){
+		System.out.println("Welcome! Let's get you set up with a profile!");
+		System.out.println("Enter a username: ");
+		String username = getUserInput();
+		if(login.searchForProfile(username) != null) {
+			System.out.println("Username already exists");
+			System.out.println("Cancelling account creation...");
+			return false;
+		}
+		else if(username.isBlank() || username.length()>15) {
+			System.out.println("Invalid Username");
+			System.out.println("Cancelling account creation...");
+			return false;
+		}
+		System.out.println("Enter a password:");
+		String password = getUserInput();
+		if(password.isBlank()) {
+			System.out.println("Password may not be empty");
+			System.out.println("Cancelling account creation...");
+			return false;
+		}
+		System.out.println("Please confirm the information below is correct (y/n)");
+		System.out.println("Username: " + username + " Password: " + password);
+		if(getUserInput().toLowerCase().equals("y")){
+			System.out.println("Your profile has been created! Logging you in...");
+			User newUser = new User(username,password);
+			this.user = newUser;
+			BankAccount newAccount = new BankAccount(newUser.getUsername() + " Account");
+			newUser.addAccount(newAccount);
+			bank.addUser(newUser);
+			
+			return true;
+		}
+		else {
+			System.out.println("Cancelling account creation...");
+		}
+		return false;
 	}
 
 
