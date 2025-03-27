@@ -47,6 +47,7 @@ public class Menu {
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 		System.out.println("h.) View transaction history");
+		System.out.println("i.) Logout");
 	}
 
 	public String getUserInput(){
@@ -79,9 +80,25 @@ public class Menu {
 			case "h":
 				viewTransactionHistory();
 				break;
+			case "i":
+                logout();
+                break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 		}
+	}
+	
+	private void logout() {
+		System.out.println("Logging out...");
+		this.user = null;
+		this.userAccount = null;
+		Boolean loggedIn = false;
+		while (!loggedIn) {
+			loggedIn = loginInputChoices();
+		}
+		this.userAccount = this.user.getAccounts().get(0);
+		System.out.println("Welcome: " + user.getUsername());
+		System.out.println();
 	}
 	
 	private void displayAccounts() {
