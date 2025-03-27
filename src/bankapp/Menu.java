@@ -38,15 +38,17 @@ public class Menu {
 	}
 
 	public void provideUserChoices(){
+		System.out.println();
+		System.out.println(" -- Welcome to Bear Banks! -- ");
 		System.out.println("Would you like to: ");
-		System.out.println("a.) Deposit money");
-		System.out.println("b.) Withdraw money");
-		System.out.println("c.) Check Balance");
-		System.out.println("d.) Create a new account");
-		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
-		System.out.println("g.) Remove an account");
-		System.out.println("e.) Display all accounts");
-		System.out.println("h.) View transaction history");
+		System.out.println("(a) Deposit money");
+		System.out.println("(b) Withdraw money");
+		System.out.println("(c) Check Balance");
+		System.out.println("(d) Create a new account");
+		System.out.println("(e) Display all accounts");
+		System.out.println("(f) Rename an account"); //Choice e already used in issue #17
+		System.out.println("(g) Remove an account");
+		System.out.println("(h) View transaction history");
 	}
 
 	public String getUserInput(){
