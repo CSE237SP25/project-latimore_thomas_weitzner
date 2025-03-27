@@ -197,6 +197,7 @@ public class Menu {
 
 	
 	public void withdraw(){
+		userAccount = findAccount();
 		System.out.println("How much would you like to withdraw?");
 		boolean validWithdraw = false;
 		while (!validWithdraw) { 
