@@ -278,7 +278,6 @@ public class Menu {
 			default:
 				System.out.println("Invalid Input");
 				return false;
-				
 		}
 		
 	}
@@ -346,6 +345,7 @@ public class Menu {
 
 
 	public void viewTransactionHistory() {
+		userAccount = findAccount();
 		if (userAccount == null){
 			System.out.println("No account selected!");
 			return;
