@@ -25,15 +25,12 @@ public class User {
 		return accounts;
 	} 
 	
-	public boolean changePassword(String oldPassword, String newPassword ) {
-		
-		if(oldPassword.equals(password)) {
-			password = newPassword;
-			return true;
-		}
-		else {
-			return false;
-		}
+	public void changePassword(String newPassword) {
+		this.password = newPassword;
+	}
+	
+	public void changeUsername(String newUsername) {
+		this.username = newUsername;
 	}
 	
 	public void addAccount(BankAccount account) {
