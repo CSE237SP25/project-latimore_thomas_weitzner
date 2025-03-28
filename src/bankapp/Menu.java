@@ -1,6 +1,6 @@
 package bankapp;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class Menu {
 
@@ -47,7 +47,9 @@ public class Menu {
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 		System.out.println("h.) View transaction history");
-		System.out.println("i.) Logout");
+		System.out.println("i.) Change username");
+		System.out.println("j.) Change password");
+		System.out.println("x.) Logout");
 	}
 
 	public String getUserInput(){
@@ -81,6 +83,12 @@ public class Menu {
 				viewTransactionHistory();
 				break;
 			case "i":
+				changeUsername();
+				break;
+			case "j":
+				changePassword();
+				break;
+			case "x":
                 logout();
                 break;
 			default:
@@ -263,6 +271,7 @@ public class Menu {
 			return;
 		}
 		userAccount.setAccountHolderName(newName);
+		bank.saveAccountsToFile(); // Save the updated account info to file
 		System.out.println("Your account has been renamed to: " + newName);
 	}
 	
@@ -360,6 +369,93 @@ public class Menu {
 		System.out.println("\n -- Transaction History -- \n");
 		for  (String transaction : history){
 			System.out.println(transaction);
+		}
+	}
+	
+	public boolean validInput(String input) {
+		if(input.length() > 15) {
+			System.out.println("Input is too long");
+			return false;
+		}
+		else if(input.isBlank()){
+			System.out.println("Input must not be blank");
+			return false;
+			
+		}
+		else if (input.contains("(") || 
+				input.contains(")") || 
+				input.contains(",") || 
+				input.contains(";") ||
+				input.contains(":") ||
+				input.contains("[") ||
+				input.contains("]") ||
+				input.contains("{") ||
+				input.contains("}") ||
+				input.contains("<") ||
+				input.contains(">") ||
+				input.contains("=") ||
+				input.contains("?") ||
+				input.contains("!") ||
+				input.contains("@") ||
+				input.contains("#") ||
+				input.contains("$") ||
+				input.contains("%") ||
+				input.contains("^") ||
+				input.contains("*") ||
+				input.contains("+") ||
+				input.contains("/") ||
+				input.contains("`") ||
+				input.contains("~")) 
+		{
+			System.out.println("Input Contains Invalid Characters");
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	public void changeUsername() {
+		System.out.println("Enter Current Password");
+		if(getUserInput().equals(user.getPassword())) {
+			System.out.println("Enter new Username");
+			String newUsername = getUserInput();
+			if(login.searchForProfile(newUsername) != null) {
+				System.out.println("Username is already taken");
+			}
+			else {
+				if(validInput(newUsername)) {
+					int index =login.existingUsers.indexOf(user);
+					user.changeUsername(newUsername);
+					login.existingUsers.remove(index);
+					login.existingUsers.add(index, user);
+					System.out.println("Username successfully changed to: " + user.getUsername());
+					//Update files (Will create a new issue for it)
+				}
+				else {
+					System.out.println("Username must contain no special characters and be less than 16 characters.");
+				}
+			}
+		}
+		else {
+			System.out.println("Password is not correct");
+		}
+	}
+	
+	public void changePassword() {
+		System.out.println("Enter Current Password");
+		if(getUserInput().equals(user.getPassword())) {
+			System.out.println("Enter new Password");
+			String newPassword = getUserInput();
+			int index =login.existingUsers.indexOf(user);
+			user.changePassword(newPassword);
+			login.existingUsers.remove(index);
+			login.existingUsers.add(index, user);
+			System.out.println("Password successfully changed");
+			bank.saveAccountsToFile(); // Save the updated account info to file
+		}
+		else {
+		System.out.println("Password is not correct");
 		}
 	}
 }
