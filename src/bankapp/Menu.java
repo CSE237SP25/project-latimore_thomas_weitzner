@@ -1,6 +1,6 @@
 package bankapp;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class Menu {
 
@@ -212,6 +212,7 @@ public class Menu {
 			return;
 		}
 		userAccount.setAccountHolderName(newName);
+		bank.saveAccountsToFile(); // Save the updated account info to file
 		System.out.println("Your account has been renamed to: " + newName);
 	}
 	
@@ -352,7 +353,7 @@ public class Menu {
 			login.existingUsers.remove(index);
 			login.existingUsers.add(index, user);
 			System.out.println("Password successfully changed");
-			//Update files (Will create new issue for it)
+			bank.saveAccountsToFile(); // Save the updated account info to file
 		}
 		else {
 		System.out.println("Password is not correct");
