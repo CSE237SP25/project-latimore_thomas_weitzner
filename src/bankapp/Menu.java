@@ -62,7 +62,7 @@ public class Menu {
 				withdraw();
 				break;
 			case "c":
-				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+				displayBalance();
 				break;
 			case "d":
 				createAccount();
@@ -84,6 +84,10 @@ public class Menu {
 		}
 	}
 	
+	private void displayBalance() {
+		System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+	}
+	
 	private void displayAccounts() {
 	    if (user == null) {
 	        System.out.println("Error: No user is currently logged in!");
@@ -91,11 +95,9 @@ public class Menu {
 	    }
 	    System.out.println("Here are all of your accounts: ");
 		for (BankAccount account : user.getAccounts()) {
-			System.out.println("Account number: " + account.getAccountNumber());
-			System.out.println("Account name: " + account.getAccountName());
-			System.out.println("Balance: " + account.getCurrentBalance());
-			System.out.println();
+			System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
 		}
+		System.out.println();
 	}
 
 	public void deposit(){
@@ -115,7 +117,7 @@ public class Menu {
 	}
 	
 	public void createAccount() {
-		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		this.userAccount = new BankAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
 		bank.addAccount(userAccount); // Add the new account to the bank
 		this.user.addAccount(userAccount);
 		System.out.println("Your new account has been created");
@@ -130,7 +132,7 @@ public class Menu {
 			return;
 		}
 		
-		if (user.getAccounts().size() == 0) {
+		if (user.getAccounts().isEmpty()) {
 			System.out.println("You don't have any open accounts.");
 			System.out.println();
 			return;
@@ -196,51 +198,25 @@ public class Menu {
 	public void renameAccount() {
 		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
-		if (newName.equals("")) {
-			System.out.println("Invalid account name. Please enter a non-empty name.");
-			renameAccount();
-			return;
-		}
-		if (newName.equals(userAccount.getAccountName())) {
-            System.out.println("Your account name is already " + newName);
-            return;
-        }
-		if (newName.length() > 25) {
-            System.out.println("Invalid account name. Please enter a name with 25 characters or less.");
-            renameAccount();
-            return;
-        }
-		if (newName.contains("(") || 
-				newName.contains(")") || 
-				newName.contains(",") || 
-				newName.contains(";") ||
-				newName.contains(":") ||
-				newName.contains("[") ||
-				newName.contains("]") ||
-				newName.contains("{") ||
-				newName.contains("}") ||
-				newName.contains("<") ||
-				newName.contains(">") ||
-				newName.contains("=") ||
-				newName.contains("?") ||
-				newName.contains("!") ||
-				newName.contains("@") ||
-				newName.contains("#") ||
-				newName.contains("$") ||
-				newName.contains("%") ||
-				newName.contains("^") ||
-				newName.contains("*") ||
-				newName.contains("+") ||
-				newName.contains("/") ||
-				newName.contains("`") ||
-				newName.contains("~")) 
-		{
-			System.out.println("Invalid account name. Please enter a name without special charachters.");
+		if (isInvalidAccountName(newName)) {
 			renameAccount();
 			return;
 		}
 		userAccount.setAccountHolderName(newName);
 		System.out.println("Your account has been renamed to: " + newName);
+	}
+	
+	public boolean isInvalidAccountName(String name) {
+		if (name.isEmpty() || name.length() > 25 || name.equals(userAccount.getAccountName())) {
+			return true;
+		}
+		String specialCharacters = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";
+		for (char c : specialCharacters.toCharArray()) {
+			if (name.contains(String.valueOf(c))) {
+                return true;
+            }
+		}
+        return false;
 	}
 	
 	//Login Code
@@ -263,22 +239,19 @@ public class Menu {
 	public Boolean loginToAccount() {
 		System.out.println("Enter Username:");
 		String username = getUserInput();
-		if(login.searchForProfile(username) == null) {
+		User profile = login.searchForProfile(username);
+		if (profile == null) {
 			System.out.println("Profile does not exist");
 			return false;
 		}
-		else {
-			User profile = login.searchForProfile(username);
-			System.out.println("Enter Password:");
-			String password = getUserInput();
-			Boolean correctPassword = login.checkPassword(profile, password);
-			if(correctPassword) {
-				this.user = profile;
-				return true;
-			}
-			System.out.println("Passwords do not match");
-			return false;
+		System.out.println("Enter Password:");
+		String password = getUserInput();
+		if(login.checkPassword(profile, password)) {
+			this.user = profile;
+			return true;
 		}
+		System.out.println("Passwords do not match");
+		return false;
 	}
 
 
