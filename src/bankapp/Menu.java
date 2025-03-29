@@ -40,6 +40,7 @@ public class Menu {
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 		System.out.println("h.) View transaction history");
+		System.out.println("i.) Make a transfer between accounts");
 	}
 
 	public String getUserInput(){
@@ -71,6 +72,9 @@ public class Menu {
 				break;
 			case "h":
 				viewTransactionHistory();
+				break;
+			case "i":
+				transferBetweenAccounts();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
@@ -217,5 +221,51 @@ public class Menu {
 			System.out.println(transaction);
 		}
 
+	}
+
+	public void transferBetweenAccounts(){
+		if (user.getAccounts().size() < 2){
+			System.out.println("You need to have more than one account to transfer between");
+			return;
+		}
+		System.out.println("Your current account:");
+		System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
+		System.out.println("Accounts avaliable: ");
+		for (BankAccount account : user.getAccounts()){
+			if (account.getAccountNumber() != userAccount.getAccountNumber()){
+				System.out.println("Account #" + account.getAccountNumber()+ " - Balance: $" + account.getCurrentBalance());
+			}
+		}
+		
+		try{
+			System.out.print("\nEnter account number to transfer to: ");
+			int targetAccount = Integer.parseInt(getUserInput());
+
+			BankAccount target = null;
+			for (BankAccount account: user.getAccounts()){
+				if(account.getAccountNumber() == targetAccount){
+					target = account;
+					break;
+				}
+			}
+			if (target.getAccountNumber() == userAccount.getAccountNumber()) {
+				System.out.println("Error: Cannot transfer to same account");
+				return;
+			}
+			if (target == null){
+				System.out.println("Target account does not exist.");
+				return;
+			}
+			System.out.print("Enter an amount to transfer: $");
+			double amount = Double.parseDouble(getUserInput());
+			userAccount.transfer(target, amount);
+			bank.saveAccountsToFile();
+			System.out.printf("\n$%.2f has been transferred to account #%d\n", amount, targetAccount);
+			System.out.printf("Your new balance is: $%.2f\n", userAccount.getCurrentBalance());
+			System.out.printf("Account #%d new balance: $%.2f\n",target.getAccountNumber(), target.getCurrentBalance());
+
+		} catch (NumberFormatException e) {
+        System.out.println("❌ Please enter valid numbers");
+		} 
 	}
 }
