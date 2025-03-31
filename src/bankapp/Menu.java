@@ -339,7 +339,7 @@ public class Menu {
 			BankAccount newAccount = new BankAccount(newUser.getUsername() + " Account");
 			newUser.addAccount(newAccount);
 			bank.addUser(newUser);
-			
+			this.currentUserAccount = newAccount;
 			return true;
 		}
 		else {
