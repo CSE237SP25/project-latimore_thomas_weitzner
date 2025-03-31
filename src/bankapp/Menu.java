@@ -5,7 +5,8 @@ import java.util.Scanner;
 public class Menu {
 
 	private Scanner inputScanner;
-	private BankAccount userAccount;
+	private List<BankAccount> userAccounts;
+	private BankAccount currentUserAccount;
 	private final Bank bank;
 	private User user;
 	private LoginMenu login;
@@ -30,10 +31,6 @@ public class Menu {
 	    this.inputScanner = new Scanner(System.in);
 		this.bank = new Bank();// Initialize the bank object
 		this.login = new LoginMenu(bank.getUsers());
-	    this.userAccount = new BankAccount("Placeholder Name");
-	    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
-	    this.user.addAccount(userAccount);
-		bank.addUser(user); // Add the user to the bank
 	    System.out.println("Hello! Welcome to our bank app!");
 	}
 
@@ -65,7 +62,7 @@ public class Menu {
 				withdraw();
 				break;
 			case "c":
-				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+				System.out.println("Your current balance is: " + currentUserAccount.getCurrentBalance());
 				break;
 			case "d":
 				createAccount();
@@ -99,12 +96,12 @@ public class Menu {
 	private void logout() {
 		System.out.println("Logging out...");
 		this.user = null;
-		this.userAccount = null;
+		this.currentUserAccount = null;
 		Boolean loggedIn = false;
 		while (!loggedIn) {
 			loggedIn = loginInputChoices();
 		}
-		this.userAccount = this.user.getAccounts().get(0);
+		this.currentUserAccount = this.user.getAccounts().get(0);
 		System.out.println("Welcome: " + user.getUsername());
 		System.out.println();
 	}
@@ -129,22 +126,22 @@ public class Menu {
 		while (!validDeposit) { 
 			try {
 					double depositAmount = Double.parseDouble(getUserInput());
-					userAccount.deposit(depositAmount);
+					currentUserAccount.deposit(depositAmount);
 					bank.saveAccountsToFile(); // Save the updated account info to file
 					validDeposit = true;
 				} catch (IllegalArgumentException e) {
 					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0. You may only have at most $1.79*10^308 within a bank account at any given time.");
 				}
 			}
-		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
+		System.out.println("Your new balance is: " + currentUserAccount.getCurrentBalance());
 	}
 	
 	public void createAccount() {
-		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
-		bank.addAccount(userAccount); // Add the new account to the bank
-		this.user.addAccount(userAccount);
+		this.currentUserAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
+		bank.addAccount(currentUserAccount); // Add the new account to the bank
+		this.user.addAccount(currentUserAccount);
 		System.out.println("Your new account has been created");
-		System.out.println("Your account number is: " + userAccount.getAccountNumber());
+		System.out.println("Your account number is: " + currentUserAccount.getAccountNumber());
 	}
 	
 
@@ -206,16 +203,16 @@ public class Menu {
 		while (!validWithdraw) { 
 			try {
 					double withdrawAmount = Double.parseDouble(getUserInput());
-					userAccount.withdraw(withdrawAmount);
+					currentUserAccount.withdraw(withdrawAmount);
 					bank.saveAccountsToFile(); // Save the updated account info to file
 					validWithdraw = true;
 				} catch (IllegalArgumentException e) {
-					double currentBalance = userAccount.getCurrentBalance();
+					double currentBalance = currentUserAccount.getCurrentBalance();
 					System.out.println("Invalid withdrawal amount. Please enter a positive withdrawal amount less than or equal to your current balance of: $" + currentBalance);
 				}
 			}
 
-		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
+		System.out.println("Your new balance is: " + currentUserAccount.getCurrentBalance());
 	}
 	
 	public void renameAccount() {
@@ -226,7 +223,7 @@ public class Menu {
 			renameAccount();
 			return;
 		}
-		if (newName.equals(userAccount.getAccountName())) {
+		if (newName.equals(currentUserAccount.getAccountName())) {
             System.out.println("Your account name is already " + newName);
             return;
         }
@@ -264,7 +261,7 @@ public class Menu {
 			renameAccount();
 			return;
 		}
-		userAccount.setAccountHolderName(newName);
+		currentUserAccount.setAccountHolderName(newName);
 		bank.saveAccountsToFile(); // Save the updated account info to file
 		System.out.println("Your account has been renamed to: " + newName);
 	}
@@ -277,6 +274,7 @@ public class Menu {
 			case "a":
 				return loginToAccount();
 			case "b":
+				System.out.println("Creating a new account...");
 				return createProfile();
 			default:
 				System.out.println("Invalid Input");
@@ -300,6 +298,9 @@ public class Menu {
 			Boolean correctPassword = login.checkPassword(profile, password);
 			if(correctPassword) {
 				this.user = profile;
+				this.currentUserAccount = user.getAccounts().get(0);
+				this.userAccounts = user.getAccounts();
+				System.out.println("Login Successful");
 				return true;
 			}
 			System.out.println("Passwords do not match");
@@ -349,12 +350,12 @@ public class Menu {
 
 
 	public void viewTransactionHistory() {
-		if (userAccount == null){
+		if (currentUserAccount == null){
 			System.out.println("No account selected!");
 			return;
 		}
 
-		List<String> history = userAccount.getTransactionHistory();
+		List<String> history = currentUserAccount.getTransactionHistory();
 		if (history.isEmpty()){
 			System.out.println("No transactions yet!");
 			return;
@@ -424,7 +425,7 @@ public class Menu {
 					login.existingUsers.remove(index);
 					login.existingUsers.add(index, user);
 					System.out.println("Username successfully changed to: " + user.getUsername());
-					//Update files (Will create a new issue for it)
+					bank.saveAccountsToFile(); // Save the updated account info to file
 				}
 				else {
 					System.out.println("Username must contain no special characters and be less than 16 characters.");
