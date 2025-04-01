@@ -3,6 +3,8 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import org.junit.jupiter.api.BeforeEach;
+
 
 import org.junit.jupiter.api.Test;
 
@@ -186,6 +188,76 @@ public class BankAccountTests {
 			assertTrue(e != null);
 
 		}
+	}
+
+	@Test
+	public void testSimpleTransfer() {
+    BankAccount source = new BankAccount("Source");
+    BankAccount target = new BankAccount("Target");
+    source.deposit(100);
+    
+    source.transfer(target, 50);
+    
+    assertEquals(50, source.getCurrentBalance(), 0.001);
+    assertEquals(50, target.getCurrentBalance(), 0.001);
+	}
+
+	@Test
+	public void testTransferNegativeAmount() {
+	BankAccount source = new BankAccount("Source");
+    BankAccount target = new BankAccount("Target");
+    source.deposit(100);
+    
+    try {
+        source.transfer(target, -10);
+        fail();
+    	} catch (IllegalArgumentException e) {
+        assertTrue(e != null);
+        assertEquals(100, source.getCurrentBalance(), 0.001);
+        assertEquals(0, target.getCurrentBalance(), 0.001);
+    }
+	}
+
+	@Test
+	public void testTransferInsufficientFunds() {
+    BankAccount source = new BankAccount("Source");
+    BankAccount target = new BankAccount("Target");
+    source.deposit(50);
+    
+    try {
+        source.transfer(target, 100);
+        fail();
+    } catch (IllegalArgumentException e) {
+        assertTrue(e != null);
+        assertEquals(50, source.getCurrentBalance(), 0.001);
+        assertEquals(0, target.getCurrentBalance(), 0.001);
+    }
+	}
+
+	@Test
+	public void testTransferToSameAccount() {
+    BankAccount account = new BankAccount("Account");
+    account.deposit(100);
+    
+    try {
+        account.transfer(account, 50);
+        fail();
+    } catch (IllegalArgumentException e) {
+        assertTrue(e != null);
+        assertEquals(100, account.getCurrentBalance(), 0.001);
+    	}
+	}
+
+	@Test
+	public void testTransferUpdatesTransactionHistory() {
+    BankAccount source = new BankAccount("Source");
+    BankAccount target = new BankAccount("Target");
+    source.deposit(200);
+    
+    source.transfer(target, 75);
+    
+    assertTrue(source.getTransactionHistory().get(1).contains("Transfer to"));
+    assertTrue(target.getTransactionHistory().get(0).contains("Transfer from"));
 	}
 	
 }
