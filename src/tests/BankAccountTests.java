@@ -238,6 +238,7 @@ public class BankAccountTests {
 	public void testTransferToSameAccount() {
     BankAccount account = new BankAccount("Account");
     account.deposit(100);
+	
     
     try {
         account.transfer(account, 50);
