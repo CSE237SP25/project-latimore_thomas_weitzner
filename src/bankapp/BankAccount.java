@@ -47,6 +47,27 @@ public class BankAccount {
 		this.transactionHistory.add(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 
 	}
+
+	public void transfer(BankAccount targetAccount, double amount){
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Must transfer positive amount");
+		}
+		if (this == targetAccount){
+			throw new IllegalArgumentException("Cannot transfer balance into the same account");
+		}
+		if (this.balance < amount){
+			throw new IllegalArgumentException("insufficient funds");
+		}
+
+		this.withdraw(amount);
+		targetAccount.deposit(amount);
+
+		String transferOut = String.format("Transfer to #%d: -$%.2f", targetAccount.getAccountNumber(), amount);
+		String transferIn = String.format("Transfer from #%d: +$%.2f", this.accountNumber, amount);
+    
+    	this.transactionHistory.add(transferOut + "Balance: $" + this.balance);
+		targetAccount.addTransactionHistory(transferIn + "Balance: $" + targetAccount.getCurrentBalance());
+	}
 	
 	public void addTransactionHistory(String transaction) {
 		this.transactionHistory.add(transaction);
@@ -68,4 +89,8 @@ public class BankAccount {
 		this.transactionHistory.add("Account name changed to: " + accountHolderName);
 		return this.accountName = accountHolderName;
 	}
+
+	public String getAccountHolderName() {
+    return this.accountName;
+}
 }

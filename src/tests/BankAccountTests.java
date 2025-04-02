@@ -3,6 +3,8 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import org.junit.jupiter.api.BeforeEach;
+
 
 import java.util.List;
 
@@ -189,6 +191,66 @@ public class BankAccountTests {
 
 		}
 	}
+	// In BankAccountTests.java, update the transfer tests to use assertTrue() instead of assertEquals()
+
+	@Test
+	public void testSimpleTransfer() {
+		BankAccount source = new BankAccount("Source");
+		BankAccount target = new BankAccount("Target");
+		source.deposit(100);
+		
+		source.transfer(target, 50);
+		
+		assertTrue(Math.abs(source.getCurrentBalance() - 50) < 0.001);
+		assertTrue(Math.abs(target.getCurrentBalance() - 50) < 0.001);
+	}
+
+	@Test
+	public void testTransferNegativeAmount() {
+		BankAccount source = new BankAccount("Source");
+		BankAccount target = new BankAccount("Target");
+		source.deposit(100);
+		
+		try {
+			source.transfer(target, -10);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e.getMessage().contains("positive"));
+			assertTrue(Math.abs(source.getCurrentBalance() - 100) < 0.001);
+			assertTrue(Math.abs(target.getCurrentBalance() - 0) < 0.001);
+		}
+	}
+
+	@Test
+	public void testTransferInsufficientFunds() {
+		BankAccount source = new BankAccount("Source");
+		BankAccount target = new BankAccount("Target");
+		source.deposit(50);
+		
+		try {
+			source.transfer(target, 100);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e.getMessage().contains("funds"));
+			assertTrue(Math.abs(source.getCurrentBalance() - 50) < 0.001);
+			assertTrue(Math.abs(target.getCurrentBalance() - 0) < 0.001);
+		}
+	}
+
+	@Test
+	public void testTransferToSameAccount() {
+		BankAccount account = new BankAccount("Account");
+		account.deposit(100);
+		
+		try {
+			account.transfer(account, 50);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e.getMessage().contains("same account"));
+			assertTrue(Math.abs(account.getCurrentBalance() - 100) < 0.001);
+		}
+	}
+
 	
 	@Test
 	public void testTransactionHistory() {
