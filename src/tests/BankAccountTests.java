@@ -6,6 +6,8 @@ import static org.junit.Assert.fail;
 import org.junit.jupiter.api.BeforeEach;
 
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
@@ -189,7 +191,6 @@ public class BankAccountTests {
 
 		}
 	}
-
 	// In BankAccountTests.java, update the transfer tests to use assertTrue() instead of assertEquals()
 
 	@Test
@@ -249,4 +250,36 @@ public class BankAccountTests {
 			assertTrue(Math.abs(account.getCurrentBalance() - 100) < 0.001);
 		}
 	}
+
+	
+	@Test
+	public void testTransactionHistory() {
+		BankAccount account = new BankAccount("John Doe");
+		account.deposit(50);
+		account.withdraw(25);
+		
+		List<String> history = account.getTransactionHistory();
+		assertEquals(history.size(), 2);
+		assertTrue(history.get(0).contains("Deposit"));
+		assertTrue(history.get(1).contains("Withdraw"));
+	}
+	
+	@Test
+	public void testTransactionHistoryEmpty() {
+		BankAccount account = new BankAccount("John Doe");
+		List<String> history = account.getTransactionHistory();
+		assertEquals(history.size(), 0);
+	}
+	
+	@Test
+	public void testTransactionHistoryTime() {
+		BankAccount account = new BankAccount("John Doe");
+		account.deposit(50);
+		account.withdraw(25);
+
+		List<String> history = account.getTransactionHistory();
+		assertTrue(history.get(0).contains("Time"));
+		assertTrue(history.get(1).contains("Time"));
+	}
+	
 }

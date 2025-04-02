@@ -38,19 +38,21 @@ public class Menu {
 	}
 
 	public void provideUserChoices(){
+		System.out.println();
+		System.out.println(" -- Welcome to Bear Banks! -- ");
 		System.out.println("Would you like to: ");
-		System.out.println("a.) Deposit money");
-		System.out.println("b.) Withdraw money");
-		System.out.println("c.) Check Balance");
-		System.out.println("d.) Create a new account");
-		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
-		System.out.println("g.) Remove an account");
-		System.out.println("e.) Display all accounts");
-		System.out.println("h.) View transaction history");
-		System.out.println("i.) Make a transfer between accounts");
-		System.out.println("j.) Logout");
-		System.out.println("k.) Change username");
-		System.out.println("l.) Change password");
+		System.out.println("(a) Deposit money");
+		System.out.println("(b) Withdraw money");
+		System.out.println("(c) Check Balance");
+		System.out.println("(d) Create a new account");
+		System.out.println("(e) Display all accounts");
+		System.out.println("(f) Rename an account"); //Choice e already used in issue #17
+		System.out.println("(g) Remove an account");
+		System.out.println("(h) View transaction history");
+		System.out.println("(i) Make a transfer between accounts");
+		System.out.println("(j) Logout");
+		System.out.println("(k) Change username");
+		System.out.println("(l) Change password");
 	}
 
 	public String getUserInput(){
@@ -128,6 +130,7 @@ public class Menu {
 	}
 
 	public void deposit(){
+		userAccount = findAccount();
 		System.out.println("How much would you like to deposit?");
 		boolean validDeposit = false;
 		while (!validDeposit) { 
@@ -151,7 +154,28 @@ public class Menu {
 		System.out.println("Your account number is: " + userAccount.getAccountNumber());
 	}
 	
-
+	private BankAccount findAccount() {
+	    System.out.println("Here are all of your accounts: ");
+	    for (BankAccount account : user.getAccounts()) {
+	        System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
+	    }
+	    System.out.println("Enter the account number of the account you want to select:");
+	    int input = Integer.parseInt(getUserInput());
+	
+	    BankAccount selectedAccount = null;
+	    for (BankAccount account : user.getAccounts()) {
+	        if (account.getAccountNumber() == input) {
+	            selectedAccount = account;
+	            break;
+	        }
+	    }
+	
+	    if (selectedAccount == null) {
+	        System.out.println("Invalid account number. Transaction cancelled.");
+	        findAccount();
+	    }
+	    return selectedAccount;
+	}
 
 	public void removeAccount() {
 		if (user == null) {
@@ -165,25 +189,7 @@ public class Menu {
 			return;
 		}
 		
-	    System.out.println("Here are all of your accounts: ");
-	    for (BankAccount account : user.getAccounts()) {
-	        System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
-	    }
-	    System.out.println("Enter the account number of the account you want to remove:");
-	    int input = Integer.parseInt(getUserInput());
-	
-	    BankAccount accountToRemove = null;
-	    for (BankAccount account : user.getAccounts()) {
-	        if (account.getAccountNumber() == input) {
-	            accountToRemove = account;
-	            break;
-	        }
-	    }
-	
-	    if (accountToRemove == null) {
-	        System.out.println("Invalid account number. Account removal cancelled.");
-	        return;
-	    }
+	    BankAccount accountToRemove = findAccount();
 		
 	    System.out.println("Are you sure you want to remove the account: " + accountToRemove.getAccountName() + "? (y/n)");
 	    String userInput = getUserInput();
@@ -205,6 +211,7 @@ public class Menu {
 
 	
 	public void withdraw(){
+		userAccount = findAccount();
 		System.out.println("How much would you like to withdraw?");
 		boolean validWithdraw = false;
 		while (!validWithdraw) { 
@@ -223,6 +230,7 @@ public class Menu {
 	}
 	
 	public void renameAccount() {
+		userAccount = findAccount();
 		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
 		if (newName.equals("")) {
@@ -285,7 +293,6 @@ public class Menu {
 			default:
 				System.out.println("Invalid Input");
 				return false;
-				
 		}
 		
 	}
@@ -353,6 +360,7 @@ public class Menu {
 
 
 	public void viewTransactionHistory() {
+		userAccount = findAccount();
 		if (userAccount == null){
 			System.out.println("No account selected!");
 			return;
