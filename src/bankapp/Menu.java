@@ -46,9 +46,9 @@ public class Menu {
 		System.out.println("(f) Rename an account"); //Choice e already used in issue #17
 		System.out.println("(g) Remove an account");
 		System.out.println("(h) View transaction history");
-    System.out.println("(i) Logout");
-    System.out.println("(j) Change username");
-    System.out.println("(k) Change password");
+    	System.out.println("(i) Logout");
+    	System.out.println("(j) Change username");
+    	System.out.println("(k) Change password");
 	}
 
 	public String getUserInput(){
@@ -83,10 +83,10 @@ public class Menu {
 			case "h":
 				viewTransactionHistory();
 				break;
-      case "i":
-        logout();
-        break;
-      case "j":
+     		 case "i":
+        		logout();
+        		break;
+      		case "j":
 				changeUsername();
 				break;
 			case "k":
@@ -125,7 +125,7 @@ public class Menu {
 	}
 
 	public void deposit(){
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		System.out.println("How much would you like to deposit?");
 		boolean validDeposit = false;
 		while (!validDeposit) { 
@@ -169,6 +169,7 @@ public class Menu {
 	        System.out.println("Invalid account number. Transaction cancelled.");
 	        findAccount();
 	    }
+		this.currentUserAccount = selectedAccount;
 	    return selectedAccount;
 	}
 
@@ -206,7 +207,7 @@ public class Menu {
 
 	
 	public void withdraw(){
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		System.out.println("How much would you like to withdraw?");
 		boolean validWithdraw = false;
 		while (!validWithdraw) { 
@@ -225,7 +226,7 @@ public class Menu {
 	}
 	
 	public void renameAccount() {
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
 		if (newName.equals("")) {
@@ -359,7 +360,7 @@ public class Menu {
 
 
 	public void viewTransactionHistory() {
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		if (userAccount == null){
 			System.out.println("No account selected!");
 			return;
