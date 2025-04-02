@@ -35,18 +35,20 @@ public class Menu {
 	}
 
 	public void provideUserChoices(){
+		System.out.println();
+		System.out.println(" -- Welcome to Bear Banks! -- ");
 		System.out.println("Would you like to: ");
-		System.out.println("a.) Deposit money");
-		System.out.println("b.) Withdraw money");
-		System.out.println("c.) Check Balance");
-		System.out.println("d.) Create a new account");
-		System.out.println("f.) Rename an account"); //Choice e already used in issue #17
-		System.out.println("g.) Remove an account");
-		System.out.println("e.) Display all accounts");
-		System.out.println("h.) View transaction history");
-		System.out.println("i.) Logout");
-		System.out.println("j.) Change username");
-		System.out.println("k.) Change password");
+		System.out.println("(a) Deposit money");
+		System.out.println("(b) Withdraw money");
+		System.out.println("(c) Check Balance");
+		System.out.println("(d) Create a new account");
+		System.out.println("(e) Display all accounts");
+		System.out.println("(f) Rename an account"); //Choice e already used in issue #17
+		System.out.println("(g) Remove an account");
+		System.out.println("(h) View transaction history");
+    System.out.println("(i) Logout");
+    System.out.println("(j) Change username");
+    System.out.println("(k) Change password");
 	}
 
 	public String getUserInput(){
@@ -62,6 +64,8 @@ public class Menu {
 				withdraw();
 				break;
 			case "c":
+        //if we want to entirely get rid of the currentUserAccount setup then this func would basically just be same as e so should have one or the other
+        //but it's still also an option to keep the setup we have rn
 				System.out.println("Your current balance is: " + currentUserAccount.getCurrentBalance());
 				break;
 			case "d":
@@ -121,19 +125,20 @@ public class Menu {
 	}
 
 	public void deposit(){
+		userAccount = findAccount();
 		System.out.println("How much would you like to deposit?");
 		boolean validDeposit = false;
 		while (!validDeposit) { 
 			try {
 					double depositAmount = Double.parseDouble(getUserInput());
-					currentUserAccount.deposit(depositAmount);
+					userAccount.deposit(depositAmount);
 					bank.saveAccountsToFile(); // Save the updated account info to file
 					validDeposit = true;
 				} catch (IllegalArgumentException e) {
 					System.out.println("Invalid deposit amount. Please enter a deposit amount greater than or equal to 0. You may only have at most $1.79*10^308 within a bank account at any given time.");
 				}
 			}
-		System.out.println("Your new balance is: " + currentUserAccount.getCurrentBalance());
+		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
 	
 	public void createAccount() {
@@ -144,7 +149,28 @@ public class Menu {
 		System.out.println("Your account number is: " + currentUserAccount.getAccountNumber());
 	}
 	
-
+	private BankAccount findAccount() {
+	    System.out.println("Here are all of your accounts: ");
+	    for (BankAccount account : user.getAccounts()) {
+	        System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
+	    }
+	    System.out.println("Enter the account number of the account you want to select:");
+	    int input = Integer.parseInt(getUserInput());
+	
+	    BankAccount selectedAccount = null;
+	    for (BankAccount account : user.getAccounts()) {
+	        if (account.getAccountNumber() == input) {
+	            selectedAccount = account;
+	            break;
+	        }
+	    }
+	
+	    if (selectedAccount == null) {
+	        System.out.println("Invalid account number. Transaction cancelled.");
+	        findAccount();
+	    }
+	    return selectedAccount;
+	}
 
 	public void removeAccount() {
 		if (user == null) {
@@ -158,25 +184,7 @@ public class Menu {
 			return;
 		}
 		
-	    System.out.println("Here are all of your accounts: ");
-	    for (BankAccount account : user.getAccounts()) {
-	        System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
-	    }
-	    System.out.println("Enter the account number of the account you want to remove:");
-	    int input = Integer.parseInt(getUserInput());
-	
-	    BankAccount accountToRemove = null;
-	    for (BankAccount account : user.getAccounts()) {
-	        if (account.getAccountNumber() == input) {
-	            accountToRemove = account;
-	            break;
-	        }
-	    }
-	
-	    if (accountToRemove == null) {
-	        System.out.println("Invalid account number. Account removal cancelled.");
-	        return;
-	    }
+	    BankAccount accountToRemove = findAccount();
 		
 	    System.out.println("Are you sure you want to remove the account: " + accountToRemove.getAccountName() + "? (y/n)");
 	    String userInput = getUserInput();
@@ -198,24 +206,26 @@ public class Menu {
 
 	
 	public void withdraw(){
+		userAccount = findAccount();
 		System.out.println("How much would you like to withdraw?");
 		boolean validWithdraw = false;
 		while (!validWithdraw) { 
 			try {
 					double withdrawAmount = Double.parseDouble(getUserInput());
-					currentUserAccount.withdraw(withdrawAmount);
+					userAccount.withdraw(withdrawAmount);
 					bank.saveAccountsToFile(); // Save the updated account info to file
 					validWithdraw = true;
 				} catch (IllegalArgumentException e) {
-					double currentBalance = currentUserAccount.getCurrentBalance();
+					double currentBalance = userAccount.getCurrentBalance();
 					System.out.println("Invalid withdrawal amount. Please enter a positive withdrawal amount less than or equal to your current balance of: $" + currentBalance);
 				}
 			}
 
-		System.out.println("Your new balance is: " + currentUserAccount.getCurrentBalance());
+		System.out.println("Your new balance is: " + userAccount.getCurrentBalance());
 	}
 	
 	public void renameAccount() {
+		userAccount = findAccount();
 		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
 		if (newName.equals("")) {
@@ -223,7 +233,7 @@ public class Menu {
 			renameAccount();
 			return;
 		}
-		if (newName.equals(currentUserAccount.getAccountName())) {
+		if (newName.equals(userAccount.getAccountName())) {
             System.out.println("Your account name is already " + newName);
             return;
         }
@@ -261,7 +271,7 @@ public class Menu {
 			renameAccount();
 			return;
 		}
-		currentUserAccount.setAccountHolderName(newName);
+		userAccount.setAccountHolderName(newName);
 		bank.saveAccountsToFile(); // Save the updated account info to file
 		System.out.println("Your account has been renamed to: " + newName);
 	}
@@ -279,7 +289,6 @@ public class Menu {
 			default:
 				System.out.println("Invalid Input");
 				return false;
-				
 		}
 		
 	}
@@ -350,12 +359,13 @@ public class Menu {
 
 
 	public void viewTransactionHistory() {
-		if (currentUserAccount == null){
+		userAccount = findAccount();
+		if (userAccount == null){
 			System.out.println("No account selected!");
 			return;
 		}
 
-		List<String> history = currentUserAccount.getTransactionHistory();
+		List<String> history = userAccount.getTransactionHistory();
 		if (history.isEmpty()){
 			System.out.println("No transactions yet!");
 			return;
