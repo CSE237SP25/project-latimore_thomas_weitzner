@@ -24,6 +24,8 @@ public class BankAccount {
 	public void deposit(double amount) {
 		if(amount < 0) {
 			throw new IllegalArgumentException();
+		}else if(Double.isInfinite(this.balance+amount) || Double.isNaN(this.balance+amount)) {
+			throw new IllegalArgumentException();
 		}
 		this.balance += amount;
 		this.transactionHistory.add(String.format("Deposit: +$%.2f | Balance: $%.2f", amount, this.balance));

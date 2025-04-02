@@ -2,7 +2,6 @@ package tests;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -51,10 +50,15 @@ public class UserTests {
 	@Test
 	void changePasswordTest() {
 		User user1 = new User("JohnSmith1", "JaneDoe!");
-		user1.changePassword("JaneDoe!", "MaryJane2");
+		user1.changePassword("MaryJane2");
 		assertEquals("MaryJane2", user1.getPassword());
-		assertEquals(false, user1.changePassword("JaneDoe!", "NewPassword"));
-		
+	}
+	
+	@Test
+	void changeUsernameTest() {
+		User user1 = new User("JohnSmith1", "JaneDoe!");
+		user1.changeUsername("PeterParker2");
+		assertEquals("PeterParker2", user1.getUsername());
 	}
 	
 	

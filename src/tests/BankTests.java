@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
@@ -19,13 +20,13 @@ public class BankTests {
         List<BankAccount> accounts = bank.getAccounts();
         assertEquals(3, accounts.size());
 
-        assertEquals("John Doe", accounts.get(0).getAccountHolderName());
+        assertEquals("John Doe", accounts.get(0).getAccountName());
         assertEquals(100.0, accounts.get(0).getCurrentBalance(), 100.0);
 
-        assertEquals("Jane Doe", accounts.get(1).getAccountHolderName());
+        assertEquals("Jane Doe", accounts.get(1).getAccountName());
         assertEquals(17.50, accounts.get(1).getCurrentBalance(), 17.50);
 
-        assertEquals("Jack Doe", accounts.get(2).getAccountHolderName());
+        assertEquals("Jack Doe", accounts.get(2).getAccountName());
         assertEquals(2000.0, accounts.get(2).getCurrentBalance(), 2000.0);
 	}
 
@@ -44,5 +45,5 @@ public class BankTests {
         bank.addAccount(newAccount);
         assertEquals(initialSize + 1, bank.getAccounts().size());
         assertEquals("New Account Holder", bank.getAccounts().get(initialSize).getAccountName());
-        }
+    }
 }
