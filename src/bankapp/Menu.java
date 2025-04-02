@@ -47,9 +47,9 @@ public class Menu {
 		System.out.println("g.) Remove an account");
 		System.out.println("e.) Display all accounts");
 		System.out.println("h.) View transaction history");
-		System.out.println("i.) Change username");
-		System.out.println("j.) Change password");
-		System.out.println("x.) Logout");
+		System.out.println("i.) Logout");
+		System.out.println("j.) Change username");
+		System.out.println("k.) Change password");
 	}
 
 	public String getUserInput(){
@@ -82,15 +82,15 @@ public class Menu {
 			case "h":
 				viewTransactionHistory();
 				break;
-			case "i":
+      case "i":
+        logout();
+        break;
+      case "j":
 				changeUsername();
 				break;
-			case "j":
+			case "k":
 				changePassword();
 				break;
-			case "x":
-                logout();
-                break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 		}
