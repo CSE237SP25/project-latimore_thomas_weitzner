@@ -82,4 +82,8 @@ public class BankAccount {
 		this.transactionHistory.add("Account name changed to: " + accountHolderName);
 		return this.accountName = accountHolderName;
 	}
+
+	public String getAccountHolderName() {
+    return this.accountName;
+}
 }

@@ -3,7 +3,7 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
@@ -43,6 +43,6 @@ public class BankTests {
         BankAccount newAccount = new BankAccount("New Account Holder");
         bank.addAccount(newAccount);
         assertEquals(initialSize + 1, bank.getAccounts().size());
-        assertEquals("New Account Holder", bank.getAccounts().get(initialSize).getAccountHolderName());
-    }
+        assertEquals("New Account Holder", bank.getAccounts().get(initialSize).getAccountName());
+        }
 }

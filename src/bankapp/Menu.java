@@ -223,49 +223,57 @@ public class Menu {
 
 	}
 
-	public void transferBetweenAccounts(){
-		if (user.getAccounts().size() < 2){
-			System.out.println("You need to have more than one account to transfer between");
-			return;
-		}
-		System.out.println("Your current account:");
-		System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
-		System.out.println("Accounts avaliable: ");
-		for (BankAccount account : user.getAccounts()){
-			if (account.getAccountNumber() != userAccount.getAccountNumber()){
-				System.out.println("Account #" + account.getAccountNumber()+ " - Balance: $" + account.getCurrentBalance());
-			}
-		}
-		
-		try{
-			System.out.print("\nEnter account number to transfer to: ");
-			int targetAccount = Integer.parseInt(getUserInput());
-
-			BankAccount target = null;
-			for (BankAccount account: user.getAccounts()){
-				if(account.getAccountNumber() == targetAccount){
-					target = account;
-					break;
-				}
-			}
-			if (target.getAccountNumber() == userAccount.getAccountNumber()) {
-				System.out.println("Error: Cannot transfer to same account");
-				return;
-			}
-			if (target == null){
-				System.out.println("Target account does not exist.");
-				return;
-			}
-			System.out.print("Enter an amount to transfer: $");
-			double amount = Double.parseDouble(getUserInput());
-			userAccount.transfer(target, amount);
-			bank.saveAccountsToFile();
-			System.out.printf("\n$%.2f has been transferred to account #%d\n", amount, targetAccount);
-			System.out.printf("Your new balance is: $%.2f\n", userAccount.getCurrentBalance());
-			System.out.printf("Account #%d new balance: $%.2f\n",target.getAccountNumber(), target.getCurrentBalance());
-
-		} catch (NumberFormatException e) {
+	public void transferBetweenAccounts() {
+    if (user.getAccounts().size() < 2) {
+        System.out.println("You need to have more than one account to transfer between");
+        return;
+    }
+    
+    try {
+        System.out.println("Your current account:");
+        System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
+        System.out.println("Accounts available: ");
+        for (BankAccount account : user.getAccounts()) {
+            if (account.getAccountNumber() != userAccount.getAccountNumber()) {
+                System.out.println("Account #" + account.getAccountNumber()+ " - Balance: $" + account.getCurrentBalance());
+            }
+        }
+        
+        System.out.print("\nEnter account number to transfer to: ");
+        int targetAccountNum = Integer.parseInt(getUserInput());
+        
+        BankAccount targetAccount = null;
+        for (BankAccount account : user.getAccounts()) {
+            if (account.getAccountNumber() == targetAccountNum) {
+                targetAccount = account;
+                break;
+            }
+        }
+        
+        if (targetAccount == null) {
+            System.out.println("Invalid account number");
+            return;
+        }
+        
+        if (targetAccount.getAccountNumber() == userAccount.getAccountNumber()) {
+            System.out.println("Cannot transfer to the same account");
+            return;
+        }
+        
+        System.out.print("Enter amount to transfer: $");
+        double amount = Double.parseDouble(getUserInput());
+        
+        try {
+            userAccount.transfer(targetAccount, amount);
+            bank.saveAccountsToFile();
+            System.out.printf("\n✅ $%.2f successfully transferred to account #%d\n", 
+                amount, targetAccountNum);
+            System.out.printf("Your new balance: $%.2f\n", userAccount.getCurrentBalance());
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ Transfer failed: " + e.getMessage());
+        }
+    } catch (NumberFormatException e) {
         System.out.println("❌ Please enter valid numbers");
-		} 
-	}
+    }
+}
 }
