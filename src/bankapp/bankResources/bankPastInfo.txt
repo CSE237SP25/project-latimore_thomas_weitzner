@@ -1,5 +1,6 @@
 testedUser1,password1,EMPTY,0,0.0
-testedUser2,password2,Placeholder Name,1,200.0
+testedUser2,password2,Placeholder Name,1,600.0
+testedUser2,password2,Placeholder Name,14,200.0
 testedUser3,password3,Placeholder Name,2,8.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,3,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,4,0.0
@@ -11,3 +12,4 @@ PlaceholderUsername,PlaceholderPassword,nina,9,150.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,10,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,11,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,12,0.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,13,0.0
