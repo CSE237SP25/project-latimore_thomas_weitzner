@@ -297,20 +297,22 @@ public class Menu {
 	public Boolean loginToAccount() {
 		System.out.println("Enter Username:");
 		String username = getUserInput();
-		if(login.searchForProfile(username) == null) {
+		User profile = login.searchForProfile(username);
+		if(profile == null) {
 			System.out.println("Profile does not exist");
 			return false;
 		}
 		else {
-			User profile = login.searchForProfile(username);
 			System.out.println("Enter Password:");
 			String password = getUserInput();
 			Boolean correctPassword = login.checkPassword(profile, password);
 			if(correctPassword) {
 				this.user = profile;
-				this.currentUserAccount = user.getAccounts().get(0);
-				this.userAccounts = user.getAccounts();
 				System.out.println("Login Successful");
+				if(checkUserHasAccounts(user)){
+					this.currentUserAccount = user.getAccounts().get(0);
+					this.userAccounts = user.getAccounts();
+				}
 				return true;
 			}
 			System.out.println("Passwords do not match");
@@ -318,6 +320,15 @@ public class Menu {
 		}
 	}
 	
+	public Boolean checkUserHasAccounts(User user){
+		if(user.getAccounts().isEmpty()) {
+			System.out.println("You do not have any accounts. Making one for you!");
+			createAccount();
+			return true;
+		}
+		return true;
+	}
+
 	//creating new Profile
 	public Boolean createProfile(){
 		System.out.println("Welcome! Let's get you set up with a profile!");
