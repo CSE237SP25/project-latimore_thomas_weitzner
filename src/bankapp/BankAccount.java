@@ -32,7 +32,7 @@ public class BankAccount {
 		}
 		this.balance += amount;
 		String dateTime = LocalDateTime.now().format(dtf);
-		this.transactionHistory.add(String.format("Time: %s | Deposit: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
+		addTransactionHistory(String.format("Time: %s | Deposit: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 	}
 
 	public void withdraw(double amount){
@@ -44,7 +44,7 @@ public class BankAccount {
 		}
 		this.balance -= amount;
 		String dateTime = LocalDateTime.now().format(dtf);
-		this.transactionHistory.add(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
+		addTransactionHistory(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 
 	}
 	
@@ -66,6 +66,8 @@ public class BankAccount {
 	
 	public String setAccountHolderName(String accountHolderName) {
 		this.transactionHistory.add("Account name changed to: " + accountHolderName);
+		String dateTime = LocalDateTime.now().format(dtf);
+		addTransactionHistory(String.format("Time: %s | Account name changed to: %s", dateTime, accountHolderName));
 		return this.accountName = accountHolderName;
 	}
 }

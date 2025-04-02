@@ -49,9 +49,9 @@ public class Menu {
 		System.out.println("(f) Rename an account"); //Choice e already used in issue #17
 		System.out.println("(g) Remove an account");
 		System.out.println("(h) View transaction history");
-    System.out.println("(i) Logout");
-    System.out.println("(j) Change username");
-    System.out.println("(k) Change password");
+	    System.out.println("(i) Logout");
+	    System.out.println("(j) Change username");
+	    System.out.println("(k) Change password");
 	}
 
 	public String getUserInput(){
@@ -84,10 +84,10 @@ public class Menu {
 			case "h":
 				viewTransactionHistory();
 				break;
-      case "i":
-        logout();
-        break;
-      case "j":
+			case "i":
+				logout();
+				break;
+			case "j":
 				changeUsername();
 				break;
 			case "k":
