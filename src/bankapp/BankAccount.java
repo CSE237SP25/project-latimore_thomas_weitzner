@@ -65,7 +65,6 @@ public class BankAccount {
 	}
 	
 	public String setAccountHolderName(String accountHolderName) {
-		this.transactionHistory.add("Account name changed to: " + accountHolderName);
 		String dateTime = LocalDateTime.now().format(dtf);
 		addTransactionHistory(String.format("Time: %s | Account name changed to: %s", dateTime, accountHolderName));
 		return this.accountName = accountHolderName;
