@@ -36,6 +36,7 @@ public class Menu {
 	public Menu() {
 	    this.inputScanner = new Scanner(System.in);
 		this.bank = new Bank();// Initialize the bank object
+
 		this.login = new LoginMenu(bank.getUsers(), bank.getTellers());
 	    System.out.println("Hello! Welcome to our bank app!");
 	}
@@ -327,7 +328,6 @@ public class Menu {
 			return false;
 		}
 	}
-	
 	public Boolean loginToTellerAccount(){
 		System.out.println("Enter Username:");
 		String username = getUserInput();
@@ -350,7 +350,7 @@ public class Menu {
 		}
 		
 	}
-	
+
 	public Boolean checkUserHasAccounts(User user){
 		if(user.getAccounts().isEmpty()) {
 			System.out.println("You do not have any accounts. Making one for you!");

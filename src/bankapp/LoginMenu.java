@@ -54,18 +54,11 @@ public class LoginMenu{
 
 	
 	public void displayChoices() {
+		System.out.println("\n -- Welcome to Bear Banks! -- \n");
 		System.out.println("Welcome! Would you like to:");
 		System.out.println("(a) Login");
-		System.out.println("(b) Create New Account");
+    System.out.println("(b) Create a new bank profile");
 		System.out.println("(c) Teller Login");
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
