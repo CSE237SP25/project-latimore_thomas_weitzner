@@ -23,7 +23,7 @@ public class TellerTests{
 		teller.changePassword("password2");
 		assertEquals("password2", teller.getPassword());
 		teller.changePassword("password3");
-		assertEquals("Username3", teller.getUsername());
+		assertEquals("password3", teller.getPassword());
 	}	
 		
 }

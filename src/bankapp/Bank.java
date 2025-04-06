@@ -15,8 +15,11 @@ public class Bank {
 	private List<String> accountInfoList = new ArrayList<>(); // List to hold account info strings
 	private List<User> users = new ArrayList<>();// List to hold users (if needed)
 	private String bankFilePath;
+	private List<Teller> tellers = new ArrayList<>();
+	
 	
 	public Bank() {
+		tellers.add(new Teller("Teller1", "Password1"));
 		this.accounts = new ArrayList<>();
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
@@ -154,5 +157,9 @@ public class Bank {
 
 	public List<User> getUsers(){
 		return this.users;
+	}
+	
+	public List<Teller> getTellers(){
+		return this.tellers;
 	}
 }
