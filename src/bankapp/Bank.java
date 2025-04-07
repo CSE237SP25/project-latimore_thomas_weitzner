@@ -142,7 +142,7 @@ public class Bank {
 	
 	private BankAccount createAccount(String accountName, int accountNumber, double balance) {
 		BankAccount account = new BankAccount(accountName);
-		account.deposit(balance);
+		account.initializeAccountBalance(balance);
 		addAccount(account);
 		return account;
 	}
