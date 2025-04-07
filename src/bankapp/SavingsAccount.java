@@ -8,10 +8,20 @@ public class SavingsAccount extends BankAccount{
     private static final double interestRate = 0.001;//this is the interest rate which compounds daily and is added to the balance
     private static final double withdrawalPenalty = 0.05;
 	private static final String lastTransactionTime = LocalDateTime.now().format(dtf);
-
+	private static final Scanner sc = new Scanner(System.in);
 	
 	public SavingsAccount(String accountName) {
         super(accountName);
+		System.out.println("Initial Deposit Amount: ");
+		Double depositAmount = Double.parseDouble(sc.nextLine());
+		if(depositAmount<100.0){
+			throw new IllegalArgumentException("Initial deposit must be at least $100.00 for a savings account");
+			//note that I don't know if doing this will auto delete this account or not
+		}else{
+			this.balance = depositAmount;
+			String dateTime = LocalDateTime.now().format(dtf);
+			this.transactionHistory.add(String.format("Time: %s | Deposit: +$%.2f | Balance: $%.2f", dateTime, depositAmount, this.balance));
+		}
 	}
 
     @Override
@@ -24,7 +34,6 @@ public class SavingsAccount extends BankAccount{
 		getCurrentBalance();
 		System.out.println("Note that withdrawing from a savings account will incur a penalty of 5% of the amount withdrawn.");
 		System.out.println("Do you still want to continue with the transaction? Please indicate y or n below.");
-		Scanner sc = new Scanner(System.in);
 		String response = sc.nextLine();
 		if (response.equalsIgnoreCase("y")){
 			amount += amount * getWithdrawalPenalty();

@@ -39,27 +39,12 @@ public abstract class BankAccount {
 
 	//different types of accounts will have different withdraw methods since they have different rules for withdrawing
 	abstract public void withdraw(double amount);
-
-	/*public void withdraw(double amount){
-		if (amount < 0){
-			throw new IllegalArgumentException("cannot complete a negative withdrawal");
-		}
-		if (this.balance - amount < 0){
-			throw new IllegalArgumentException("insufficient funds");
-		}
-		this.balance -= amount;
-		String dateTime = LocalDateTime.now().format(dtf);
-		this.transactionHistory.add(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
-
-	}*/
 	
 	public void addTransactionHistory(String transaction) {
 		this.transactionHistory.add(transaction);
 	}
 	
-	public double getCurrentBalance() {
-		return this.balance;
-	}
+	abstract public double getCurrentBalance();
 	
 	public int getAccountNumber() {
 		return this.accountNumber;
