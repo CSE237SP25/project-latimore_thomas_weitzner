@@ -142,7 +142,7 @@ public class Menu {
 	}
 	
 	public void createAccount() {
-		this.userAccount = new BankAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
+		this.currentUserAccount = new BankAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
 		bank.addAccount(currentUserAccount); // Add the new account to the bank
 		this.user.addAccount(currentUserAccount);
 		System.out.println("Your new account has been created");
@@ -239,7 +239,7 @@ public class Menu {
 	}
 	
 	public boolean isInvalidAccountName(String name) {
-		if (name.isEmpty() || name.length() > 25 || name.equals(userAccount.getAccountName())) {
+		if (name.isEmpty() || name.length() > 25 || name.equals(this.currentUserAccount.getAccountName())) {
 			return true;
 		}
 		String specialCharacters = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";
