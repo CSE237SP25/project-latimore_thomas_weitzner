@@ -49,7 +49,7 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
-    System.out.println("(X) Logout");
+    	System.out.println("(X) Logout");
 	}
 
 	public String getUserInput(){
@@ -459,6 +459,9 @@ public class Menu {
     }
     
     try {
+		System.out.println("Select the account you want to transfer from:");
+		BankAccount userAccount = findAccount();
+		this.currentUserAccount = userAccount;
         System.out.println("Your current account:");
         System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
         System.out.println("Accounts available: ");
