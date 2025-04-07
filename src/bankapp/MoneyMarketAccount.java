@@ -3,14 +3,15 @@ package bankapp;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-public class SavingsAccount extends BankAccount{
+public class MoneyMarketAccount extends BankAccount{
 	
-    private static final double interestRate = 0.001;//this is the interest rate which compounds daily and is added to the balance
+    private static final double interestRate = 0.005;//this is the interest rate which compounds daily and is added to the balance
     private static final double withdrawalPenalty = 0.05;
 	private static final String lastTransactionTime = LocalDateTime.now().format(dtf);
+	private static final double minimumBalance = 1000.00;
 
 	
-	public SavingsAccount(String accountName) {
+	public MoneyMarketAccount(String accountName) {
         super(accountName);
 	}
 
@@ -29,8 +30,8 @@ public class SavingsAccount extends BankAccount{
 		if (response.equalsIgnoreCase("y")){
 			amount += amount * getWithdrawalPenalty();
 			System.out.println("The amount after penalty is: " + amount);
-			if (this.balance - amount < 0){
-				throw new IllegalArgumentException("insufficient funds");
+			if (this.balance - amount < minimumBalance){
+				throw new IllegalArgumentException("Insufficient funds. A minimum balance of $1000.00 is required.");
 			}
 			this.balance -= amount;
 			String dateTime = LocalDateTime.now().format(dtf);

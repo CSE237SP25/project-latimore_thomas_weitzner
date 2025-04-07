@@ -1,18 +1,12 @@
 package bankapp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class CheckingsAccount extends BankAccount{
 	
 	
 	public CheckingsAccount(String accountName) {
 		super(accountName);
-	}
-	
-	public List<String> getTransactionHistory(){
-		return new ArrayList<>(this.transactionHistory);
 	}
 
 	//different types of accounts will have different withdraw methods since they have different rules for withdrawing
