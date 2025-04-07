@@ -11,3 +11,16 @@ PlaceholderUsername,PlaceholderPassword,nina,9,150.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,10,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,11,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,12,0.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,13,0.0
+PlaceholderUsername,PlaceholderPassword,thomasTestAccount31,14,100.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,15,9990.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,16,0.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,17,0.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,18,0.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,19,0.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,20,0.0
+PlaceholderUsername,PlaceholderPassword,thomasAccount,21,91.0
+PlaceholderUsername,PlaceholderPassword,Placeholder Name,23,998.5
+thomasUsername,myPassword,thomasUsername Account,22,1000.0
+myNewAccount,mynewPassword,myNewAccount Account,24,100.0
+myNewAccount,mynewPassword,mySecondAccount,25,9980.0

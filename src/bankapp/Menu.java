@@ -5,7 +5,8 @@ import java.util.Scanner;
 public class Menu {
 
 	private Scanner inputScanner;
-	private BankAccount userAccount;
+	private List<BankAccount> userAccounts;
+	private BankAccount currentUserAccount;
 	private final Bank bank;
 	private User user;
 	private LoginMenu login;
@@ -30,10 +31,6 @@ public class Menu {
 	    this.inputScanner = new Scanner(System.in);
 		this.bank = new Bank();// Initialize the bank object
 		this.login = new LoginMenu(bank.getUsers());
-	    this.userAccount = new BankAccount("Placeholder Name");
-	    this.user = new User("PlaceholderUsername", "PlaceholderPassword");
-	    this.user.addAccount(userAccount);
-		bank.addUser(user); // Add the user to the bank
 	    System.out.println("Hello! Welcome to our bank app!");
 	}
 
@@ -50,9 +47,9 @@ public class Menu {
 		System.out.println("(g) Remove an account");
 		System.out.println("(h) View transaction history");
 		System.out.println("(i) Make a transfer between accounts");
-		System.out.println("(j) Logout");
-		System.out.println("(k) Change username");
-		System.out.println("(l) Change password");
+		System.out.println("(j) Change username");
+		System.out.println("(k) Change password");
+    System.out.println("(X) Logout");
 	}
 
 	public String getUserInput(){
@@ -68,7 +65,7 @@ public class Menu {
 				withdraw();
 				break;
 			case "c":
-				System.out.println("Your current balance is: " + userAccount.getCurrentBalance());
+				displayBalance();
 				break;
 			case "d":
 				createAccount();
@@ -89,31 +86,35 @@ public class Menu {
 				transferBetweenAccounts();
 				break;
 			case "j":
-				logout();
-				break;
-			case "k":
 				changeUsername();
 				break;
-			case "l":
+			case "k":
 				changePassword();
+				break;
+      case "x":
+				logout();
 				break;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 		}
 	}
 	
+	private void displayBalance() {
+		System.out.println("Your current balance is: " + currentUserAccount.getCurrentBalance());
+  }
+
 	private void logout() {
 		System.out.println("Logging out...");
 		this.user = null;
-		this.userAccount = null;
+		this.currentUserAccount = null;
 		Boolean loggedIn = false;
 		while (!loggedIn) {
 			loggedIn = loginInputChoices();
 		}
-		this.userAccount = this.user.getAccounts().get(0);
+		this.currentUserAccount = this.user.getAccounts().get(0);
 		System.out.println("Welcome: " + user.getUsername());
 		System.out.println();
-	}
+	 }
 	
 	private void displayAccounts() {
 	    if (user == null) {
@@ -122,15 +123,13 @@ public class Menu {
 	    }
 	    System.out.println("Here are all of your accounts: ");
 		for (BankAccount account : user.getAccounts()) {
-			System.out.println("Account number: " + account.getAccountNumber());
-			System.out.println("Account name: " + account.getAccountName());
-			System.out.println("Balance: " + account.getCurrentBalance());
-			System.out.println();
+			System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
 		}
+		System.out.println();
 	}
 
 	public void deposit(){
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		System.out.println("How much would you like to deposit?");
 		boolean validDeposit = false;
 		while (!validDeposit) { 
@@ -147,11 +146,11 @@ public class Menu {
 	}
 	
 	public void createAccount() {
-		this.userAccount = new BankAccount("Placeholder Name"); //NOTE: replace the name with the actual persons name from their profile
-		bank.addAccount(userAccount); // Add the new account to the bank
-		this.user.addAccount(userAccount);
+		this.currentUserAccount = new BankAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
+		bank.addAccount(currentUserAccount); // Add the new account to the bank
+		this.user.addAccount(currentUserAccount);
 		System.out.println("Your new account has been created");
-		System.out.println("Your account number is: " + userAccount.getAccountNumber());
+		System.out.println("Your account number is: " + currentUserAccount.getAccountNumber());
 	}
 	
 	private BankAccount findAccount() {
@@ -174,6 +173,7 @@ public class Menu {
 	        System.out.println("Invalid account number. Transaction cancelled.");
 	        findAccount();
 	    }
+		this.currentUserAccount = selectedAccount;
 	    return selectedAccount;
 	}
 
@@ -211,7 +211,7 @@ public class Menu {
 
 	
 	public void withdraw(){
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		System.out.println("How much would you like to withdraw?");
 		boolean validWithdraw = false;
 		while (!validWithdraw) { 
@@ -230,55 +230,29 @@ public class Menu {
 	}
 	
 	public void renameAccount() {
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
-		if (newName.equals("")) {
-			System.out.println("Invalid account name. Please enter a non-empty name.");
-			renameAccount();
-			return;
-		}
-		if (newName.equals(userAccount.getAccountName())) {
-            System.out.println("Your account name is already " + newName);
-            return;
-        }
-		if (newName.length() > 25) {
-            System.out.println("Invalid account name. Please enter a name with 25 characters or less.");
-            renameAccount();
-            return;
-        }
-		if (newName.contains("(") || 
-				newName.contains(")") || 
-				newName.contains(",") || 
-				newName.contains(";") ||
-				newName.contains(":") ||
-				newName.contains("[") ||
-				newName.contains("]") ||
-				newName.contains("{") ||
-				newName.contains("}") ||
-				newName.contains("<") ||
-				newName.contains(">") ||
-				newName.contains("=") ||
-				newName.contains("?") ||
-				newName.contains("!") ||
-				newName.contains("@") ||
-				newName.contains("#") ||
-				newName.contains("$") ||
-				newName.contains("%") ||
-				newName.contains("^") ||
-				newName.contains("*") ||
-				newName.contains("+") ||
-				newName.contains("/") ||
-				newName.contains("`") ||
-				newName.contains("~")) 
-		{
-			System.out.println("Invalid account name. Please enter a name without special charachters.");
+		if (isInvalidAccountName(newName)) {
 			renameAccount();
 			return;
 		}
 		userAccount.setAccountHolderName(newName);
 		bank.saveAccountsToFile(); // Save the updated account info to file
 		System.out.println("Your account has been renamed to: " + newName);
+	}
+	
+	public boolean isInvalidAccountName(String name) {
+		if (name.isEmpty() || name.length() > 25 || name.equals(this.currentUserAccount.getAccountName())) {
+			return true;
+		}
+		String specialCharacters = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";
+		for (char c : specialCharacters.toCharArray()) {
+			if (name.contains(String.valueOf(c))) {
+                return true;
+            }
+		}
+        return false;
 	}
 	
 	//Login Code
@@ -289,6 +263,7 @@ public class Menu {
 			case "a":
 				return loginToAccount();
 			case "b":
+				System.out.println("Creating a new account...");
 				return createProfile();
 			default:
 				System.out.println("Invalid Input");
@@ -300,17 +275,20 @@ public class Menu {
 	public Boolean loginToAccount() {
 		System.out.println("Enter Username:");
 		String username = getUserInput();
-		if(login.searchForProfile(username) == null) {
+		User profile = login.searchForProfile(username);
+		if(profile == null) {
 			System.out.println("Profile does not exist");
 			return false;
 		}
 		else {
-			User profile = login.searchForProfile(username);
 			System.out.println("Enter Password:");
 			String password = getUserInput();
-			Boolean correctPassword = login.checkPassword(profile, password);
-			if(correctPassword) {
+			if(login.checkPassword(profile, password)) {
 				this.user = profile;
+				if(checkUserHasAccounts(user)){
+					this.currentUserAccount = user.getAccounts().get(0);
+					this.userAccounts = user.getAccounts();
+				}
 				return true;
 			}
 			System.out.println("Passwords do not match");
@@ -318,6 +296,15 @@ public class Menu {
 		}
 	}
 	
+	public Boolean checkUserHasAccounts(User user){
+		if(user.getAccounts().isEmpty()) {
+			System.out.println("You do not have any accounts. Making one for you!");
+			createAccount();
+			return true;
+		}
+		return true;
+	}
+
 	//creating new Profile
 	public Boolean createProfile(){
 		System.out.println("Welcome! Let's get you set up with a profile!");
@@ -349,7 +336,7 @@ public class Menu {
 			BankAccount newAccount = new BankAccount(newUser.getUsername() + " Account");
 			newUser.addAccount(newAccount);
 			bank.addUser(newUser);
-			
+			this.currentUserAccount = newAccount;
 			return true;
 		}
 		else {
@@ -360,7 +347,7 @@ public class Menu {
 
 
 	public void viewTransactionHistory() {
-		userAccount = findAccount();
+		BankAccount userAccount = findAccount();
 		if (userAccount == null){
 			System.out.println("No account selected!");
 			return;
@@ -436,7 +423,7 @@ public class Menu {
 					login.existingUsers.remove(index);
 					login.existingUsers.add(index, user);
 					System.out.println("Username successfully changed to: " + user.getUsername());
-					//Update files (Will create a new issue for it)
+					bank.saveAccountsToFile(); // Save the updated account info to file
 				}
 				else {
 					System.out.println("Username must contain no special characters and be less than 16 characters.");
