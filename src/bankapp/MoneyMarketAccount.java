@@ -8,7 +8,7 @@ public class MoneyMarketAccount extends BankAccount{
     private static final double interestRate = 0.005;//this is the interest rate which compounds daily and is added to the balance
     private static final double withdrawalPenalty = 0.05;
 	private static final String lastTransactionTime = LocalDateTime.now().format(dtf);
-	private static final double minimumBalance = 1000.00;
+	private static final double minimumBalance = 10000.00;
 	private static final Scanner sc = new Scanner(System.in);
 
 	
@@ -16,8 +16,8 @@ public class MoneyMarketAccount extends BankAccount{
 		super(accountName);
 		System.out.println("Initial Deposit Amount: ");
 		Double depositAmount = Double.parseDouble(sc.nextLine());
-		if(depositAmount<1000.0){
-			throw new IllegalArgumentException("Initial deposit must be at least $1000.00 for a money market account");
+		if(depositAmount<minimumBalance){
+			throw new IllegalArgumentException("Initial deposit must be at least $10,000.00 for a money market account");
 			//note that I don't know if doing this will auto delete this account or not
 		}else{
 			this.balance = depositAmount;
