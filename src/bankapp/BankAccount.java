@@ -1,8 +1,5 @@
-
 package bankapp;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,9 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BankAccount {
-
+public class BankAccount{
     private static int nextAccountNumber = 1;
     private int accountNumber;
     private double balance;
@@ -113,7 +111,6 @@ public class BankAccount {
             e.printStackTrace();
         }
     }
-	}
 
 	public void transfer(BankAccount targetAccount, double amount){
 		if (amount <= 0) {
@@ -135,31 +132,10 @@ public class BankAccount {
     	this.transactionHistory.add(transferOut + "Balance: $" + this.balance);
 		targetAccount.addTransactionHistory(transferIn + "Balance: $" + targetAccount.getCurrentBalance());
 	}
-	
-	public void addTransactionHistory(String transaction) {
-		this.transactionHistory.add(transaction);
-	}
-	
-	public double getCurrentBalance() {
-		return this.balance;
-	}
-	
-	public int getAccountNumber() {
-		return this.accountNumber;
-	}
-	
-	public String getAccountName() {
-		return this.accountName;
-	}
-	
-	public String setAccountHolderName(String accountHolderName) {
-		String dateTime = LocalDateTime.now().format(dtf);
-		addTransactionHistory(String.format("Time: %s | Account name changed to: %s", dateTime, accountHolderName));
-		return this.accountName = accountHolderName;
-	}
 
 	public String getAccountHolderName() {
     return this.accountName;
+    }
 }
 
-}
+
