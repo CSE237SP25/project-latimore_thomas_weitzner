@@ -39,6 +39,7 @@ public class TellerMenu{
 	public void tellerOption() {
 		System.out.println("Hello! Would you like to:");
 		System.out.println("a.) View active bank accounts?");
+		System.out.println("c.) Deposit into account");
 	}
 	
 	public void tellerProccessChoice(String userInput) {
@@ -46,13 +47,16 @@ public class TellerMenu{
 		case "a":
 			showcaseAccounts();
 			break;
+		case "c":
+			depositIntoAccount();
+			break;
 		default:
 			System.out.println("Input Invalid!");
 		}
 		
 	}
 	
-	public void showcaseAccounts() {
+	public User showcaseAccounts() {
 		System.out.println("Which user's account would you like to see?");
 		List<User> users = bank.getUsers();
 		for( User user : users) {
@@ -62,6 +66,7 @@ public class TellerMenu{
 		String username = getUserInput();
 		if(selectUser(username) == null) {
 			System.out.println("Invalid Username");
+			return null;
 		}
 		else {
 			User currentUser = selectUser(username);
@@ -79,7 +84,70 @@ public class TellerMenu{
 				System.out.println("Balance: " + account.getCurrentBalance());
 				System.out.println("---------------------------------------------");
 			}
+			return currentUser;
+			
 		}
 	}
+	public BankAccount searchForAccount(User user,int input) {
+	  
+	    for (BankAccount account : user.getAccounts()) {
+	        if (account.getAccountNumber() == input) {
+	            return account;
+	        }
+	    }
+	    return null;
+		
+		
+	}
 	
+	public void depositIntoAccount(){
+		System.out.println("Select an account to deposit into");
+		User user = showcaseAccounts();
+		if(user == null) {
+			System.out.print("Cancelling deposit...");
+			return;
+		}
+		System.out.println("Enter the account number of the account you want to select:");
+		int input = 0;
+		try {
+			input = Integer.parseInt(getUserInput());
+		}
+		catch(NumberFormatException e){
+			System.out.println("Invalid Account Number");
+    		System.out.println("Cancelling deposit...");
+			return;
+			
+		}
+	    if(searchForAccount(user, input) ==  null) {
+	    	System.out.println("Invalid Account number");
+	    	System.out.println("Cancelling deposit...");
+	    	System.out.println();
+	    }
+	    else{
+	    	BankAccount account = searchForAccount(user,input);
+	    	System.out.println("How much would you like to deposit?");
+	    	double amount = 0;
+	    	try {
+	    		amount = Double.parseDouble(getUserInput());
+	    	}
+	    	catch(NumberFormatException e) {
+	    		System.out.println("Invalid Amount");
+	    		System.out.println("Cancelling deposit...");
+	    		return;
+	    	}
+	    	
+	    	if(amount <= 0) {
+	    		System.out.println("Invalid Amount");
+	    		System.out.println("Cancelling deposit...");
+	    	}
+	    	else {
+	    		System.out.println("Deposit was succesful!");
+	    		account.deposit(amount);
+	    		bank.saveAccountsToFile();
+	    		System.out.println("Your new balance is: " + account.getCurrentBalance());
+	    	}
+	    	
+	    }
+	    
+	}
 }
