@@ -54,7 +54,7 @@ public class MoneyMarketAccount extends BankAccount{
 
     @Override
     public String getAccountType(){
-        return "Savings";
+        return "Money Market";
     }
 
 	public static double getInterestRate() {
