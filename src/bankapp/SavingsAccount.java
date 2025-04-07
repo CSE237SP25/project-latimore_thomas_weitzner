@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class SavingsAccount extends BankAccount{
 	
-    private static final double interestRate = 0.001;//this is the interest rate which compounds daily and is added to the balance
+    private static final double interestRate = 0.00001;//this is the interest rate which compounds daily and is added to the balance
     private static final double withdrawalPenalty = 0.05;
 	private static final String lastTransactionTime = LocalDateTime.now().format(dtf);
 	private static final Scanner sc = new Scanner(System.in);
