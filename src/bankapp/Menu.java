@@ -9,6 +9,8 @@ public class Menu {
 	private BankAccount currentUserAccount;
 	private final Bank bank;
 	private User user;
+	private Teller teller;
+	private Boolean isTeller = false;
 	private LoginMenu login;
 
 
@@ -17,6 +19,10 @@ public class Menu {
 		Boolean loggedIn = false;
 		while(!loggedIn) {
 			loggedIn = menu.loginInputChoices();
+		}
+		if (menu.isTeller) {
+			TellerMenu tellerMenu = new TellerMenu(menu.bank, menu.teller);
+			tellerMenu.operateMenu();
 		}
 		System.out.println("Welcome: " + menu.user.getUsername());
 		while (true) { 
@@ -30,7 +36,8 @@ public class Menu {
 	public Menu() {
 	    this.inputScanner = new Scanner(System.in);
 		this.bank = new Bank();// Initialize the bank object
-		this.login = new LoginMenu(bank.getUsers());
+
+		this.login = new LoginMenu(bank.getUsers(), bank.getTellers());
 	    System.out.println("Hello! Welcome to our bank app!");
 	}
 
@@ -265,6 +272,8 @@ public class Menu {
 			case "b":
 				System.out.println("Creating a new account...");
 				return createProfile();
+			case "c":
+				return loginToTellerAccount();
 			default:
 				System.out.println("Invalid Input");
 				return false;
@@ -295,7 +304,29 @@ public class Menu {
 			return false;
 		}
 	}
-	
+	public Boolean loginToTellerAccount(){
+		System.out.println("Enter Username:");
+		String username = getUserInput();
+		if(login.searchForTeller(username) == null) {
+			System.out.println("Teller does not exist");
+			return false;
+		}
+		else {
+			Teller teller = login.searchForTeller(username);
+			System.out.println("Enter Password:");
+			String password = getUserInput();
+			Boolean correctPassword = login.checkPassword(teller, password);
+			if(correctPassword) {
+				this.teller = teller;
+				this.isTeller = true;
+				return true;
+			}
+			System.out.println("Passwords do not match");
+			return false;
+		}
+		
+	}
+
 	public Boolean checkUserHasAccounts(User user){
 		if(user.getAccounts().isEmpty()) {
 			System.out.println("You do not have any accounts. Making one for you!");
