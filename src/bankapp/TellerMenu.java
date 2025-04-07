@@ -39,12 +39,16 @@ public class TellerMenu{
 	public void tellerOption() {
 		System.out.println("Hello! Would you like to:");
 		System.out.println("a.) View active bank accounts?");
+		System.out.println("b.) Create New Teller?");
 	}
 	
 	public void tellerProccessChoice(String userInput) {
 		switch(userInput.toLowerCase()) {
 		case "a":
 			showcaseAccounts();
+			break;
+		case "b":
+			createTeller();
 			break;
 		default:
 			System.out.println("Input Invalid!");
@@ -79,6 +83,82 @@ public class TellerMenu{
 				System.out.println("Balance: " + account.getCurrentBalance());
 				System.out.println("---------------------------------------------");
 			}
+		}
+	}
+	
+	public void createTeller(){
+		System.out.println("Enter new teller username: ");
+		String username = getUserInput();
+		if(login.searchForTeller(username) != null) {
+			System.out.println("Teller username already exists");
+			System.out.println("Cancelling account creation...");
+			return;
+		}
+		else if(!validInput(username)) {
+			System.out.println("Invalid Username");
+			System.out.println("Cancelling account creation...");
+			return;
+		}
+		System.out.println("Enter a password:");
+		String password = getUserInput();
+		if(password.isBlank()) {
+			System.out.println("Password may not be empty");
+			System.out.println("Cancelling account creation...");
+			return;
+			
+		}
+		System.out.println("Please confirm the information below is correct (y/n)");
+		System.out.println("Username: " + username + " Password: " + password);
+		if(getUserInput().toLowerCase().equals("y")){
+			System.out.println("New teller has been created");
+			Teller newTeller = new Teller(username, password);
+			bank.addTeller(newTeller);
+		}
+		
+	}
+	
+	//valid Input will be moved to a different file next cycle. For now I will make a copy of it here for testing purposes.
+	
+	public boolean validInput(String input) {
+		if(input.length() > 15) {
+			System.out.println("Input is too long");
+			return false;
+		}
+		else if(input.isBlank()){
+			System.out.println("Input must not be blank");
+			return false;
+			
+		}
+		else if (input.contains("(") || 
+				input.contains(")") || 
+				input.contains(",") || 
+				input.contains(";") ||
+				input.contains(":") ||
+				input.contains("[") ||
+				input.contains("]") ||
+				input.contains("{") ||
+				input.contains("}") ||
+				input.contains("<") ||
+				input.contains(">") ||
+				input.contains("=") ||
+				input.contains("?") ||
+				input.contains("!") ||
+				input.contains("@") ||
+				input.contains("#") ||
+				input.contains("$") ||
+				input.contains("%") ||
+				input.contains("^") ||
+				input.contains("*") ||
+				input.contains("+") ||
+				input.contains("/") ||
+				input.contains("`") ||
+				input.contains("~")) 
+		{
+			System.out.println("Input Contains Invalid Characters");
+			return false;
+		}
+		else {
+			return true;
 		}
 	}
 	

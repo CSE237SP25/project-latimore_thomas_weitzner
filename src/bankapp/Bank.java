@@ -88,6 +88,11 @@ public class Bank {
 			addAccount(account);
 		}
 	}
+	
+	public void addTeller(Teller teller) {
+		this.tellers.add(teller);
+		//TODO Write tellers to file
+	}
 
 	public void saveAccountsToFile() {
 		try (FileWriter writer = new FileWriter(bankFilePath)) {
