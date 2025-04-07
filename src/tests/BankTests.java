@@ -66,7 +66,7 @@ public class BankTests {
 
 
         Bank bank = new Bank(filePath);
-        List<BankAccount> accounts = bank.getAccounts();		System.out.print(accounts);
+        List<BankAccount> accounts = bank.getAccounts();
 
         assertEquals(3, accounts.size());
 
