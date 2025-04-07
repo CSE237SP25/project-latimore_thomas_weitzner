@@ -1,6 +1,5 @@
 package bankapp;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -130,6 +129,7 @@ public class Bank {
 			BankAccount account = createAccount(accountName, accountNumber, balance);
 			currentUser.addAccount(account);
 		}
+		saveAccountsToFile();
 	}
 	
 	private User initializeUser(String username, String password) {
