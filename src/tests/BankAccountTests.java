@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
@@ -186,6 +188,36 @@ public class BankAccountTests {
 			assertTrue(e != null);
 
 		}
+	}
+	
+	@Test
+	public void testTransactionHistory() {
+		BankAccount account = new BankAccount("John Doe");
+		account.deposit(50);
+		account.withdraw(25);
+		
+		List<String> history = account.getTransactionHistory();
+		assertEquals(history.size(), 2);
+		assertTrue(history.get(0).contains("Deposit"));
+		assertTrue(history.get(1).contains("Withdraw"));
+	}
+	
+	@Test
+	public void testTransactionHistoryEmpty() {
+		BankAccount account = new BankAccount("John Doe");
+		List<String> history = account.getTransactionHistory();
+		assertEquals(history.size(), 0);
+	}
+	
+	@Test
+	public void testTransactionHistoryTime() {
+		BankAccount account = new BankAccount("John Doe");
+		account.deposit(50);
+		account.withdraw(25);
+
+		List<String> history = account.getTransactionHistory();
+		assertTrue(history.get(0).contains("Time"));
+		assertTrue(history.get(1).contains("Time"));
 	}
 	
 }

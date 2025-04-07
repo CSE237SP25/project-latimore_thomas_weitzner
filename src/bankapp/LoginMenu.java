@@ -5,7 +5,7 @@ import java.util.List;
 
 public class LoginMenu{
 	List<User> existingUsers;
-	User profile;
+	
 	
 	public LoginMenu(List<User> existingUsers) {
 		this.existingUsers = existingUsers;
@@ -15,12 +15,12 @@ public class LoginMenu{
 		
 		for(User user : existingUsers) {
 			if (user.getUsername().equals(username)){
-				profile = user;
-				return profile;
+				return user;
 			}
 		}
 		return null;
 	}
+	
 	
 	public Boolean checkPassword(User user, String password){
 		if(user.getPassword().equals(password)) {
@@ -33,17 +33,10 @@ public class LoginMenu{
 
 	
 	public void displayChoices() {
+		System.out.println("\n -- Welcome to Bear Banks! -- \n");
 		System.out.println("Welcome! Would you like to:");
 		System.out.println("(a) Login");
-		System.out.println("(b) Create New Account");
+		System.out.println("(b) Create a new bank profile");
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

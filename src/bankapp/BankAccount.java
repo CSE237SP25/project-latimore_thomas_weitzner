@@ -2,6 +2,8 @@ package bankapp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BankAccount {
 	
@@ -10,6 +12,7 @@ public class BankAccount {
 	private double balance;
 	private String accountName;
 	private List<String> transactionHistory;
+	private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
 	
 	public BankAccount(String accountName) {
 		this.accountNumber = nextAccountNumber++;
@@ -28,7 +31,8 @@ public class BankAccount {
 			throw new IllegalArgumentException();
 		}
 		this.balance += amount;
-		this.transactionHistory.add(String.format("Deposit: +$%.2f | Balance: $%.2f", amount, this.balance));
+		String dateTime = LocalDateTime.now().format(dtf);
+		addTransactionHistory(String.format("Time: %s | Deposit: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 	}
 
 	public void withdraw(double amount){
@@ -39,7 +43,8 @@ public class BankAccount {
 			throw new IllegalArgumentException("insufficient funds");
 		}
 		this.balance -= amount;
-		this.transactionHistory.add(String.format("Withdraw: +$%.2f | Balance: $%.2f", amount, this.balance));
+		String dateTime = LocalDateTime.now().format(dtf);
+		addTransactionHistory(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 
 	}
 	
@@ -61,6 +66,8 @@ public class BankAccount {
 	
 	public String setAccountHolderName(String accountHolderName) {
 		this.transactionHistory.add("Account name changed to: " + accountHolderName);
+		String dateTime = LocalDateTime.now().format(dtf);
+		addTransactionHistory(String.format("Time: %s | Account name changed to: %s", dateTime, accountHolderName));
 		return this.accountName = accountHolderName;
 	}
 }

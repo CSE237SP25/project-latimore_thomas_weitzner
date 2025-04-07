@@ -154,6 +154,16 @@ public class Bank {
 		this.accounts.remove(account);
 		saveAccountsToFile();
 	}
+
+	public List<BankAccount> getUserAccounts(User user) {
+		List<BankAccount> userAccounts = new ArrayList<>();
+		for (User tempUser : users) {
+			if (tempUser.getUsername().equals(user.getUsername())) {
+				userAccounts = user.getAccounts();
+			}
+		}
+		return userAccounts;
+	}
 	
 	public List<BankAccount> getAccounts() {
 		return this.accounts;
@@ -162,4 +172,5 @@ public class Bank {
 	public List<User> getUsers(){
 		return this.users;
 	}
+
 }
