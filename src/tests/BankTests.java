@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
 import bankapp.BankAccount;
+import bankapp.Teller;
 
 public class BankTests {
 	
@@ -97,6 +98,10 @@ public class BankTests {
 
         assertEquals("Jack Doe", accounts.get(2).getAccountName());
         assertEquals(2000.0, accounts.get(2).getCurrentBalance(), 2000.0);
+
+        List<Teller> tellers = bank.getTellers();
+        assertEquals(1, tellers.size());
+        assertEquals("exTeller", tellers.get(0).getUsername());
 	}
 
     @Test
@@ -106,6 +111,9 @@ public class BankTests {
 
         List<BankAccount> accounts = bank.getAccounts();
         assertEquals(0, accounts.size());
+
+        List<Teller> tellers = bank.getTellers();
+        assertEquals(0, tellers.size());
     }
 
     @Test
@@ -118,5 +126,15 @@ public class BankTests {
         bank.addAccount(newAccount);
         assertEquals(initialSize + 1, bank.getAccounts().size());
         assertEquals("New Account Holder", bank.getAccounts().get(initialSize).getAccountName());
+    }
+
+    public void testAddingTellerAccount(){
+        Bank bank = new Bank("bankResources/exampleAddBankInfo.txt");
+        int initialSize = bank.getTellers().size();
+
+        Teller newTeller = new Teller("NewTeller", "password");
+        bank.addTeller(newTeller);
+        assertEquals(initialSize + 1, bank.getTellers().size());
+        assertEquals("NewTeller", bank.getTellers().get(initialSize).getUsername());
     }
 }

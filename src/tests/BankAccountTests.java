@@ -308,7 +308,7 @@ public class BankAccountTests {
 		account.withdraw(25);
 		
 		List<String> history = account.getTransactionHistory();
-		assertEquals(history.size(), 2);
+		assertEquals(2,history.size());
 		assertTrue(history.get(0).contains("Deposit"));
 		assertTrue(history.get(1).contains("Withdraw"));
 	}
