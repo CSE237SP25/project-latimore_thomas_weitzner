@@ -13,4 +13,3 @@ PlaceholderUsername,PlaceholderPassword,Placeholder Name,10,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,11,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,12,0.0
 PlaceholderUsername,PlaceholderPassword,Placeholder Name,13,0.0
-
