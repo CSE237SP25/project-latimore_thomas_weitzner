@@ -17,18 +17,26 @@ public class Menu {
 	public static void main(String[] args) {
 		Menu menu = new Menu();
 		Boolean loggedIn = false;
-		while(!loggedIn) {
-			loggedIn = menu.loginInputChoices();
-		}
-		if (menu.isTeller) {
-			TellerMenu tellerMenu = new TellerMenu(menu.bank, menu.teller);
-			tellerMenu.operateMenu();
-		}
-		System.out.println("Welcome: " + menu.user.getUsername());
-		while (true) { 
-			menu.provideUserChoices();
-			String userInput = menu.getUserInput();
-			menu.processUserInput(userInput);
+		Boolean active = true;
+		while(active) {
+			if(!loggedIn) {
+				loggedIn = menu.loginInputChoices();
+			}
+			else {
+				if (menu.isTeller) {
+					TellerMenu tellerMenu = new TellerMenu(menu.bank, menu.teller);
+					tellerMenu.operateMenu();
+					loggedIn = false;
+					menu.isTeller = false;
+				}
+				else {
+					System.out.println("Welcome: " + menu.user.getUsername());
+					menu.provideUserChoices();
+					String userInput = menu.getUserInput();
+					loggedIn = menu.processUserInput(userInput);
+					
+				}
+			}
 		}
 	}
 
@@ -56,53 +64,53 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
-    	System.out.println("(X) Logout");
+    	System.out.println("(x) Logout");
 	}
 
 	public String getUserInput(){
 		return this.inputScanner.nextLine();
 	}
 
-	public void processUserInput(String userInput){
+	public Boolean processUserInput(String userInput){
 		switch(userInput.toLowerCase()){
 			case "a":
 				deposit();
-				break;
+				return true;
 			case "b":
 				withdraw();
-				break;
+				return true;
 			case "c":
 				displayBalance();
-				break;
+				return true;
 			case "d":
 				createAccount();
-				break;
+				return true;
 			case "f":
 				renameAccount();
-				break;
+				return true;
 			case "e":
 				displayAccounts();
-				break;
+				return true;
       		case "g":
 				removeAccount();
-				break;
+				return true;
 			case "h":
 				viewTransactionHistory();
-				break;
+				return true;
 			case "i":
 				transferBetweenAccounts();
-				break;
+				return true;
 			case "j":
 				changeUsername();
-				break;
+				return true;
 			case "k":
 				changePassword();
-				break;
-      		case "x":
-				logout();
-				break;
+				return true;
+			case "x":
+				return logout();
 			default:
 				System.out.println("Invalid choice. Please try again.");
+				return true;
 		}
 	}
 	
@@ -110,17 +118,11 @@ public class Menu {
 		System.out.println("Your current balance is: " + currentUserAccount.getCurrentBalance());
   }
 
-	private void logout() {
+	private Boolean logout() {
 		System.out.println("Logging out...");
 		this.user = null;
 		this.currentUserAccount = null;
-		Boolean loggedIn = false;
-		while (!loggedIn) {
-			loggedIn = loginInputChoices();
-		}
-		this.currentUserAccount = this.user.getAccounts().get(0);
-		System.out.println("Welcome: " + user.getUsername());
-		System.out.println();
+		return false;
 	 }
 	
 	private void displayAccounts() {

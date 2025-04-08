@@ -9,17 +9,19 @@ public class TellerMenu{
 	private Bank bank;
 	private LoginMenu login;
 	private Scanner inputScanner;
+	private Boolean active;
 	
 	public TellerMenu(Bank bank, Teller teller) {
 		this.bank = bank;
 		this.teller = teller;
 		login = new LoginMenu(bank.getUsers(), bank.getTellers());
 		inputScanner = new Scanner(System.in);
+		active = true;
 	}
 	
 	
 	public void operateMenu(){
-		while(true) {
+		while(active) {
 			tellerOption();
 			String input = inputScanner.nextLine();
 			tellerProccessChoice(input);
@@ -40,6 +42,7 @@ public class TellerMenu{
 		System.out.println("Hello! Would you like to:");
 		System.out.println("a.) View active bank accounts?");
 		System.out.println("b.) Create New Teller?");
+		System.out.println("x.) Logout");
 	}
 	
 	public void tellerProccessChoice(String userInput) {
@@ -49,10 +52,18 @@ public class TellerMenu{
 			break;
 		case "b":
 			createTeller();
+		case "x":
+			logout();
 			break;
 		default:
 			System.out.println("Input Invalid!");
 		}
+		
+	}
+	
+	public void logout() {
+		System.out.println("Logging Out...");
+		active = false;
 		
 	}
 	
