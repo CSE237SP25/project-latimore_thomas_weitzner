@@ -94,6 +94,27 @@ public class BankAccountTests {
         	return null;
 		}
 	}
+
+
+	private String determineFilePathExampleInfo() {
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String[] pathParts = s.split("[/\\\\]");
+		String lastPart = pathParts[pathParts.length - 1];
+		
+		switch (lastPart) {
+		case "bankapp":
+			return "./bankResources/exampleBankInfo.txt";
+		case "src":
+			return "./bankapp/bankResources/exampleBankInfo.txt";
+        case "project-latimore_thomas_weitzner":
+        	return "./src/bankapp/bankResources/exampleBankInfo.txt";
+        default:
+        	System.out.println("Please run the bankapp from the project-latimore_thomas_weitzner, bankapp, or src directories.");
+        	System.out.println("The bankapp will not be able to save account information.");
+        	return null;
+		}
+	}
 	
 	@Test
     public void testAddDuplicateAccount() {
@@ -197,7 +218,8 @@ public class BankAccountTests {
 //		}
 	
 	public void testRemoveAccount() {
-		Bank bank = new Bank();
+		String filePath = determineFilePathExampleInfo();
+        Bank bank = new Bank(filePath);
 		BankAccount account = new BankAccount("John Doe");
 		bank.addAccount(account);
 		bank.removeAccount(account);
@@ -206,7 +228,9 @@ public class BankAccountTests {
 	
 	@Test
 	public void testRemoveAccountNotThere() {
-		Bank bank = new Bank();
+		String filePath = determineFilePathExampleInfo();
+        Bank bank = new Bank(filePath);
+		
 		BankAccount account = new BankAccount("John Doe");
 		try {
 			bank.removeAccount(account);

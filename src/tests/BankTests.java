@@ -55,6 +55,25 @@ public class BankTests {
 		}
 	}
 
+	private String determineFilePathExampleAddInfo() {
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String[] pathParts = s.split("[/\\\\]");
+		String lastPart = pathParts[pathParts.length - 1];
+		
+		switch (lastPart) {
+		case "bankapp":
+			return "./bankResources/exampleAddBankInfo.txt";
+		case "src":
+			return "./bankapp/bankResources/exampleAddBankInfo.txt";
+        case "project-latimore_thomas_weitzner":
+        	return "./src/bankapp/bankResources/exampleAddBankInfo.txt";
+        default:
+        	System.out.println("Please run the bankapp from the project-latimore_thomas_weitzner, bankapp, or src directories.");
+        	System.out.println("The bankapp will not be able to save account information.");
+        	return null;
+		}
+	}
 	
 	
 	
@@ -91,7 +110,8 @@ public class BankTests {
 
     @Test
     public void testAddingAccount(){
-        Bank bank = new Bank("bankResources/exampleAddBankInfo.txt");
+    	String filePathBlankInfo = determineFilePathExampleAddInfo();
+		Bank bank = new Bank(filePathBlankInfo);
         int initialSize = bank.getAccounts().size();
 
         BankAccount newAccount = new BankAccount("New Account Holder");
