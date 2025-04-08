@@ -64,7 +64,7 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
-    	System.out.println("(X) Logout");
+    	System.out.println("(x) Logout");
 	}
 
 	public String getUserInput(){
