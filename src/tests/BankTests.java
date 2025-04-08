@@ -101,7 +101,7 @@ public class BankTests {
 
         List<Teller> tellers = bank.getTellers();
         assertEquals(1, tellers.size());
-        assertEquals("Teller1", tellers.get(0).getUsername());
+        assertEquals("exTeller", tellers.get(0).getUsername());
 	}
 
     @Test
