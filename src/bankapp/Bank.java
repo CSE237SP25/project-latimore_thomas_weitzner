@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Bank {
 	//NOTE: This is the entire bank, should only be ONE BANK OBJECT IN THE PROJECT
+	//also note that accounts doesn't include the accounts of the tellers
 	private List<BankAccount> accounts;
 	private List<String> accountInfoList = new ArrayList<>(); // List to hold account info strings
 	private List<User> users = new ArrayList<>();// List to hold users (if needed)

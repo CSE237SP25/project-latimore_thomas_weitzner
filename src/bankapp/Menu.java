@@ -98,7 +98,7 @@ public class Menu {
 			case "k":
 				changePassword();
 				break;
-      case "x":
+      		case "x":
 				logout();
 				break;
 			default:
