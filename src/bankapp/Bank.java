@@ -66,6 +66,11 @@ public class Bank {
 	
 	
 	public void addAccount(BankAccount account) {
+		for (BankAccount existingAccount : this.accounts) {
+			if (existingAccount.getAccountName() == account.getAccountName()) {
+				throw new IllegalArgumentException("Account Name already exists");
+			}
+		}
 		if (isDuplicateAccountNumber(account.getAccountNumber())) {
             throw new IllegalArgumentException("Account number already exists");
         }
@@ -159,7 +164,7 @@ public class Bank {
 	
 	private BankAccount createAccount(String accountName, int accountNumber, double balance) {
 		BankAccount account = new BankAccount(accountName);
-		account.deposit(balance);
+		account.initializeAccountBalance(balance);
 		addAccount(account);
 		return account;
 	}
