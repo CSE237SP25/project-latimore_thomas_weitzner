@@ -12,6 +12,13 @@ public class Menu {
 	private Teller teller;
 	private Boolean isTeller = false;
 	private LoginMenu login;
+	private enum InvalidNameReason {
+		EMPTY,
+		LONG,
+		SAME_NAME,
+		SPECIAL_CHARACTERS,
+		NONE
+	}
 
 
 	public static void main(String[] args) {
@@ -98,7 +105,7 @@ public class Menu {
 			case "k":
 				changePassword();
 				break;
-      case "x":
+      		case "x":
 				logout();
 				break;
 			default:
@@ -161,12 +168,19 @@ public class Menu {
 	}
 	
 	private BankAccount findAccount() {
-	    System.out.println("Here are all of your accounts: ");
-	    for (BankAccount account : user.getAccounts()) {
-	        System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
-	    }
+	    displayAccounts();
 	    System.out.println("Enter the account number of the account you want to select:");
-	    int input = Integer.parseInt(getUserInput());
+		boolean validAccountNumber=false;
+		int input=0;
+		while(!validAccountNumber) {
+			try {	
+	    		input = Integer.parseInt(getUserInput());
+				validAccountNumber = true;
+			} catch (NumberFormatException e) {
+				System.out.println("Invalid account number. Please enter a valid account number.");
+				displayAccounts();
+			}
+		}
 	
 	    BankAccount selectedAccount = null;
 	    for (BankAccount account : user.getAccounts()) {
@@ -177,8 +191,8 @@ public class Menu {
 	    }
 	
 	    if (selectedAccount == null) {
-	        System.out.println("Invalid account number. Transaction cancelled.");
-	        findAccount();
+	        System.out.println("Invalid account number. Please enter a valid account number.");
+	        selectedAccount=findAccount();
 	    }
 		this.currentUserAccount = selectedAccount;
 	    return selectedAccount;
@@ -240,7 +254,7 @@ public class Menu {
 		BankAccount userAccount = findAccount();
 		System.out.println("What would you like to rename your account to? [Must not contain special characters]");
 		String newName = getUserInput();
-		if (isInvalidAccountName(newName)) {
+		if (isInvalidAccountName(newName)!=InvalidNameReason.NONE) {
 			renameAccount();
 			return;
 		}
@@ -249,17 +263,27 @@ public class Menu {
 		System.out.println("Your account has been renamed to: " + newName);
 	}
 	
-	public boolean isInvalidAccountName(String name) {
-		if (name.isEmpty() || name.length() > 25 || name.equals(this.currentUserAccount.getAccountName())) {
-			return true;
+	public InvalidNameReason isInvalidAccountName(String name) {
+		if(name.isEmpty()){
+			System.out.println("Username or account name may not be empty.");
+			return InvalidNameReason.EMPTY;
+		}
+		if(name.length() > 25) {
+			System.out.println("Username or account name must be less than 25 characters.");
+			return InvalidNameReason.LONG;
+		}
+		if(name.equals(this.currentUserAccount.getAccountName())) {
+			System.out.println("New username or account name must be different from the current name.");
+			return InvalidNameReason.SAME_NAME;
 		}
 		String specialCharacters = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";
 		for (char c : specialCharacters.toCharArray()) {
 			if (name.contains(String.valueOf(c))) {
-                return true;
+				System.out.println("Username or account name must contain no special characters.");
+                return InvalidNameReason.SPECIAL_CHARACTERS;
             }
 		}
-        return false;
+        return InvalidNameReason.NONE;
 	}
 	
 	//Login Code
@@ -396,48 +420,6 @@ public class Menu {
 		}
 	}
 	
-	public boolean validInput(String input) {
-		if(input.length() > 15) {
-			System.out.println("Input is too long");
-			return false;
-		}
-		else if(input.isBlank()){
-			System.out.println("Input must not be blank");
-			return false;
-			
-		}
-		else if (input.contains("(") || 
-				input.contains(")") || 
-				input.contains(",") || 
-				input.contains(";") ||
-				input.contains(":") ||
-				input.contains("[") ||
-				input.contains("]") ||
-				input.contains("{") ||
-				input.contains("}") ||
-				input.contains("<") ||
-				input.contains(">") ||
-				input.contains("=") ||
-				input.contains("?") ||
-				input.contains("!") ||
-				input.contains("@") ||
-				input.contains("#") ||
-				input.contains("$") ||
-				input.contains("%") ||
-				input.contains("^") ||
-				input.contains("*") ||
-				input.contains("+") ||
-				input.contains("/") ||
-				input.contains("`") ||
-				input.contains("~")) 
-		{
-			System.out.println("Input Contains Invalid Characters");
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
 	
 	public void changeUsername() {
 		System.out.println("Enter Current Password");
@@ -448,16 +430,13 @@ public class Menu {
 				System.out.println("Username is already taken");
 			}
 			else {
-				if(validInput(newUsername)) {
+				if(isInvalidAccountName(newUsername)==InvalidNameReason.NONE) {
 					int index =login.existingUsers.indexOf(user);
 					user.changeUsername(newUsername);
 					login.existingUsers.remove(index);
 					login.existingUsers.add(index, user);
 					System.out.println("Username successfully changed to: " + user.getUsername());
 					bank.saveAccountsToFile(); // Save the updated account info to file
-				}
-				else {
-					System.out.println("Username must contain no special characters and be less than 16 characters.");
 				}
 			}
 		}
@@ -496,11 +475,7 @@ public class Menu {
         System.out.println("Your current account:");
         System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
         System.out.println("Accounts available: ");
-        for (BankAccount account : user.getAccounts()) {
-            if (account.getAccountNumber() != userAccount.getAccountNumber()) {
-                System.out.println("Account #" + account.getAccountNumber()+ " - Balance: $" + account.getCurrentBalance());
-            }
-        }
+		displayAccounts();
         
         System.out.print("\nEnter account number to transfer to: ");
         int targetAccountNum = Integer.parseInt(getUserInput());
