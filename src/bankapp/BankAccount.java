@@ -28,16 +28,21 @@ public class BankAccount{
         loadTransactionHistory();
     }
 
+	public BankAccount(String accountName, int accountNumber, double balance) {
+		this.accountNumber = accountNumber;
+		nextAccountNumber = Math.max(nextAccountNumber, accountNumber + 1);
+		if(balance < 0) {
+			throw new IllegalArgumentException("Initial balance cannot be negative");
+		}
+		this.balance = balance;
+		this.accountName = accountName;
+		this.transactionHistory = new ArrayList<>();
+		loadTransactionHistory();
+	}
+
     public List<String> getTransactionHistory() {
         return new ArrayList<>(this.transactionHistory);
     }
-    
-	public void initializeAccountBalance(double savedBalance) {
-		if (savedBalance < 0) {
-			throw new IllegalArgumentException("Initial balance cannot be negative");
-		}
-		this.balance = savedBalance;
-	}
 
     public void deposit(double amount) {
         if (amount < 0) {
