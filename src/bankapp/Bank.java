@@ -97,23 +97,20 @@ public class Bank {
 	public void saveAccountsToFile() {
 		try (FileWriter writer = new FileWriter(bankFilePath)) {
 			for(User user : users) {
-                String userInfo = String.join(',' + "," + user.getPassword() + "," +
-                        user.getName() + "," + user.getPhone() + "," +user.getEmail() + "," +
-                        user.getAddress() + "," + user.getSsn() + "," + user.getTshirtSize() + "\n");
-                if(user.getAccounts().isEmpty()) {
-                    writer.write(user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
-                } else {
-                    for (BankAccount account : user.getAccounts()) {
-                        writer.write(userInfo + "," +
-                                    account.getAccountName() + "," + account.getAccountNumber() + "," +
-                                    account.getCurrentBalance() + "\n");
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error saving accounts to file: " + e.getMessage());
-        }
-    }
+			    if(user.getAccounts().isEmpty()) {
+			        writer.write(user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
+			    } else {
+			        for (BankAccount account : user.getAccounts()) {
+			            writer.write(user.getUsername() + "," + user.getPassword() + "," +
+			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
+			                         account.getCurrentBalance() + "\n");
+			        }
+			    }
+			}
+		} catch (IOException e) {
+			System.out.println("Error saving accounts to file: " + e.getMessage());
+		}
+	}
 
 	public void loadAccountsFromFile() {
 		for(String accountInfo : accountInfoList) {
@@ -123,37 +120,22 @@ public class Bank {
 	
 	public void makeAccountFromFile(String accountInfo){
 		String[] parts = accountInfo.split(",");
-        if (parts.length < 5) {
-            throw new IllegalArgumentException("Invalid account info format");
-        }//can be between 5-10
-        String username = parts[0];
-        String password = parts[1];
-
-        User currentUser = initializeUser(username, password);
-
-        if (parts.length >= 8){
-            currentUser.setName(parts[2]);
-            currentUser.setPhone(parts[3]);
-            currentUser.setEmail(parts[4]);
-            currentUser.setAddress(parts[5]);
-            currentUser.setSsn(parts[6]);
-            currentUser.setTshirtSize(parts[7]);
-        }
-        if (parts.length >= 11 && !parts[8].equals("EMPTY")) {
-            String accountName = parts[8];
-            int accountNumber = Integer.parseInt(parts[9]);
-            double balance = Double.parseDouble(parts[10]);
-            BankAccount account = createAccount(accountName, accountNumber, balance);
-            currentUser.addAccount(account);
-        } else if (parts.length == 5) {
-            BankAccount account = createAccount("Default Account", 0, 0.0);
-            currentUser.addAccount(account);
-        } else {
-            System.out.println("No accounts found for user: " + username);
-
-        }
-        
-    }
+		if (parts.length != 5) {
+			throw new IllegalArgumentException("Invalid account info format");
+		}
+		String username = parts[0];
+		String password = parts[1];
+		String accountName = parts[2];
+		int accountNumber = Integer.parseInt(parts[3]);
+		double balance = Double.parseDouble(parts[4]);
+		
+		User currentUser = initializeUser(username, password);
+		if (!accountName.equals("EMPTY")) {
+			BankAccount account = createAccount(accountName, accountNumber, balance);
+			currentUser.addAccount(account);
+		}
+		saveAccountsToFile();
+	}
 	
 	private User initializeUser(String username, String password) {
 		for (User user : this.users) {
