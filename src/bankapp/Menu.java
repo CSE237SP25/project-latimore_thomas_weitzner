@@ -112,10 +112,10 @@ public class Menu {
 				return true;
 			case "k":
 				changePassword();
-				break;
+				return true;
       		case "x":
 				logout();
-				break;
+				return false;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 				return true;
