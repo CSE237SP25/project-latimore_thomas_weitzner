@@ -303,19 +303,19 @@ public class BankAccountTests {
 	
 	@Test
 	public void testTransactionHistory() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new BankAccount("John Doe", 12345, 0.0);
 		account.deposit(50);
 		account.withdraw(25);
 		
 		List<String> history = account.getTransactionHistory();
-		assertEquals(history.size(), 2);
+		assertEquals(2,history.size());
 		assertTrue(history.get(0).contains("Deposit"));
 		assertTrue(history.get(1).contains("Withdraw"));
 	}
 	
 	@Test
 	public void testTransactionHistoryEmpty() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new BankAccount("John Doe",123456,0.0);
 		List<String> history = account.getTransactionHistory();
 		assertEquals(history.size(), 0);
 	}

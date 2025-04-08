@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Bank {
 	//NOTE: This is the entire bank, should only be ONE BANK OBJECT IN THE PROJECT
+	//also note that accounts doesn't include the accounts of the tellers
 	private List<BankAccount> accounts;
 	private List<String> accountInfoList = new ArrayList<>(); // List to hold account info strings
 	private List<User> users = new ArrayList<>();// List to hold users (if needed)
@@ -18,7 +19,6 @@ public class Bank {
 	
 	
 	public Bank() {
-		tellers.add(new Teller("Teller1", "Password1"));
 		this.accounts = new ArrayList<>();
 		this.bankFilePath = determineFilePath();
 		this.accountInfoList = readAccountInfoFromFile();
@@ -93,19 +93,27 @@ public class Bank {
 			addAccount(account);
 		}
 	}
+	
+	public void addTeller(Teller teller) {
+		this.tellers.add(teller);
+		saveAccountsToFile();
+	}
 
 	public void saveAccountsToFile() {
 		try (FileWriter writer = new FileWriter(bankFilePath)) {
 			for(User user : users) {
 			    if(user.getAccounts().isEmpty()) {
-			        writer.write(user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
+			        writer.write("User,"+user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
 			    } else {
 			        for (BankAccount account : user.getAccounts()) {
-			            writer.write(user.getUsername() + "," + user.getPassword() + "," +
+			            writer.write("User,"+user.getUsername() + "," + user.getPassword() + "," +
 			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
 			                         account.getCurrentBalance() + "\n");
 			        }
 			    }
+			}
+			for(Teller teller:tellers) {
+			    writer.write("Teller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0\n");
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving accounts to file: " + e.getMessage());
@@ -120,19 +128,25 @@ public class Bank {
 	
 	public void makeAccountFromFile(String accountInfo){
 		String[] parts = accountInfo.split(",");
-		if (parts.length != 5) {
+		if (parts.length != 6) {
 			throw new IllegalArgumentException("Invalid account info format");
 		}
-		String username = parts[0];
-		String password = parts[1];
-		String accountName = parts[2];
-		int accountNumber = Integer.parseInt(parts[3]);
-		double balance = Double.parseDouble(parts[4]);
-		
-		User currentUser = initializeUser(username, password);
-		if (!accountName.equals("EMPTY")) {
-			BankAccount account = createAccount(accountName, accountNumber, balance);
-			currentUser.addAccount(account);
+		String type = parts[0];
+		String username = parts[1];
+		String password = parts[2];
+		String accountName = parts[3];
+		int accountNumber = Integer.parseInt(parts[4]);
+		double balance = Double.parseDouble(parts[5]);
+		if("Teller".equals(type)) {
+			Teller teller = new Teller(username, password);
+			addTeller(teller);
+			return;
+		}else if("User".equals(type)) {
+			User currentUser = initializeUser(username, password);
+			if (!accountName.equals("EMPTY")) {
+				BankAccount account = createAccount(accountName, accountNumber, balance);
+				currentUser.addAccount(account);
+			}
 		}
 		saveAccountsToFile();
 	}
