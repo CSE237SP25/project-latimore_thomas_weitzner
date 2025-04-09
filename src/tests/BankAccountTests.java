@@ -303,7 +303,7 @@ public class BankAccountTests {
 	
 	@Test
 	public void testTransactionHistory() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new BankAccount("John Doe", 12345, 0.0);
 		account.deposit(50);
 		account.withdraw(25);
 		
@@ -315,7 +315,7 @@ public class BankAccountTests {
 	
 	@Test
 	public void testTransactionHistoryEmpty() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new BankAccount("John Doe",123456,0.0);
 		List<String> history = account.getTransactionHistory();
 		assertEquals(history.size(), 0);
 	}
