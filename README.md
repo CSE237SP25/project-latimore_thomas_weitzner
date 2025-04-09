@@ -46,3 +46,9 @@ What commands are needed to compile and run your code from the command line (ple
 Make sure you are in the root of the repo then run:
 chmod +x runBearBanks.sh
 ./runBearBanks.sh
+
+Below are usernames and passwords for testing purposes (or create your own):
+`USERNAME`:
+`USER_PASS`:
+`TELLER_NAME`:
+`TELLER_PASS`:
