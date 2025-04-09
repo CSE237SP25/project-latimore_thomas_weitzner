@@ -72,7 +72,7 @@ public class TellerMenu{
 		
 	}
 	
-	public void showcaseAccounts() {
+	public User showcaseAccounts() {
 		System.out.println("Which user's account would you like to see?");
 		List<User> users = bank.getUsers();
 		for( User user : users) {
@@ -116,8 +116,8 @@ public class TellerMenu{
 	public void depositIntoAccount(){
 		System.out.println("Select an account to deposit into");
 		User user = showcaseAccounts();
-		if(user == null) {
-			System.out.print("Cancelling deposit...");
+		if(user == null || user.getAccounts().isEmpty()) {
+			System.out.println("Cancelling deposit...");
 			return;
 		}
 		System.out.println("Enter the account number of the account you want to select:");
