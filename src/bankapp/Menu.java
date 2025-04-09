@@ -71,6 +71,7 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
+		System.out.println("(l) Update profile information");
     	System.out.println("(x) Logout");
 	}
 
@@ -113,9 +114,11 @@ public class Menu {
 			case "k":
 				changePassword();
 				return true;
-      		case "x":
-				logout();
-				return false;
+			case "l":
+				updateProfile();
+				return true;
+			case "x":
+				return logout();
 			default:
 				System.out.println("Invalid choice. Please try again.");
 				return true;
@@ -390,6 +393,36 @@ public class Menu {
 			System.out.println("Cancelling account creation...");
 			return false;
 		}
+
+    System.out.println("Do you want to complete account set up now? (y/n)");
+    if(getUserInput().toLowerCase().equals("y")) {
+        System.out.println("Enter your full name:");
+        String name = getUserInput();
+        System.out.println("Enter your phone number:");
+        String phone = getUserInput();
+        System.out.println("Enter your email:");
+        String email = getUserInput();
+        System.out.println("Enter your address:");
+        String address = getUserInput();
+        System.out.println("Enter your SSN:");
+        String ssn = getUserInput();
+
+        User newUser = new User(username, password);
+        newUser.setName(name);
+        newUser.setPhone(phone);
+        newUser.setEmail(email);
+        newUser.setAddress(address);
+        newUser.setSsn(ssn);
+
+        System.out.println("Profile created successfully!");
+        this.user = newUser;
+        BankAccount newAccount = new BankAccount(newUser.getName() + "'s Account");
+        newUser.addAccount(newAccount);
+        bank.addUser(newUser);
+        this.currentUserAccount = newAccount;
+        return true;
+	} else {
+
 		System.out.println("Please confirm the information below is correct (y/n)");
 		System.out.println("Username: " + username + " Password: " + password);
 		if(getUserInput().toLowerCase().equals("y")){
@@ -401,13 +434,12 @@ public class Menu {
 			bank.addUser(newUser);
 			this.currentUserAccount = newAccount;
 			return true;
-		}
-		else {
+		} else {
 			System.out.println("Cancelling account creation...");
 		}
 		return false;
 	}
-
+	}
 
 	public void viewTransactionHistory() {
 		BankAccount userAccount = findAccount();
@@ -522,4 +554,76 @@ public class Menu {
         System.out.println("❌ Please enter valid numbers");
     }
 }
+	public void updateProfile() {
+		System.out.println("\n-- Update your profile --");
+		System.out.println("Current Information:" + 
+			"\nName: " + user.getName() + "\nPhone Number: " + user.getPhone() + 
+			"\nEmail: " + user.getEmail() + "\nAddress: " + user.getAddress() + 
+			"\nSSN: " + user.getSsn() + "\nT-shirt Size: " + user.getTshirtSize());
+		
+		System.out.println("Please enter your current password to update your profile");
+		if(getUserInput().equals(user.getPassword())) {
+			System.out.println("What would you like to update?");
+			System.out.println("a.) Name");
+			System.out.println("b.) Phone Number");
+			System.out.println("c.) Email");
+			System.out.println("d.) Address");
+			System.out.println("e.) SSN");
+			System.out.println("f.) T-shirt Size");
+			System.out.println("g.) Back to the main menu");
+			
+			String choice = getUserInput();
+			switch(choice.toLowerCase()) {
+				case "a":
+					System.out.println("Enter new name:");
+					String newName = getUserInput();
+						user.setName(newName);
+						bank.saveAccountsToFile();
+					 //else {
+						//System.out.println("Name cannot contain special characters");
+					//}
+					break;
+				case "b":
+					System.out.println("Enter new phone number:");
+					String newPhone = getUserInput();
+						user.setPhone(newPhone);
+						bank.saveAccountsToFile();
+					 //else {
+						//System.out.println("Number cannot contain special characters");
+					//}
+					break;
+				case "c":
+					System.out.println("Enter new email:");
+					user.setEmail(getUserInput());
+					bank.saveAccountsToFile();
+					break;
+				case "d":
+					System.out.println("Enter new address:");
+					user.setAddress(getUserInput());
+					bank.saveAccountsToFile();
+					break;
+				case "e":
+					System.out.println("Enter new SSN:");
+					user.setSsn(getUserInput());
+					bank.saveAccountsToFile();
+					break;
+				case "f":
+					System.out.println("Enter new T-shirt size:");
+					user.setTshirtSize(getUserInput());
+					bank.saveAccountsToFile();
+					break;
+				case "g":
+					System.out.println("Returning to main menu...");
+					break;
+				default:
+					System.out.println("Invalid choice. Please try again.");
+					break;
+			}
+		} else {
+			System.out.println("Password is not correct");
+		}
+		System.out.println("Your profile has been updated!");
+	}
+
+
 }

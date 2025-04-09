@@ -6,11 +6,23 @@ public class User {
 	private String username;
 	private String password;
 	private ArrayList<BankAccount> accounts;
+	private String name;
+    private String phone;
+    private String email;
+    private String address;
+    private String ssn;
+    private String tshirtSize;
 	
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
 		accounts = new ArrayList<BankAccount>();
+		this.name = "";
+        this.phone = "";
+        this.email = "";
+        this.address = "";
+        this.ssn = "";
+        this.tshirtSize = "";
 	}
 	
 	public String getUsername() {
@@ -24,6 +36,52 @@ public class User {
 	public ArrayList<BankAccount> getAccounts(){
 		return accounts;
 	} 
+	public String getName() {
+        return name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+	public String getTshirtSize() {
+		return tshirtSize;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
+	
+	public void setTshirtSize(String tshirtSize) {
+		this.tshirtSize = tshirtSize;
+	}
 	
 	public void changePassword(String newPassword) {
 		this.password = newPassword;

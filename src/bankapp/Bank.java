@@ -23,6 +23,7 @@ public class Bank {
 		this.bankFilePath = determineFilePath();
 		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
+		loadCustomerInfoFromFile();
 	}
 
 	public Bank(String filePath) {
@@ -30,6 +31,7 @@ public class Bank {
 		this.bankFilePath = filePath; // Use provided file path for account info
 		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
+		loadCustomerInfoFromFile();
 	}
 	
 	private String determineFilePath() {
@@ -92,6 +94,8 @@ public class Bank {
 		for (BankAccount account : user.getAccounts()) { // Add user's accounts to the bank
 			addAccount(account);
 		}
+		saveCustomerInfoToFile(); // Save the customer info
+    	saveAccountsToFile(); // Save the accounts
 	}
 	
 	public void addTeller(Teller teller) {
@@ -187,6 +191,11 @@ public class Bank {
 		return userAccounts;
 	}
 	
+	private String getCustomerInfoFilePath() {
+    if (bankFilePath == null) return null;
+    return bankFilePath.replace("bankPastInfo.txt", "customerInfo.txt");
+	}
+
 	public List<BankAccount> getAccounts() {
 		return this.accounts;
 	}
@@ -195,7 +204,53 @@ public class Bank {
 		return this.users;
 	}
 
+	public void saveCustomerInfoToFile() {
+    String customerFilePath = getCustomerInfoFilePath();
+    if (customerFilePath == null) return;
+    
+    try (FileWriter writer = new FileWriter(customerFilePath)) {
+        for (User user : users) {
+            writer.write(String.join(",",
+                user.getUsername(),
+                user.getName(),
+                user.getPhone(),
+                user.getEmail(),
+                user.getAddress(),
+                user.getSsn(),
+                user.getTshirtSize() + "\n"));
+        }
+    } catch (IOException e) {
+        System.out.println("Error saving customer info: " + e.getMessage());
+    	}
+	}
 	
+	public void loadCustomerInfoFromFile() {
+		String customerFilePath = getCustomerInfoFilePath();
+		if (customerFilePath == null) return;
+		
+		try {
+			List<String> lines = Files.readAllLines(Paths.get(customerFilePath));
+			for (String line : lines) {
+				String[] parts = line.split(",");
+				if (parts.length == 7) {
+					for (User user : users) {
+						if (user.getUsername().equals(parts[0])) {
+							user.setName(parts[1]);
+							user.setPhone(parts[2]);
+							user.setEmail(parts[3]);
+							user.setAddress(parts[4]);
+							user.setSsn(parts[5]);
+							user.setTshirtSize(parts[6]);
+							break;
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("Error loading customer info: " + e.getMessage());
+		}
+	}
+
 	public List<Teller> getTellers(){
 		return this.tellers;
 	}
