@@ -57,8 +57,9 @@ public class LoginMenu{
 		System.out.println("\n -- Welcome to Bear Banks! -- \n");
 		System.out.println("Welcome! Would you like to:");
 		System.out.println("(a) Login");
-    System.out.println("(b) Create a new bank profile");
-		System.out.println("(c) Teller Login");
+		System.out.println("(b) Create a new bank profile");
+		System.out.println("(c) Teller login");
+		System.out.println("(x) Exit program");
 	}
 	
 }

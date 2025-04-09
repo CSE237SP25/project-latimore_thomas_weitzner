@@ -12,6 +12,7 @@ public class Menu {
 	private Teller teller;
 	private Boolean isTeller = false;
 	private LoginMenu login;
+	private Boolean active = true;
 	private enum InvalidNameReason {
 		EMPTY,
 		LONG,
@@ -20,12 +21,11 @@ public class Menu {
 		NONE
 	}
 
-
 	public static void main(String[] args) {
 		Menu menu = new Menu();
 		Boolean loggedIn = false;
-		Boolean active = true;
-		while(active) {
+		
+		while(menu.active) {
 			if(!loggedIn) {
 				loggedIn = menu.loginInputChoices();
 			}
@@ -301,6 +301,11 @@ public class Menu {
 				return createProfile();
 			case "c":
 				return loginToTellerAccount();
+			case "x":
+				System.out.println("Thank you for using Bear Banks! Hope to see you again soon!");
+				System.out.println("Exiting the program...");
+				active = false;
+				return false;
 			default:
 				System.out.println("Invalid Input");
 				return false;
