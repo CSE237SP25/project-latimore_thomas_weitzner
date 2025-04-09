@@ -9,17 +9,19 @@ public class TellerMenu{
 	private Bank bank;
 	private LoginMenu login;
 	private Scanner inputScanner;
+	private Boolean active;
 	
 	public TellerMenu(Bank bank, Teller teller) {
 		this.bank = bank;
 		this.teller = teller;
 		login = new LoginMenu(bank.getUsers(), bank.getTellers());
 		inputScanner = new Scanner(System.in);
+		active = true;
 	}
 	
 	
 	public void operateMenu(){
-		while(true) {
+		while(active) {
 			tellerOption();
 			String input = inputScanner.nextLine();
 			tellerProccessChoice(input);
@@ -39,7 +41,9 @@ public class TellerMenu{
 	public void tellerOption() {
 		System.out.println("Hello! Would you like to:");
 		System.out.println("a.) View active bank accounts?");
-		System.out.println("c.) Deposit into account");
+		System.out.println("b.) Create New Teller?");
+    System.out.println("c.) Deposit into account");
+		System.out.println("x.) Logout");
 	}
 	
 	public void tellerProccessChoice(String userInput) {
@@ -47,8 +51,14 @@ public class TellerMenu{
 		case "a":
 			showcaseAccounts();
 			break;
-		case "c":
-			depositIntoAccount();
+		case "b":
+			createTeller();
+      break;
+    case "c":
+		  depositIntoAccount();
+      break;
+		case "x":
+			logout();
 			break;
 		default:
 			System.out.println("Input Invalid!");
@@ -56,7 +66,13 @@ public class TellerMenu{
 		
 	}
 	
-	public User showcaseAccounts() {
+	public void logout() {
+		System.out.println("Logging Out...");
+		active = false;
+		
+	}
+	
+	public void showcaseAccounts() {
 		System.out.println("Which user's account would you like to see?");
 		List<User> users = bank.getUsers();
 		for( User user : users) {
@@ -96,10 +112,7 @@ public class TellerMenu{
 	        }
 	    }
 	    return null;
-		
-		
 	}
-	
 	public void depositIntoAccount(){
 		System.out.println("Select an account to deposit into");
 		User user = showcaseAccounts();
@@ -149,5 +162,81 @@ public class TellerMenu{
 	    	
 	    }
 	    
+	}
+
+	public void createTeller(){
+		System.out.println("Enter new teller username: ");
+		String username = getUserInput();
+		if(login.searchForTeller(username) != null) {
+			System.out.println("Teller username already exists");
+			System.out.println("Cancelling account creation...");
+			return;
+		}
+		else if(!validInput(username)) {
+			System.out.println("Invalid Username");
+			System.out.println("Cancelling account creation...");
+			return;
+		}
+		System.out.println("Enter a password:");
+		String password = getUserInput();
+		if(password.isBlank()) {
+			System.out.println("Password may not be empty");
+			System.out.println("Cancelling account creation...");
+			return;
+			
+		}
+		System.out.println("Please confirm the information below is correct (y/n)");
+		System.out.println("Username: " + username + " Password: " + password);
+		if(getUserInput().toLowerCase().equals("y")){
+			System.out.println("New teller has been created");
+			Teller newTeller = new Teller(username, password);
+			bank.addTeller(newTeller);
+		}
+		
+	}
+	
+	//valid Input will be moved to a different file next cycle. For now I will make a copy of it here for testing purposes.
+	
+	public boolean validInput(String input) {
+		if(input.length() > 15) {
+			System.out.println("Input is too long");
+			return false;
+		}
+		else if(input.isBlank()){
+			System.out.println("Input must not be blank");
+			return false;
+			
+		}
+		else if (input.contains("(") || 
+				input.contains(")") || 
+				input.contains(",") || 
+				input.contains(";") ||
+				input.contains(":") ||
+				input.contains("[") ||
+				input.contains("]") ||
+				input.contains("{") ||
+				input.contains("}") ||
+				input.contains("<") ||
+				input.contains(">") ||
+				input.contains("=") ||
+				input.contains("?") ||
+				input.contains("!") ||
+				input.contains("@") ||
+				input.contains("#") ||
+				input.contains("$") ||
+				input.contains("%") ||
+				input.contains("^") ||
+				input.contains("*") ||
+				input.contains("+") ||
+				input.contains("/") ||
+				input.contains("`") ||
+				input.contains("~")) 
+		{
+			System.out.println("Input Contains Invalid Characters");
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 }
