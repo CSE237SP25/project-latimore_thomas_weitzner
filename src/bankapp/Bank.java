@@ -1,6 +1,5 @@
 package bankapp;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,64 +10,81 @@ import java.util.List;
 
 public class Bank {
 	//NOTE: This is the entire bank, should only be ONE BANK OBJECT IN THE PROJECT
+	//also note that accounts doesn't include the accounts of the tellers
 	private List<BankAccount> accounts;
 	private List<String> accountInfoList = new ArrayList<>(); // List to hold account info strings
 	private List<User> users = new ArrayList<>();// List to hold users (if needed)
 	private String bankFilePath;
+	private List<Teller> tellers = new ArrayList<>();
+	
 	
 	public Bank() {
 		this.accounts = new ArrayList<>();
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		String[] pathParts = s.split("/");
-		if(pathParts.length == 1){
-			pathParts = s.split("\\\\"); // For systems that use backslashes for file system
-		}
-
-		if(pathParts[pathParts.length-1].equals("bankapp")) {
-			this.bankFilePath = "./bankResources/bankPastInfo.txt"; // Default file path for account info
-		}else if(pathParts[pathParts.length-1].equals("src")) {
-			this.bankFilePath = "./bankapp/bankResources/bankPastInfo.txt"; // Default file path for account info
-		}else if(pathParts[pathParts.length-1].equals("project-latimore_thomas_weitzner")) {
-			this.bankFilePath = "./src/bankapp/bankResources/bankPastInfo.txt"; // Default file path for account info
-		}else{
-			System.out.println("Please run the bankapp from the project-latimore_thomas_weitzner, bankapp, or src directories.");
-			System.out.println("The bankapp will not be able to save account information.");
-		}
-
-		File f=new File(this.bankFilePath);
-		Path fullPath = f.toPath();
-		try {
-			this.accountInfoList = Files.readAllLines(fullPath);
-		} catch (IOException e) {
-			System.out.println("Error reading account info file: " + e.getMessage());
-		} 
-
+		this.bankFilePath = determineFilePath();
+		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
 	}
 
 	public Bank(String filePath) {
 		this.accounts = new ArrayList<>();
 		this.bankFilePath = filePath; // Use provided file path for account info
-		File f=new File(filePath);
-		Path fullPath = f.toPath();
-		try {
-			this.accountInfoList = Files.readAllLines(fullPath);
-		} catch (IOException e) {
-			System.out.println("Error reading account info file: " + e.getMessage());
-		} 
-
+		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
 	}
 	
-	public void addAccount(BankAccount account) {
-		for (BankAccount acc : accounts) {
-			if (acc.getAccountNumber() == (account.getAccountNumber())) {
-				throw new IllegalArgumentException("Account number already exists");
+	private String determineFilePath() {
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String[] pathParts = s.split("[/\\\\]");
+		String lastPart = pathParts[pathParts.length - 1];
+		
+		switch (lastPart) {
+		case "bankapp":
+			return "./bankResources/bankPastInfo.txt";
+		case "src":
+			return "./bankapp/bankResources/bankPastInfo.txt";
+        case "project-latimore_thomas_weitzner":
+        	return "./src/bankapp/bankResources/bankPastInfo.txt";
+        default:
+        	System.out.println("Please run the bankapp from the project-latimore_thomas_weitzner, bankapp, or src directories.");
+        	System.out.println("The bankapp will not be able to save account information.");
+        	return null;
+		}
+	}
+	
+	private List<String> readAccountInfoFromFile() {
+		List<String> accountInfo = new ArrayList<>();
+		if (bankFilePath != null) {
+			try {
+				accountInfo = Files.readAllLines(Paths.get(bankFilePath));
+			} catch (IOException e) {
+				System.out.println("Error reading account info file: " + e.getMessage());
 			}
 		}
+		return accountInfo;
+	}
+	
+	
+	public void addAccount(BankAccount account) {
+		for (BankAccount existingAccount : this.accounts) {
+			if (existingAccount.getAccountName() == account.getAccountName()) {
+				throw new IllegalArgumentException("Account Name already exists");
+			}
+		}
+		if (isDuplicateAccountNumber(account.getAccountNumber())) {
+            throw new IllegalArgumentException("Account number already exists");
+        }
 		this.accounts.add(account);
 		saveAccountsToFile(); // Save the updated account info to file
+	}
+	
+	private boolean isDuplicateAccountNumber(int accountNumber) {
+		for (BankAccount account : this.accounts) {
+			if (account.getAccountNumber() == accountNumber) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void addUser(User user){
@@ -77,19 +93,27 @@ public class Bank {
 			addAccount(account);
 		}
 	}
+	
+	public void addTeller(Teller teller) {
+		this.tellers.add(teller);
+		saveAccountsToFile();
+	}
 
 	public void saveAccountsToFile() {
 		try (FileWriter writer = new FileWriter(bankFilePath)) {
 			for(User user : users) {
 			    if(user.getAccounts().isEmpty()) {
-			        writer.write(user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
+			        writer.write("User,"+user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
 			    } else {
 			        for (BankAccount account : user.getAccounts()) {
-			            writer.write(user.getUsername() + "," + user.getPassword() + "," +
+			            writer.write("User,"+user.getUsername() + "," + user.getPassword() + "," +
 			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
 			                         account.getCurrentBalance() + "\n");
 			        }
 			    }
+			}
+			for(Teller teller:tellers) {
+			    writer.write("Teller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0\n");
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving accounts to file: " + e.getMessage());
@@ -104,48 +128,63 @@ public class Bank {
 	
 	public void makeAccountFromFile(String accountInfo){
 		String[] parts = accountInfo.split(",");
-		if (parts.length != 5) {
+		if (parts.length != 6) {
 			throw new IllegalArgumentException("Invalid account info format");
 		}
-		String Username = parts[0];
-		String password = parts[1];
-		String AccountName = parts[2];
-		int accountNumber = Integer.parseInt(parts[3]);
-		double balance = Double.parseDouble(parts[4]);
-
-		List<String> usernames = new ArrayList<>(); // List to check if the user already exists
-		User currentUser = null;
-		for(User user : this.users){
-			usernames.add(user.getUsername());
-		}
-		
-		if (!usernames.contains(Username)) {
-			currentUser = new User(Username,password);
-			this.users.add(currentUser); // Add new user to the list
-		}else{
-			for(User user : this.users){
-				if(user.getUsername().equals(Username)){
-					currentUser = user; // Get the existing user
-				}
+		String type = parts[0];
+		String username = parts[1];
+		String password = parts[2];
+		String accountName = parts[3];
+		int accountNumber = Integer.parseInt(parts[4]);
+		double balance = Double.parseDouble(parts[5]);
+		if("Teller".equals(type)) {
+			Teller teller = new Teller(username, password);
+			addTeller(teller);
+			return;
+		}else if("User".equals(type)) {
+			User currentUser = initializeUser(username, password);
+			if (!accountName.equals("EMPTY")) {
+				BankAccount account = createAccount(accountName, accountNumber, balance);
+				currentUser.addAccount(account);
 			}
 		}
-		
-		if (AccountName.equals("EMPTY")) {
-			return;
+		saveAccountsToFile();
+	}
+	
+	private User initializeUser(String username, String password) {
+		for (User user : this.users) {
+			if (user.getUsername().equals(username)) {
+				return user;
+			}
 		}
-
-		BankAccount account = new BankAccount(AccountName);
-		account.deposit(balance); //use deposit method to set the initial balance
+		User newUser = new User(username, password);
+		users.add(newUser);
+		return newUser;
+	}
+	
+	private BankAccount createAccount(String accountName, int accountNumber, double balance) {
+		BankAccount account = new BankAccount(accountName,accountNumber,balance);
+		//account.initializeAccountBalance(balance);
 		addAccount(account);
-		currentUser.addAccount(account); // Add the account to the user
+		return account;
 	}
 
 	public void removeAccount(BankAccount account) {
 		if (!this.accounts.contains(account)) {
             throw new IllegalArgumentException("Account does not exist");
-            }
+        }
 		this.accounts.remove(account);
 		saveAccountsToFile();
+	}
+
+	public List<BankAccount> getUserAccounts(User user) {
+		List<BankAccount> userAccounts = new ArrayList<>();
+		for (User tempUser : users) {
+			if (tempUser.getUsername().equals(user.getUsername())) {
+				userAccounts = user.getAccounts();
+			}
+		}
+		return userAccounts;
 	}
 	
 	public List<BankAccount> getAccounts() {
@@ -155,4 +194,10 @@ public class Bank {
 	public List<User> getUsers(){
 		return this.users;
 	}
+
+	
+	public List<Teller> getTellers(){
+		return this.tellers;
+	}
+
 }
