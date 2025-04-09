@@ -1,18 +1,18 @@
 User,testedUser1,password1,EMPTY,0,0.0
-User,testedUser2,password2,Placeholder Name,66,600.0
-User,testedUser2,password2,Placeholder Name,67,200.0
-User,testedUser3,password3,Placeholder Name,68,8.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,69,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,70,0.0
-User,PlaceholderUsername,PlaceholderPassword,ThomasAccount,71,8.0
-User,PlaceholderUsername,PlaceholderPassword,nina,72,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,73,100.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,74,0.0
-User,PlaceholderUsername,PlaceholderPassword,nina,75,150.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,76,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,77,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,78,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,79,0.0
-User,nina,latimore,nina Account,80,10000.0
+User,testedUser2,password2,Placeholder Name,1,600.0
+User,testedUser2,password2,Placeholder Name,2,200.0
+User,testedUser3,password3,Placeholder Name,3,8.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,4,0.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,5,0.0
+User,PlaceholderUsername,PlaceholderPassword,ThomasAccount,6,8.0
+User,PlaceholderUsername,PlaceholderPassword,nina,7,0.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,8,100.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,9,0.0
+User,PlaceholderUsername,PlaceholderPassword,nina,10,150.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,11,0.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,12,0.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,13,0.0
+User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,14,0.0
+User,nina,latimore,nina Account,15,10000.0
 Teller,Teller1,Password1,EMPTY,0,0.0
 Teller,teller2,tellerpw2,EMPTY,0,0.0
