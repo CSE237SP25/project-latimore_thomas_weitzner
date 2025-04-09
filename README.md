@@ -55,6 +55,7 @@ What user stories do you intend to complete next iteration?
 
 Is there anything that you implemented but doesn't currently work?
 * All code on the development branch works as intended. We have a few pull requests open that might not be merged in by the time of the peer review on some of the issues in "next iteration".
+* Creating a new teller logs current Teller out, this has been fixed in a pull request that is currently open
 
 What commands are needed to compile and run your code from the command line (please provide a script that users can run to launch your program)?
 
