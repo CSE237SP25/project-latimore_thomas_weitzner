@@ -1,5 +1,9 @@
 package bankapp;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,19 +17,33 @@ public class BankAccount {
 	private String accountName;
 	private List<String> transactionHistory;
 	private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
+    private static final String FILE_PATH = "bankResources/transactionHistoryStore/";
 	
-	public BankAccount(String accountName) {
-		this.accountNumber = nextAccountNumber++;
-		this.balance = 0;
+    public BankAccount(String accountName) {
+        this.accountNumber = nextAccountNumber++;
+        this.balance = 0;
+        this.accountName = accountName;
+        this.transactionHistory = new ArrayList<>();
+        loadTransactionHistory();
+    }
+
+	public BankAccount(String accountName, int accountNumber, double balance) {
+		this.accountNumber = accountNumber;
+		nextAccountNumber = Math.max(nextAccountNumber, accountNumber + 1);
+		if(balance < 0) {
+			throw new IllegalArgumentException("Initial balance cannot be negative");
+		}
+		this.balance = balance;
 		this.accountName = accountName;
 		this.transactionHistory = new ArrayList<>();
-	}
-	
-	public List<String> getTransactionHistory(){
-		return new ArrayList<>(this.transactionHistory);
+		loadTransactionHistory();
 	}
 
-	public void initializeAccountBalance(double savedBalance) {
+    public List<String> getTransactionHistory() {
+        return new ArrayList<>(this.transactionHistory);
+    }
+    
+    public void initializeAccountBalance(double savedBalance) {
 		if (savedBalance < 0) {
 			throw new IllegalArgumentException("Initial balance cannot be negative");
 		}
@@ -55,6 +73,21 @@ public class BankAccount {
 		addTransactionHistory(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 
 	}
+
+    private void loadTransactionHistory() {
+         File file = new File(FILE_PATH + getAccountNumber() + ".txt");
+         if (!file.exists()) {
+             return;
+         }
+         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+             String line;
+             while ((line = reader.readLine()) != null) {
+                 transactionHistory.add(line);
+             }
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
 
 	public void transfer(BankAccount targetAccount, double amount){
 		if (amount <= 0) {
