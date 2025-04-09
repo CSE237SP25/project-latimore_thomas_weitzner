@@ -13,6 +13,5 @@ User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,11,0.0
 User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,12,0.0
 User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,13,0.0
 User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,14,0.0
-User,nina,latimore,nina Account,15,10000.0
 Teller,Teller1,Password1,EMPTY,0,0.0
 Teller,teller2,tellerpw2,EMPTY,0,0.0
