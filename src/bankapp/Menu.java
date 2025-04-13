@@ -6,14 +6,15 @@ public class Menu {
 
 	private Scanner inputScanner;
 	private List<BankAccount> userAccounts;
-	private BankAccount currentUserAccount;
+	public BankAccount currentUserAccount;
 	private final Bank bank;
-	private User user;
+	public User user;
 	private Teller teller;
 	private Boolean isTeller = false;
 	private LoginMenu login;
 	private Boolean active = true;
-	private enum InvalidNameReason {
+
+	public enum InvalidNameReason {
 		EMPTY,
 		LONG,
 		SAME_NAME,
@@ -54,8 +55,15 @@ public class Menu {
 
 		this.login = new LoginMenu(bank.getUsers(), bank.getTellers());
 	    System.out.println("Hello! Welcome to our bank app!");
+	
+	}
+	void setUser(User user) {
+    this.user = user;
 	}
 
+	void setCurrentUserAccount(BankAccount acc) {
+		this.currentUserAccount = acc;
+	}
 	public void provideUserChoices(){
 		System.out.println();
 		System.out.println(" -- Welcome to Bear Banks! -- ");
@@ -367,7 +375,7 @@ public class Menu {
 		}
 		return true;
 	}
-
+	
 	//creating new Profile
 	public Boolean createProfile(){
 		System.out.println("Welcome! Let's get you set up with a profile!");
@@ -522,4 +530,10 @@ public class Menu {
         System.out.println("❌ Please enter valid numbers");
     }
 }
+
+	public LoginMenu getLogin() {
+    return this.login;
+	}
+
 }
+
