@@ -14,7 +14,7 @@ public class Menu {
 	private LoginMenu login;
 	private Boolean active = true;
 
-	private enum InvalidNameReason {
+	public enum InvalidNameReason {
 		EMPTY,
 		LONG,
 		SAME_NAME,
