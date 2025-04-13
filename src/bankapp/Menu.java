@@ -12,6 +12,7 @@ public class Menu {
 	private Teller teller;
 	private Boolean isTeller = false;
 	private LoginMenu login;
+	private Boolean active = true;
 	public enum InvalidNameReason {
 		EMPTY,
 		LONG,
