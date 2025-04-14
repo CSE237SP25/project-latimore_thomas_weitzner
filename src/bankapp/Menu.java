@@ -398,15 +398,29 @@ public class Menu {
     if(getUserInput().toLowerCase().equals("y")) {
         System.out.println("Enter your full name:");
         String name = getUserInput();
-        System.out.println("Enter your phone number:");
-        String phone = getUserInput();
+		String phone;
+		while(true) {
+			System.out.println("Enter phone number (10 digits):");
+			phone = getUserInput();
+			if(phone.matches("\\d{10}")) {
+				break;
+			}
+			System.out.println("Invalid phone number. Must be 10 digits.");
+		}
         System.out.println("Enter your email:");
         String email = getUserInput();
         System.out.println("Enter your address:");
         String address = getUserInput();
         System.out.println("Enter your SSN:");
-        String ssn = getUserInput();
-
+		String ssn;
+		while(true) {
+			System.out.println("Enter SSN (9 digits):");
+			ssn = getUserInput();
+			if(ssn.matches("\\d{9}")) {
+				break;
+			}
+			System.out.println("Invalid SSN. Must be 9 digits.");
+		}
         User newUser = new User(username, password);
         newUser.setName(name);
         newUser.setPhone(phone);
@@ -559,7 +573,7 @@ public class Menu {
 		System.out.println("Current Information:" + 
 			"\nName: " + user.getName() + "\nPhone Number: " + user.getPhone() + 
 			"\nEmail: " + user.getEmail() + "\nAddress: " + user.getAddress() + 
-			"\nSSN: " + user.getSsn() + "\nT-shirt Size: " + user.getTshirtSize());
+			"\nSSN: " + user.getSsn());
 		
 		System.out.println("Please enter your current password to update your profile");
 		if(getUserInput().equals(user.getPassword())) {
@@ -569,8 +583,7 @@ public class Menu {
 			System.out.println("c.) Email");
 			System.out.println("d.) Address");
 			System.out.println("e.) SSN");
-			System.out.println("f.) T-shirt Size");
-			System.out.println("g.) Back to the main menu");
+			System.out.println("f.) Back to the main menu");
 			
 			String choice = getUserInput();
 			switch(choice.toLowerCase()) {
@@ -585,12 +598,18 @@ public class Menu {
 					break;
 				case "b":
 					System.out.println("Enter new phone number:");
-					String newPhone = getUserInput();
-						user.setPhone(newPhone);
-						bank.saveAccountsToFile();
-					 //else {
-						//System.out.println("Number cannot contain special characters");
-					//}
+					String newPhone;
+					while (true) {
+						System.out.println("Enter new phone number (10 digits):");
+						newPhone = getUserInput();
+						if (newPhone.matches("\\d{10}")) {
+							user.setPhone(newPhone);
+							bank.saveAccountsToFile();
+							break;
+						} else {
+							System.out.println("Invalid phone number. Must be 10 digits.");
+						}
+					}
 					break;
 				case "c":
 					System.out.println("Enter new email:");
@@ -602,17 +621,22 @@ public class Menu {
 					user.setAddress(getUserInput());
 					bank.saveAccountsToFile();
 					break;
-				case "e":
-					System.out.println("Enter new SSN:");
-					user.setSsn(getUserInput());
-					bank.saveAccountsToFile();
+			    case "e":
+					String newSSN;
+					while (true) {
+						System.out.println("Enter new SSN (9 digits):");
+						newSSN = getUserInput();
+						if (newSSN.matches("\\d{9}")) {
+							user.setSsn(newSSN);
+							bank.saveAccountsToFile();
+							break;
+						} else {
+							System.out.println("Invalid SSN. Must be 9 digits.");
+						}
+					}
 					break;
+
 				case "f":
-					System.out.println("Enter new T-shirt size:");
-					user.setTshirtSize(getUserInput());
-					bank.saveAccountsToFile();
-					break;
-				case "g":
 					System.out.println("Returning to main menu...");
 					break;
 				default:
