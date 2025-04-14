@@ -28,7 +28,7 @@ public class MenuTests {
         testUser.addAccount(account1);
         testUser.addAccount(account2);
         bank.addUser(testUser);
-        menu = new Menu();
+        menu = new Menu(testUser);
         menu.user = testUser;
         menu.currentUserAccount = account1;
     }

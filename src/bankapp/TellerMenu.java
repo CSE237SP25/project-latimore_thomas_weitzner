@@ -14,11 +14,10 @@ public class TellerMenu{
 	public TellerMenu(Bank bank, Teller teller) {
 		this.bank = bank;
 		this.teller = teller;
-		login = new LoginMenu(bank.getUsers(), bank.getTellers());
+		login = new LoginMenu(bank.getUsers(), bank.getTellers(), this.bank);
 		inputScanner = new Scanner(System.in);
 		active = true;
 	}
-	
 	
 	public void operateMenu(){
 		while(active) {
