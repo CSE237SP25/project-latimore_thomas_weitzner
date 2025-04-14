@@ -649,5 +649,9 @@ public class Menu {
 		System.out.println("Your profile has been updated!");
 	}
 
+	public LoginMenu getLogin() {
+    return this.login;
+	}
+
 
 }

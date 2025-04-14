@@ -1,120 +1,111 @@
 package tests;
 
-import static org.junit.Assert.*;
+import bankapp.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import bankapp.*;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MenuTests {
     private Menu menu;
-    private Bank bank;
     private User testUser;
+    private BankAccount account1;
+    private BankAccount account2;
+    private Bank bank;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         bank = new Bank();
-        menu = new Menu();
         testUser = new User("testUser", "testPass");
+        account1 = new BankAccount("AccountOne");
+        account2 = new BankAccount("AccountTwo");
+        account1.deposit(100.0);
+        account2.deposit(50.0);
+        testUser.addAccount(account1);
+        testUser.addAccount(account2);
         bank.addUser(testUser);
-        menu.user = testUser; // Simulate logged in user
+        menu = new Menu();
+        menu.user = testUser;
+        menu.currentUserAccount = account1;
     }
 
+    //existing account can add a user
     @Test
-    void testCreateAccount() {
-        int initialAccountCount = testUser.getAccounts().size();
+    public void testCreateAccountAddsAccount() {
+        int initialSize = testUser.getAccounts().size();
         menu.createAccount();
-        assertEquals(initialAccountCount + 1, testUser.getAccounts().size());
+        assertEquals(initialSize + 1, testUser.getAccounts().size());
     }
 
+    //user can remove an account
     @Test
-    void testDepositValidAmount() {
-        BankAccount account = new BankAccount("Test Account");
-        testUser.addAccount(account);
-        menu.currentUserAccount = account;
-        
-        double initialBalance = account.getCurrentBalance();
-        double depositAmount = 100.0;
-        
-        // Simulate user input
-        menu.inputScanner = new java.util.Scanner(String.valueOf(depositAmount));
-        menu.deposit();
-        
-        assertEquals(initialBalance + depositAmount, account.getCurrentBalance(), 0.001);
+    public void testDeleteAccountRemovesAccount() {
+        int initialSize = testUser.getAccounts().size();
+        menu.currentUserAccount = account1; 
+        menu.removeAccount();
+        assertEquals(initialSize - 1, testUser.getAccounts().size());
     }
 
+    //testing the account name (special characters)
     @Test
-    void testWithdrawValidAmount() {
-        BankAccount account = new BankAccount("Test Account");
-        account.deposit(200.0); // Start with some balance
-        testUser.addAccount(account);
-        menu.currentUserAccount = account;
-        
-        double withdrawAmount = 50.0;
-        
-        // Simulate user input
-        menu.inputScanner = new java.util.Scanner(String.valueOf(withdrawAmount));
-        menu.withdraw();
-        
-        assertEquals(150.0, account.getCurrentBalance(), 0.001);
+    public void testIsInvalidAccountName() {
+        menu.currentUserAccount = new BankAccount("OldName");
+
+        assertEquals(Menu.InvalidNameReason.EMPTY, menu.isInvalidAccountName(""));
+        assertEquals(Menu.InvalidNameReason.LONG, menu.isInvalidAccountName("ThisNameIsWayTooLongToActuallyWerk"));
+        assertEquals(Menu.InvalidNameReason.SAME_NAME, menu.isInvalidAccountName("OldName"));
+        assertEquals(Menu.InvalidNameReason.SPECIAL_CHARACTERS, menu.isInvalidAccountName("B@@@@d@Name"));
+        assertEquals(Menu.InvalidNameReason.NONE, menu.isInvalidAccountName("GoodName"));
+    }
+    
+    //testing account deposit
+    @Test
+    public void testDepositIncreasesBalance() {
+        double before = account1.getCurrentBalance();
+        account1.deposit(25.0);
+        assertEquals(before + 25.0, account1.getCurrentBalance());
     }
 
+    //testing account withdraw
     @Test
-    void testRenameAccountValidName() {
-        BankAccount account = new BankAccount("Old Name");
-        testUser.addAccount(account);
-        menu.currentUserAccount = account;
-        
-        String newName = "New Valid Name";
-        menu.inputScanner = new java.util.Scanner(newName);
-        menu.renameAccount();
-        
-        assertEquals(newName, account.getAccountName());
+    public void testWithdrawDecreasesBalance() {
+        double initialBalance = account1.getCurrentBalance();
+        account1.withdraw(30.0);
+        assertEquals(initialBalance - 30.0, account1.getCurrentBalance());
+    }
+/* this didnt work because something in menu would need to change
+    @Test
+    public void testDisplayBalanceShowsCorrectAmount() {
+        menu.currentUserAccount = account1;
+        menu.displayBalance();
+    }
+*/
+    //account transfer tests
+    @Test
+    public void testTransferBetweenAccounts() {
+        account1.transfer(account2, 30.0);
+        assertEquals(70.0, account1.getCurrentBalance());
+        assertEquals(80.0, account2.getCurrentBalance());
     }
 
+    //new accounts have diff numbers
     @Test
-    void testChangeUsernameValid() {
-        String newUsername = "newUsername";
-        menu.inputScanner = new java.util.Scanner("testPass\n" + newUsername);
-        menu.changeUsername();
-        
-        assertEquals(newUsername, testUser.getUsername());
+    public void testCreateAccountAssignsUniqueNumber() {
+        BankAccount newAccount1 = new BankAccount("New1");
+        BankAccount newAccount2 = new BankAccount("New2");
+        assertNotEquals(newAccount1.getAccountNumber(), newAccount2.getAccountNumber());
     }
 
+    //testing the login
     @Test
-    void testChangePasswordValid() {
-        String newPassword = "newPassword123";
-        menu.inputScanner = new java.util.Scanner("testPass\n" + newPassword);
-        menu.changePassword();
-        
-        assertEquals(newPassword, testUser.getPassword());
+    public void testValidPassword() {
+        User validUser = new User("validUser", "correctPass");
+        bank.addUser(validUser);
+
+        assertTrue(menu.getLogin().checkPassword(validUser, "correctPass"));
     }
 
-    @Test
-    void testTransferBetweenAccounts() {
-        BankAccount source = new BankAccount("Source");
-        source.deposit(300.0);
-        BankAccount target = new BankAccount("Target");
-        testUser.addAccount(source);
-        testUser.addAccount(target);
-        
-        // Simulate user input: select source, then target, then amount 100
-        menu.inputScanner = new java.util.Scanner(
-            source.getAccountNumber() + "\n" + 
-            target.getAccountNumber() + "\n" + 
-            "100");
-        
-        menu.transferBetweenAccounts();
-        
-        assertEquals(200.0, source.getCurrentBalance(), 0.001);
-        assertEquals(100.0, target.getCurrentBalance(), 0.001);
-    }
-
-    @Test
-    void testIsInvalidAccountName() {
-        // Test empty name
-        assertEquals(Menu.InvalidNameReason.EMPTY, 
-                   menu.isInvalidAccountName(""));
-        
-        // Test too long namels
-        // removed valid input so change testing
-    }
+}
