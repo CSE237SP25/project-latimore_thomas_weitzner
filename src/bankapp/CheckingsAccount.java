@@ -1,8 +1,9 @@
 package bankapp;
 
+import static bankapp.BankAccount.dtf;
 import java.time.LocalDateTime;
 
-public abstract class CheckingsAccount extends BankAccount{
+public class CheckingsAccount extends BankAccount{
 	
 	
 	public CheckingsAccount(String accountName) {
@@ -23,6 +24,7 @@ public abstract class CheckingsAccount extends BankAccount{
 		this.transactionHistory.add(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 
 	}
+
 	
 	@Override
 	public double getCurrentBalance() {

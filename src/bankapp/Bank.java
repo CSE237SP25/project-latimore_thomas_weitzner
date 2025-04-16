@@ -103,10 +103,10 @@ public class Bank {
 		try (FileWriter writer = new FileWriter(bankFilePath)) {
 			for(User user : users) {
 			    if(user.getAccounts().isEmpty()) {
-			        writer.write("User,"+user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
+			        writer.write("User,NONE,"+user.getUsername() + "," + user.getPassword() + ",EMPTY,0,0.0\n");
 			    } else {
 			        for (BankAccount account : user.getAccounts()) {
-			            writer.write("User,"+user.getUsername() + "," + user.getPassword() + "," +
+			            writer.write("User,"+account.getAccountType()+","+user.getUsername() + "," + user.getPassword() + "," +
 			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
 			                         account.getCurrentBalance()+"\n");
 			        }
@@ -115,9 +115,9 @@ public class Bank {
 			int i=0;
 			for(Teller teller:tellers) {
 				if(i==0) {
-			    	writer.write("Teller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
+			    	writer.write("Teller,NONE,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
 				}else{
-			    	writer.write("\nTeller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
+			    	writer.write("\nTeller,NONE,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
 				}
 				i++;
 			}
@@ -134,15 +134,16 @@ public class Bank {
 	
 	public void makeAccountFromFile(String accountInfo){
 		String[] parts = accountInfo.split(",");
-		if (parts.length != 6) {
+		if (parts.length != 7) {
 			throw new IllegalArgumentException("Invalid account info format");
 		}
 		String type = parts[0];
-		String username = parts[1];
-		String password = parts[2];
-		String accountName = parts[3];
-		int accountNumber = Integer.parseInt(parts[4]);
-		double balance = Double.parseDouble(parts[5]);
+		String accountType = parts[1];
+		String username = parts[2];
+		String password = parts[3];
+		String accountName = parts[4];
+		int accountNumber = Integer.parseInt(parts[5]);
+		double balance = Double.parseDouble(parts[6]);
 		if("Teller".equals(type)) {
 			Teller teller = new Teller(username, password);
 			addTeller(teller);
@@ -150,7 +151,7 @@ public class Bank {
 		}else if("User".equals(type)) {
 			User currentUser = initializeUser(username, password);
 			if (!accountName.equals("EMPTY")) {
-				BankAccount account = createAccount(accountName, accountNumber, balance);
+				BankAccount account = createAccount(accountType,accountName, accountNumber, balance);
 				currentUser.addAccount(account);
 			}
 		}
@@ -168,11 +169,39 @@ public class Bank {
 		return newUser;
 	}
 	
-	private BankAccount createAccount(String accountName, int accountNumber, double balance) {
-		BankAccount account = new BankAccount(accountName,accountNumber,balance);
-		//account.initializeAccountBalance(balance);
-		addAccount(account);
-		return account;
+	private BankAccount createAccount(String accountType,String accountName, int accountNumber, double balance) {
+            switch (accountType) {
+                case "Checkings":
+                {
+                    BankAccount account = new CheckingsAccount(accountName);
+                    account.setAccountNumber(accountNumber);
+                    account.initializeAccountBalance(balance);
+                    currentUser.addAccount(account);
+                    addAccount(account);
+                    return account;
+                }
+                case "Savings":
+                {
+                    BankAccount account = new SavingsAccount(accountName);
+                    account.setAccountNumber(accountNumber);
+                    account.initializeAccountBalance(balance);
+                    currentUser.addAccount(account);
+                    addAccount(account);
+                    return account;
+                }
+                case "Loan":
+                {
+                    BankAccount account = new LoanAccount(accountName);
+                    account.setAccountNumber(accountNumber);
+                    account.initializeAccountBalance(balance);
+                    currentUser.addAccount(account);
+                    addAccount(account);
+                    return account;
+                }
+                default:
+                    break;
+            }
+			return null;
 	}
 
 	public void removeAccount(BankAccount account) {

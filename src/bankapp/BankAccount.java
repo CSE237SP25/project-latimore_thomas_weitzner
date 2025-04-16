@@ -11,13 +11,13 @@ import java.util.List;
 
 public abstract class BankAccount {
 	
-	private static int nextAccountNumber = 1;
-	private int accountNumber;
-	private double balance;
-	private String accountName;
-	private List<String> transactionHistory;
-	private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
-    private static final String FILE_PATH = "bankResources/transactionHistoryStore/";
+	protected static int nextAccountNumber = 1;
+	protected int accountNumber;
+	protected double balance;
+	protected String accountName;
+	protected List<String> transactionHistory;
+	protected static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
+    protected static final String FILE_PATH = "bankResources/transactionHistoryStore/";
 	
     public BankAccount(String accountName) {
         this.accountNumber = nextAccountNumber++;
@@ -80,7 +80,8 @@ public abstract class BankAccount {
          }
      }
 
-	public void transfer(BankAccount targetAccount, double amount){
+	 public void transfer(BankAccount targetAccount, double amount){
+		this.balance = getCurrentBalance();
 		if (amount <= 0) {
 			throw new IllegalArgumentException("Must transfer positive amount");
 		}
