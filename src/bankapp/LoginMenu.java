@@ -101,7 +101,7 @@ public class LoginMenu{
 			
 			break;
 		case "user":
-			Menu menu = new Menu(user);
+			Menu menu = new Menu(bank,user);
 			menu.operateMenu();
 			break;
 		}

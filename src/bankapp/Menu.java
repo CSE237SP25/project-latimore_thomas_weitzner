@@ -22,10 +22,10 @@ public class Menu {
 	}
 
 
-	public Menu(User user) {
+	public Menu(Bank bank, User user) {
 		this.user = user;
 	    this.inputScanner = new Scanner(System.in);
-		this.bank = new Bank();// Initialize the bank object
+		this.bank = bank;// Initialize the bank object
 		this.login = new LoginMenu(bank.getUsers(), bank.getTellers(), bank);
 		checkUserHasAccounts(user);
 		setCurrentUserAccount(user.getAccounts().get(0));
