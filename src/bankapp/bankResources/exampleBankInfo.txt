@@ -1,3 +1,4 @@
-jdUser,randompassword1,John Doe,1,100.0
-janeyUser,randompassword2,Jane Doe,2,17.50
-jackUser,randompassword3,Jack Doe,3,2000.0
+User,jdUser,randompassword1,John Doe,1,100.0
+User,janeyUser,randompassword2,Jane Doe,2,17.50
+User,jackUser,randompassword3,Jack Doe,3,2000.0
+Teller,exTeller,randompassword4,EMPTY,0,0
