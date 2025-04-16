@@ -119,6 +119,7 @@ public class Bank {
 				}else{
 			    	writer.write("\nTeller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
 				}
+				i++;
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving accounts to file: " + e.getMessage());
