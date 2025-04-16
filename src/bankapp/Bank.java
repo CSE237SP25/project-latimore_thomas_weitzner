@@ -108,12 +108,18 @@ public class Bank {
 			        for (BankAccount account : user.getAccounts()) {
 			            writer.write("User,"+user.getUsername() + "," + user.getPassword() + "," +
 			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
-			                         account.getCurrentBalance() + "\n");
+			                         account.getCurrentBalance()+"\n");
 			        }
 			    }
 			}
+			int i=0;
 			for(Teller teller:tellers) {
-			    writer.write("Teller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0\n");
+				if(i==0) {
+			    	writer.write("Teller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
+				}else{
+			    	writer.write("\nTeller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
+				}
+				i++;
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving accounts to file: " + e.getMessage());

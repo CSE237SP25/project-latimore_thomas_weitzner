@@ -9,8 +9,7 @@ public class Menu {
 	public BankAccount currentUserAccount;
 	private final Bank bank;
 	public User user;
-	private Teller teller;
-	private Boolean isTeller = false;
+	
 	private LoginMenu login;
 	private Boolean active = true;
 
@@ -22,38 +21,14 @@ public class Menu {
 		NONE
 	}
 
-	public static void main(String[] args) {
-		Menu menu = new Menu();
-		Boolean loggedIn = false;
-		
-		while(menu.active) {
-			if(!loggedIn) {
-				loggedIn = menu.loginInputChoices();
-			}
-			else {
-				if (menu.isTeller) {
-					TellerMenu tellerMenu = new TellerMenu(menu.bank, menu.teller);
-					tellerMenu.operateMenu();
-					loggedIn = false;
-					menu.isTeller = false;
-				}
-				else {
-					System.out.println("Welcome: " + menu.user.getUsername());
-					menu.provideUserChoices();
-					String userInput = menu.getUserInput();
-					loggedIn = menu.processUserInput(userInput);
-					
-				}
-			}
-		}
-	}
 
-	
-	public Menu() {
+	public Menu(Bank bank, User user) {
+		this.user = user;
 	    this.inputScanner = new Scanner(System.in);
-		this.bank = new Bank();// Initialize the bank object
-
-		this.login = new LoginMenu(bank.getUsers(), bank.getTellers());
+		this.bank = bank;// Initialize the bank object
+		this.login = new LoginMenu(bank.getUsers(), bank.getTellers(), bank);
+		checkUserHasAccounts(user);
+		setCurrentUserAccount(user.getAccounts().get(0));
 	    System.out.println("Hello! Welcome to our bank app!");
 	
 	}
@@ -63,6 +38,13 @@ public class Menu {
 
 	void setCurrentUserAccount(BankAccount acc) {
 		this.currentUserAccount = acc;
+	}
+	
+	public void operateMenu() {
+		while(active) {
+			provideUserChoices();
+			active = processUserInput(getUserInput());
+		}
 	}
 	public void provideUserChoices(){
 		System.out.println();
@@ -297,123 +279,15 @@ public class Menu {
         return InvalidNameReason.NONE;
 	}
 	
-	//Login Code
-	public Boolean loginInputChoices() {
-		login.displayChoices();
-		String userInput = getUserInput();
-		switch(userInput.toLowerCase()) {
-			case "a":
-				return loginToAccount();
-			case "b":
-				System.out.println("Creating a new account...");
-				return createProfile();
-			case "c":
-				return loginToTellerAccount();
-			case "x":
-				System.out.println("Thank you for using Bear Banks! Hope to see you again soon!");
-				System.out.println("Exiting the program...");
-				active = false;
-				return false;
-			default:
-				System.out.println("Invalid Input");
-				return false;
-		}
-		
-	}
-	
-	public Boolean loginToAccount() {
-		System.out.println("Enter Username:");
-		String username = getUserInput();
-		User profile = login.searchForProfile(username);
-		if(profile == null) {
-			System.out.println("Profile does not exist");
-			return false;
-		}
-		else {
-			System.out.println("Enter Password:");
-			String password = getUserInput();
-			if(login.checkPassword(profile, password)) {
-				this.user = profile;
-				if(checkUserHasAccounts(user)){
-					this.currentUserAccount = user.getAccounts().get(0);
-					this.userAccounts = user.getAccounts();
-				}
-				return true;
-			}
-			System.out.println("Passwords do not match");
-			return false;
-		}
-	}
-	public Boolean loginToTellerAccount(){
-		System.out.println("Enter Username:");
-		String username = getUserInput();
-		if(login.searchForTeller(username) == null) {
-			System.out.println("Teller does not exist");
-			return false;
-		}
-		else {
-			Teller teller = login.searchForTeller(username);
-			System.out.println("Enter Password:");
-			String password = getUserInput();
-			Boolean correctPassword = login.checkPassword(teller, password);
-			if(correctPassword) {
-				this.teller = teller;
-				this.isTeller = true;
-				return true;
-			}
-			System.out.println("Passwords do not match");
-			return false;
-		}
-		
-	}
 
-	public Boolean checkUserHasAccounts(User user){
+	
+	
+
+	public void checkUserHasAccounts(User user){
 		if(user.getAccounts().isEmpty()) {
 			System.out.println("You do not have any accounts. Making one for you!");
 			createAccount();
-			return true;
 		}
-		return true;
-	}
-	
-	//creating new Profile
-	public Boolean createProfile(){
-		System.out.println("Welcome! Let's get you set up with a profile!");
-		System.out.println("Enter a username: ");
-		String username = getUserInput();
-		if(login.searchForProfile(username) != null) {
-			System.out.println("Username already exists");
-			System.out.println("Cancelling account creation...");
-			return false;
-		}
-		else if(username.isBlank() || username.length()>15) {
-			System.out.println("Invalid Username");
-			System.out.println("Cancelling account creation...");
-			return false;
-		}
-		System.out.println("Enter a password:");
-		String password = getUserInput();
-		if(password.isBlank()) {
-			System.out.println("Password may not be empty");
-			System.out.println("Cancelling account creation...");
-			return false;
-		}
-		System.out.println("Please confirm the information below is correct (y/n)");
-		System.out.println("Username: " + username + " Password: " + password);
-		if(getUserInput().toLowerCase().equals("y")){
-			System.out.println("Your profile has been created! Logging you in...");
-			User newUser = new User(username,password);
-			this.user = newUser;
-			BankAccount newAccount = new BankAccount(newUser.getUsername() + " Account");
-			newUser.addAccount(newAccount);
-			bank.addUser(newUser);
-			this.currentUserAccount = newAccount;
-			return true;
-		}
-		else {
-			System.out.println("Cancelling account creation...");
-		}
-		return false;
 	}
 
 
@@ -447,10 +321,7 @@ public class Menu {
 			}
 			else {
 				if(isInvalidAccountName(newUsername)==InvalidNameReason.NONE) {
-					int index =login.existingUsers.indexOf(user);
 					user.changeUsername(newUsername);
-					login.existingUsers.remove(index);
-					login.existingUsers.add(index, user);
 					System.out.println("Username successfully changed to: " + user.getUsername());
 					bank.saveAccountsToFile(); // Save the updated account info to file
 				}
@@ -466,10 +337,7 @@ public class Menu {
 		if(getUserInput().equals(user.getPassword())) {
 			System.out.println("Enter new Password");
 			String newPassword = getUserInput();
-			int index =login.existingUsers.indexOf(user);
 			user.changePassword(newPassword);
-			login.existingUsers.remove(index);
-			login.existingUsers.add(index, user);
 			System.out.println("Password successfully changed");
 			bank.saveAccountsToFile(); // Save the updated account info to file
 		}
