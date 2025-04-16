@@ -1,0 +1,8 @@
+Time: 04/08/2025 01:41 PM | Deposit: +$100.00 | Balance: $100.00
+Time: 04/08/2025 01:41 PM | Withdraw: +$50.00 | Balance: $50.00
+Time: 04/08/2025 01:51 PM | Deposit: +$100.00 | Balance: $100.00
+Time: 04/08/2025 01:51 PM | Withdraw: +$50.00 | Balance: $50.00
+Time: 04/08/2025 01:54 PM | Deposit: +$100.00 | Balance: $100.00
+Time: 04/08/2025 01:54 PM | Withdraw: +$50.00 | Balance: $50.00
+Time: 04/08/2025 01:55 PM | Deposit: +$100.00 | Balance: $100.00
+Time: 04/08/2025 01:55 PM | Withdraw: +$50.00 | Balance: $50.00

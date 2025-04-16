@@ -331,14 +331,5 @@ public class BankAccountTests {
 		assertTrue(history.get(1).contains("Time"));
 	}
 	
-	@Test
-	public void testInitializeBalance() {
-		BankAccount account = new BankAccount("John Doe");
-        account.initializeAccountBalance(100);
-		List<String> history = account.getTransactionHistory();
-		
-        assertEquals(account.getCurrentBalance(), 100.0, 0.005);
-        assertEquals(history.size(), 0);
-	}
 	
 }

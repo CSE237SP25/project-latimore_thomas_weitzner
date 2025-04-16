@@ -43,13 +43,6 @@ public class BankAccount {
         return new ArrayList<>(this.transactionHistory);
     }
     
-    public void initializeAccountBalance(double savedBalance) {
-		if (savedBalance < 0) {
-			throw new IllegalArgumentException("Initial balance cannot be negative");
-		}
-		this.balance = savedBalance;
-	}
-
 	public void deposit(double amount) {
 		if(amount < 0) {
 			throw new IllegalArgumentException();

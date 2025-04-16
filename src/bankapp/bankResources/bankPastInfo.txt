@@ -1,4 +1,4 @@
-User,testedUser1,password1,EMPTY,0,0.0
+User,testedUser1,password1,Unnamed Account,15,10.0
 User,testedUser2,password2,Placeholder Name,1,600.0
 User,testedUser2,password2,Placeholder Name,2,200.0
 User,testedUser3,password3,Placeholder Name,3,8.0
