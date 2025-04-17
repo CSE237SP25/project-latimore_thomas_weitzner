@@ -1,4 +1,6 @@
 package bankapp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,6 +22,8 @@ public class Menu {
 		SPECIAL_CHARACTERS,
 		NONE
 	}
+	
+
 
 
 	public Menu(Bank bank, User user) {
@@ -61,6 +65,7 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
+		System.out.println("(l) View Todays Rates");
     	System.out.println("(x) Logout");
 	}
 
@@ -106,6 +111,9 @@ public class Menu {
       		case "x":
 				logout();
 				return false;
+			case "l":
+				viewRates();
+				return true;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 				return true;
@@ -397,6 +405,23 @@ public class Menu {
     } catch (NumberFormatException e) {
         System.out.println("❌ Please enter valid numbers");
     }
+}
+	
+public void viewRates() {
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	String date = LocalDateTime.now().format(dtf);
+	System.out.println("=== Account Rates Summary for " + date + " ===\n");
+	System.out.println("Account Type           | Savings (Default) | Checking         | Money Market");
+	System.out.println("------------------------+--------------------+------------------+----------------");
+	System.out.println("Interest Rate (%)      | 0.001             | 0.0              | 1 ");
+	System.out.println("Min. Opening Balance   | $0                | $100             | $10,000\n");
+	System.out.println();
+	System.out.println("CD Rates (Compounded Daily):\n");
+	System.out.println("Term                   | 1 Hour | 3 Hour | 6 Hour | 9 Hour | 12 Hour Promo | 24 Hour | 1 Week");
+	System.out.println("------------------------+--------+--------+--------+--------+----------------+---------+--------");
+	System.out.println("Interest Rate (%)      | 0.00011| 0.00016| 0.00021| 0.00029| 0.00045       | 0.00033 | 0.00038");
+	System.out.println("Min. Opening Balance   | $0.00  | $0.00  | $100   | $1000  | $500          | $1000   | $1000");
+
 }
 
 	public LoginMenu getLogin() {
