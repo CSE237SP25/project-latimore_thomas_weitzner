@@ -22,8 +22,6 @@ public class Menu {
 		SPECIAL_CHARACTERS,
 		NONE
 	}
-	
-
 
 
 	public Menu(Bank bank, User user) {
