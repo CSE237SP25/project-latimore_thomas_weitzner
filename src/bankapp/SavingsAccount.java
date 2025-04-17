@@ -7,20 +7,39 @@ public class SavingsAccount extends BankAccount{
 	
     private static final double interestRate = 0.00001;//this is the interest rate which compounds daily and is added to the balance
     private static final double withdrawalPenalty = 0.05;
-	private static final String lastTransactionTime = LocalDateTime.now().format(dtf);
+	private static String lastTransactionTime = LocalDateTime.now().format(dtf);
 	private static final Scanner sc = new Scanner(System.in);
+	private static final double minimumBalance = 100.00;
 	
 	public SavingsAccount(String accountName) {
         super(accountName);
 		System.out.println("Initial Deposit Amount: ");
 		Double depositAmount = Double.parseDouble(sc.nextLine());
-		if(depositAmount<100.0){
+		if(depositAmount<minimumBalance){
 			throw new IllegalArgumentException("Initial deposit must be at least $100.00 for a savings account");
 			//note that I don't know if doing this will auto delete this account or not
 		}else{
 			this.balance = depositAmount;
 			String dateTime = LocalDateTime.now().format(dtf);
-			this.transactionHistory.add(String.format("Time: %s | Deposit: +$%.2f | Balance: $%.2f", dateTime, depositAmount, this.balance));
+			this.addTransactionHistory(String.format("Time: %s | Deposit: +$%.2f | Balance: $%.2f", dateTime, depositAmount, this.balance));
+		}
+	}
+
+	public SavingsAccount(String accountName, int accountNumber, double balance) {
+		super(accountName, accountNumber, balance);
+		if(balance<minimumBalance){
+			throw new IllegalArgumentException("Initial deposit must be at least $100.00 for a savings account");
+			//note that I don't know if doing this will auto delete this account or not
+		}else{
+			this.balance = balance;
+			String dateTime = LocalDateTime.now().format(dtf);
+			if(this.transactionHistory.isEmpty()){
+				lastTransactionTime = dateTime;
+				this.addTransactionHistory(String.format("Time: %s | Initial Deposit: +$%.2f | Balance: $%.2f", dateTime, balance, this.balance));
+			}else{
+				setLastTransactionTimeFromRestart();
+				getCurrentBalance();
+			}
 		}
 	}
 
@@ -43,7 +62,8 @@ public class SavingsAccount extends BankAccount{
 			}
 			this.balance -= amount;
 			String dateTime = LocalDateTime.now().format(dtf);
-			this.transactionHistory.add(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
+			this.addTransactionHistory(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
+			lastTransactionTime = dateTime;
 		}else if (response.equalsIgnoreCase("n")){
 			System.out.println("Transaction cancelled.");
 		}
@@ -54,10 +74,20 @@ public class SavingsAccount extends BankAccount{
     	LocalDateTime time = LocalDateTime.parse(lastTransactionTime, dtf);
 		LocalDateTime now = LocalDateTime.now();
 		long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(time, now);
-		double interest = this.balance * Math.pow(1 + getInterestRate(), daysBetween);
-		this.balance += interest;
-		this.transactionHistory.add(String.format("Time: %s | Interest: +$%.2f | Balance: $%.2f", now.format(dtf), interest, this.balance));
+		if(daysBetween>0){
+			double interest = this.balance * Math.pow(1 + getInterestRate(), daysBetween);
+			this.balance += interest;
+			this.addTransactionHistory(String.format("Time: %s | Interest: +$%.2f | Balance: $%.2f", now.format(dtf), interest, this.balance));
+			lastTransactionTime = now.format(dtf);
+		}
 		return this.balance;
+	}
+
+	public void setLastTransactionTimeFromRestart() {
+		if(!this.transactionHistory.isEmpty()){
+			String latestTransaction = this.transactionHistory.get(this.transactionHistory.size()-1);
+			lastTransactionTime=latestTransaction.substring(6,25);
+		}
 	}
 
     @Override

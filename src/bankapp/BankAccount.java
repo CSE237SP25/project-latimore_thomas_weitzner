@@ -1,8 +1,10 @@
 package bankapp;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +19,7 @@ public abstract class BankAccount {
 	protected String accountName;
 	protected List<String> transactionHistory;
 	protected static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
-    protected static final String FILE_PATH = "bankResources/transactionHistoryStore/";
+    protected static final String FILE_PATH = "src/bankapp/bankResources/transactionHistoryStore/";
 	
     public BankAccount(String accountName) {
         this.accountNumber = nextAccountNumber++;
@@ -98,13 +100,38 @@ public abstract class BankAccount {
 		String transferOut = String.format("Transfer to #%d: -$%.2f", targetAccount.getAccountNumber(), amount);
 		String transferIn = String.format("Transfer from #%d: +$%.2f", this.accountNumber, amount);
     
-    	this.transactionHistory.add(transferOut + "Balance: $" + this.balance);
+    	this.addTransactionHistory(transferOut + "Balance: $" + this.balance);
 		targetAccount.addTransactionHistory(transferIn + "Balance: $" + targetAccount.getCurrentBalance());
 	}
 	
 	public void addTransactionHistory(String transaction) {
 		this.transactionHistory.add(transaction);
+		System.out.println(transaction);
+		this.saveTransactionHistory();
 	}
+
+	private void saveTransactionHistory() {
+        File directory = new File(FILE_PATH);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        File file = new File(FILE_PATH + getAccountNumber() + ".txt");
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.out.println("could not create transaction file");
+			}
+		}
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (String transaction : transactionHistory) {
+                writer.write(transaction);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	abstract public double getCurrentBalance();
 	
@@ -125,6 +152,6 @@ public abstract class BankAccount {
 	}
 
 	public String getAccountHolderName() {
-    return this.accountName;
-}
+    	return this.accountName;
+	}
 }

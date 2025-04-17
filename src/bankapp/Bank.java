@@ -66,11 +66,6 @@ public class Bank {
 	
 	
 	public void addAccount(BankAccount account) {
-		for (BankAccount existingAccount : this.accounts) {
-			if (existingAccount.getAccountName() == account.getAccountName()) {
-				throw new IllegalArgumentException("Account Name already exists");
-			}
-		}
 		if (isDuplicateAccountNumber(account.getAccountNumber())) {
             throw new IllegalArgumentException("Account number already exists");
         }
@@ -173,30 +168,31 @@ public class Bank {
             switch (accountType) {
                 case "Checkings":
                 {
-                    BankAccount account = new CheckingsAccount(accountName);
-                    account.setAccountNumber(accountNumber);
-                    account.initializeAccountBalance(balance);
-                    currentUser.addAccount(account);
+                    BankAccount account = new CheckingsAccount(accountName,accountNumber, balance);
                     addAccount(account);
                     return account;
                 }
                 case "Savings":
                 {
-                    BankAccount account = new SavingsAccount(accountName);
-                    account.setAccountNumber(accountNumber);
-                    account.initializeAccountBalance(balance);
-                    currentUser.addAccount(account);
-                    addAccount(account);
-                    return account;
+					try {
+						BankAccount account = new SavingsAccount(accountName,accountNumber, balance);
+						addAccount(account);
+						return account;
+					} catch (IllegalArgumentException e) {
+						System.out.println("Error creating account: " + e.getMessage());
+						return null;
+					}
                 }
-                case "Loan":
+                case "Money Market":
                 {
-                    BankAccount account = new LoanAccount(accountName);
-                    account.setAccountNumber(accountNumber);
-                    account.initializeAccountBalance(balance);
-                    currentUser.addAccount(account);
-                    addAccount(account);
-                    return account;
+                    try {
+						BankAccount account = new MoneyMarketAccount(accountName,accountNumber, balance);
+						addAccount(account);
+						return account;
+					} catch (IllegalArgumentException e) {
+						System.out.println("Error creating account: " + e.getMessage());
+						return null;
+					}
                 }
                 default:
                     break;
