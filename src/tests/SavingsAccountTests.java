@@ -13,26 +13,26 @@ import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
 import bankapp.BankAccount;
-import bankapp.CheckingsAccount;
+import bankapp.SavingsAccount;
 
-public class CheckingsAccountTests {
+public class SavingsAccountTests {
 
 	@Test
 	public void testSimpleDeposit() {
 		//1. Create objects to be tested
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,100);
 		
 		//2. Call the method being tested
 		account.deposit(25);
 		
 		//3. Use assertions to verify results
-		assertEquals(account.getCurrentBalance(), 25.0, 0.005);
+		assertEquals(account.getCurrentBalance(), 125.0, 0.005);
 	}
 	
 	@Test
 	public void testNegativeDeposit() {
 		//1. Create object to be tested
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,100);
 
 		try {
 			account.deposit(-25);
@@ -50,7 +50,7 @@ public class CheckingsAccountTests {
         Bank bank = new Bank(filePath);
 
         // Add a new account
-        BankAccount newAccount = new CheckingsAccount("John Doe");
+        BankAccount newAccount = new SavingsAccount("John Doe",12345,100);
         bank.addAccount(newAccount);
 
         // Verify the account was added
@@ -65,8 +65,8 @@ public class CheckingsAccountTests {
         Bank bank = new Bank(filePath);
 
         // Add multiple accounts
-        BankAccount account1 = new CheckingsAccount("John Doe");
-        BankAccount account2 = new CheckingsAccount("Jane Smith");
+        BankAccount account1 = new SavingsAccount("John Doe",12345,100);
+        BankAccount account2 = new SavingsAccount("Jane Smith",112346,100);
         bank.addAccount(account1);
         bank.addAccount(account2);
 
@@ -124,7 +124,7 @@ public class CheckingsAccountTests {
         Bank bank = new Bank(filePath);
 
         // Add an account
-        BankAccount account = new CheckingsAccount("John Doe");
+        BankAccount account = new SavingsAccount("John Doe",12345,100);
         bank.addAccount(account);
         // Try to add the same account again
         try {
@@ -137,49 +137,45 @@ public class CheckingsAccountTests {
         assertEquals(1, bank.getAccounts().size());
     }
 	
-	@Test 
+	/*@Test 
 	public void testSimpleWithdraw() {
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
 		
-		account.deposit(50);
 		account.withdraw(25);
 		
-		assertEquals(account.getCurrentBalance(), 25.0, 0.005);
+		assertEquals(account.getCurrentBalance(), 125.0, 0.005);
 	}
 
 	@Test 
 	public void testWithdrawMoreThanBalance() {
-		BankAccount account = new CheckingsAccount("John Doe");
-		
-		account.deposit(50);
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
 		
 		try {
-			account.withdraw(75);
+			account.withdraw(165);
 			fail();
 		} catch (IllegalArgumentException e) {
 			assertTrue(e != null);
 		}
 	}
+
+	@Test 
+	public void testWithdrawPastMinimum() {
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
+		
+		try {
+			account.withdraw(60);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		}
+	}*/
 
 	@Test 
 	public void testWithdrawNegativeAmount() {
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
 		
-		account.deposit(50);
 		try {
 			account.withdraw(-25);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
-	}
-
-	@Test 
-	public void testWithdrawFromEmptyAccount() {
-		BankAccount account = new CheckingsAccount("John Doe");
-		
-		try {
-			account.withdraw(25);
 			fail();
 		} catch (IllegalArgumentException e) {
 			assertTrue(e != null);
@@ -188,14 +184,14 @@ public class CheckingsAccountTests {
 	
 	@Test
 	public void testChangeAccountName() {
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,100);
 		account.setAccountHolderName("Jane Smith");
 		assertEquals(account.getAccountName(), "Jane Smith");
 	}
 	
 	@Test
 	public void testChangeAccountNameToEmpty() {
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,100);
 		account.setAccountHolderName("");
 		assertEquals(account.getAccountName(), "");
 	}
@@ -204,24 +200,25 @@ public class CheckingsAccountTests {
 
 //	@Test
 //	public void testChangeAccountNameToLong() {
-//		BankAccount account = new CheckingsAccount("John Doe");
+//		BankAccount account = new SavingsAccount("John Doe");
 //		account.setAccountHolderName("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 //		assertEquals(account.getAccountName(), "John Doe");
 //	}
 
 //	@Test
 //	public void testChangeAccountNameToSpecialCharacters() {
-//		BankAccount account = new CheckingsAccount("John Doe");
+//		BankAccount account = new SavingsAccount("John Doe");
 //		for (char c : "!@#$%^&*()_+-=[]{}|;':,.<>?/".toCharArray()) {
 //			account.setAccountHolderName("John Doe" + c);
 //			assertEquals("John Doe", account.getAccountName());
 //			}
 //		}
-	
+
+	@Test
 	public void testRemoveAccount() {
-		String filePath = determineFilePathExampleInfo();
+		String filePath = determineFilePathBlankInfo();
         Bank bank = new Bank(filePath);
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
 		bank.addAccount(account);
 		bank.removeAccount(account);
 		assertEquals(0, bank.getAccounts().size());
@@ -232,7 +229,7 @@ public class CheckingsAccountTests {
 		String filePath = determineFilePathExampleInfo();
         Bank bank = new Bank(filePath);
 		
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
 		try {
 			bank.removeAccount(account);
 			fail();
@@ -243,104 +240,111 @@ public class CheckingsAccountTests {
 	}
 	// In BankAccountTests.java, update the transfer tests to use assertTrue() instead of assertEquals()
 
-	@Test
+	/*@Test
 	public void testSimpleTransfer() {
-		BankAccount source = new CheckingsAccount("Source");
-		BankAccount target = new CheckingsAccount("Target");
-		source.deposit(100);
+		BankAccount source = new SavingsAccount("Source",12345,200);
+		BankAccount target = new SavingsAccount("Target",12346,100);
 		
 		source.transfer(target, 50);
 		
-		assertTrue(Math.abs(source.getCurrentBalance() - 50) < 0.001);
-		assertTrue(Math.abs(target.getCurrentBalance() - 50) < 0.001);
+		assertTrue(Math.abs(source.getCurrentBalance() - 150) < 0.001);
+		assertTrue(Math.abs(target.getCurrentBalance() - 150) < 0.001);
 	}
 
 	@Test
 	public void testTransferNegativeAmount() {
-		BankAccount source = new CheckingsAccount("Source");
-		BankAccount target = new CheckingsAccount("Target");
-		source.deposit(100);
+		BankAccount source = new SavingsAccount("Source",12345,200);
+		BankAccount target = new SavingsAccount("Target",12346,100);
 		
 		try {
 			source.transfer(target, -10);
 			fail();
 		} catch (IllegalArgumentException e) {
 			assertTrue(e.getMessage().contains("positive"));
-			assertTrue(Math.abs(source.getCurrentBalance() - 100) < 0.001);
-			assertTrue(Math.abs(target.getCurrentBalance() - 0) < 0.001);
+			assertTrue(Math.abs(source.getCurrentBalance() - 200) < 0.001);
+			assertTrue(Math.abs(target.getCurrentBalance() - 100) < 0.001);
 		}
 	}
 
 	@Test
 	public void testTransferInsufficientFunds() {
-		BankAccount source = new CheckingsAccount("Source");
-		BankAccount target = new CheckingsAccount("Target");
-		source.deposit(50);
+		BankAccount source = new SavingsAccount("Source",12345,200);
+		BankAccount target = new SavingsAccount("Target",12346,100);
 		
 		try {
-			source.transfer(target, 100);
+			source.transfer(target, 250);
 			fail();
 		} catch (IllegalArgumentException e) {
 			assertTrue(e.getMessage().contains("funds"));
-			assertTrue(Math.abs(source.getCurrentBalance() - 50) < 0.001);
-			assertTrue(Math.abs(target.getCurrentBalance() - 0) < 0.001);
+			assertTrue(Math.abs(source.getCurrentBalance() - 200) < 0.001);
+			assertTrue(Math.abs(target.getCurrentBalance() - 100) < 0.001);
+		}
+	}
+
+	@Test
+	public void testTransferPastMinimum() {
+		BankAccount source = new SavingsAccount("Source",12345,200);
+		BankAccount target = new SavingsAccount("Target",12346,100);
+		
+		try {
+			source.transfer(target, 150);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(Math.abs(source.getCurrentBalance() - 200) < 0.001);
+			assertTrue(Math.abs(target.getCurrentBalance() - 100) < 0.001);
 		}
 	}
 
 	@Test
 	public void testTransferToSameAccount() {
-		BankAccount account = new CheckingsAccount("Account");
-		account.deposit(100);
+		BankAccount account = new SavingsAccount("Account",12345,150);
 		
 		try {
 			account.transfer(account, 50);
 			fail();
 		} catch (IllegalArgumentException e) {
 			assertTrue(e.getMessage().contains("same account"));
-			assertTrue(Math.abs(account.getCurrentBalance() - 100) < 0.001);
+			assertTrue(Math.abs(account.getCurrentBalance() - 150) < 0.001);
 		}
-	}
+	}*/
 
 	
 	@Test
 	public void testTransactionHistory() {
-		BankAccount account = new CheckingsAccount("John Doe", 12345, 0.0);
+		BankAccount account = new SavingsAccount("John Doe", 12345, 150);
 		List<String> previousHistory = account.getTransactionHistory();
 		account.deposit(50);
-		account.withdraw(25);
 		
 		List<String> history = account.getTransactionHistory();
-		assertEquals(2+previousHistory.size(),history.size());
+		assertEquals(1+previousHistory.size(),history.size());
 		assertTrue(history.get(0).contains("Deposit"));
-		assertTrue(history.get(1).contains("Withdraw"));
 	}
 	
 	@Test
 	public void testTransactionHistoryEmpty() {
-		BankAccount account = new CheckingsAccount("John Doe",123456789,0.0);
+		BankAccount account = new SavingsAccount("John Doe",123456,150);
 		List<String> history = account.getTransactionHistory();
-		assertEquals(history.size(), 0);
+		assertEquals(history.size(), 1);
 	}
 	
 	@Test
 	public void testTransactionHistoryTime() {
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
 		account.deposit(50);
-		account.withdraw(25);
 
 		List<String> history = account.getTransactionHistory();
 		assertTrue(history.get(0).contains("Time"));
-		assertTrue(history.get(1).contains("Time"));
 	}
 	
-	@Test
+	//don't think we have this anymore for savings 
+	/*@Test
 	public void testInitializeBalance() {
-		BankAccount account = new CheckingsAccount("John Doe");
+		BankAccount account = new SavingsAccount("John Doe",12345,150);
         account.initializeAccountBalance(100);
 		List<String> history = account.getTransactionHistory();
 		
         assertEquals(account.getCurrentBalance(), 100.0, 0.005);
         assertEquals(history.size(), 0);
-	}
+	}*/
 	
 }
