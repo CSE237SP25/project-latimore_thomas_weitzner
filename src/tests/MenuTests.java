@@ -2,44 +2,83 @@ package tests;
 
 import bankapp.*;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MenuTests {
-
     private Menu menu;
     private User testUser;
     private BankAccount account1;
     private BankAccount account2;
     private Bank bank;
+    
+
+	private String determineFilePathExampleAddInfo() {
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String[] pathParts = s.split("[/\\\\]");
+		String lastPart = pathParts[pathParts.length - 1];
+		
+		switch (lastPart) {
+		case "bankapp":
+			return "./bankResources/exampleAddBankInfo.txt";
+		case "src":
+			return "./bankapp/bankResources/exampleAddBankInfo.txt";
+        case "project-latimore_thomas_weitzner":
+        	return "./src/bankapp/bankResources/exampleAddBankInfo.txt";
+        default:
+        	System.out.println("Please run the bankapp from the project-latimore_thomas_weitzner, bankapp, or src directories.");
+        	System.out.println("The bankapp will not be able to save account information.");
+        	return null;
+		}
+	}
 
     @BeforeEach
     public void setUp() {
-        bank = new Bank();
-        testUser = new User("testUser", "testPass");
-        account1 = new BankAccount("AccountOne");
-        account2 = new BankAccount("AccountTwo");
-        account1.deposit(100.0);
-        account2.deposit(50.0);
-        testUser.addAccount(account1);
-        testUser.addAccount(account2);
-        bank.addUser(testUser);
+        String filePath = determineFilePathExampleAddInfo();
+        bank = new Bank(filePath);
+        testUser = null;
+        for(User user : bank.getUsers()) {
+            if(user.getUsername().equals("testUser")) {
+                testUser = user;
+            }
+        }
+        account1 = null;
+        account2 = null;
+        for(BankAccount account : testUser.getAccounts()) {
+            if(account.getAccountName().equals("AccountOne")) {
+                account1 = account;
+            }
+            if(account.getAccountName().equals("AccountTwo")) {
+                account2 = account;
+            }
+        }
+
         menu = new Menu(bank,testUser);
         menu.user = testUser;
         menu.currentUserAccount = account1;
     }
 
+    
+
     //existing account can add a user
-    @Test
+    //this test is no longer valid since createAccount now requires IO
+    /*@Test
     public void testCreateAccountAddsAccount() {
         int initialSize = testUser.getAccounts().size();
         menu.createAccount();
         assertEquals(initialSize + 1, testUser.getAccounts().size());
-    }
+    }*/
 
     //user can remove an account
     /*@Test
@@ -53,7 +92,7 @@ public class MenuTests {
     //testing the account name (special characters)
     @Test
     public void testIsInvalidAccountName() {
-        menu.currentUserAccount = new BankAccount("OldName");
+        menu.currentUserAccount = new CheckingsAccount("OldName");
 
         assertEquals(Menu.InvalidNameReason.EMPTY, menu.isInvalidAccountName(""));
         assertEquals(Menu.InvalidNameReason.LONG, menu.isInvalidAccountName("ThisNameIsWayTooLongToActuallyWerk"));
@@ -95,8 +134,8 @@ public class MenuTests {
     //new accounts have diff numbers
     @Test
     public void testCreateAccountAssignsUniqueNumber() {
-        BankAccount newAccount1 = new BankAccount("New1");
-        BankAccount newAccount2 = new BankAccount("New2");
+        BankAccount newAccount1 = new CheckingsAccount("New1");
+        BankAccount newAccount2 = new CheckingsAccount("New2");
         assertNotEquals(newAccount1.getAccountNumber(), newAccount2.getAccountNumber());
     }
 

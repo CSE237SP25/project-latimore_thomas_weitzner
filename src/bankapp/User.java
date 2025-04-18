@@ -37,7 +37,7 @@ public class User {
 		for (BankAccount existingAccount : accounts) {
 			//no user should be able to create two accounts with the same name
 			if (existingAccount.getAccountName().equals(account.getAccountName())) {
-				throw new IllegalArgumentException("Account Name already exists");
+				throw new IllegalArgumentException("Account Name "+ account.getAccountName() + " already exists");
 			}
 		}
 		accounts.add(account);

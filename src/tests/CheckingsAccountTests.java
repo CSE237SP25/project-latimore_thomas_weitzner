@@ -13,13 +13,14 @@ import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
 import bankapp.BankAccount;
+import bankapp.CheckingsAccount;
 
-public class BankAccountTests {
+public class CheckingsAccountTests {
 
 	@Test
 	public void testSimpleDeposit() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		
 		//2. Call the method being tested
 		account.deposit(25);
@@ -31,7 +32,7 @@ public class BankAccountTests {
 	@Test
 	public void testNegativeDeposit() {
 		//1. Create object to be tested
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 
 		try {
 			account.deposit(-25);
@@ -49,7 +50,7 @@ public class BankAccountTests {
         Bank bank = new Bank(filePath);
 
         // Add a new account
-        BankAccount newAccount = new BankAccount("John Doe");
+        BankAccount newAccount = new CheckingsAccount("John Doe");
         bank.addAccount(newAccount);
 
         // Verify the account was added
@@ -64,8 +65,8 @@ public class BankAccountTests {
         Bank bank = new Bank(filePath);
 
         // Add multiple accounts
-        BankAccount account1 = new BankAccount("John Doe");
-        BankAccount account2 = new BankAccount("Jane Smith");
+        BankAccount account1 = new CheckingsAccount("John Doe");
+        BankAccount account2 = new CheckingsAccount("Jane Smith");
         bank.addAccount(account1);
         bank.addAccount(account2);
 
@@ -123,7 +124,7 @@ public class BankAccountTests {
         Bank bank = new Bank(filePath);
 
         // Add an account
-        BankAccount account = new BankAccount("John Doe");
+        BankAccount account = new CheckingsAccount("John Doe");
         bank.addAccount(account);
         // Try to add the same account again
         try {
@@ -138,7 +139,7 @@ public class BankAccountTests {
 	
 	@Test 
 	public void testSimpleWithdraw() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		
 		account.deposit(50);
 		account.withdraw(25);
@@ -148,7 +149,7 @@ public class BankAccountTests {
 
 	@Test 
 	public void testWithdrawMoreThanBalance() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		
 		account.deposit(50);
 		
@@ -162,7 +163,7 @@ public class BankAccountTests {
 
 	@Test 
 	public void testWithdrawNegativeAmount() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		
 		account.deposit(50);
 		try {
@@ -175,7 +176,7 @@ public class BankAccountTests {
 
 	@Test 
 	public void testWithdrawFromEmptyAccount() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		
 		try {
 			account.withdraw(25);
@@ -187,14 +188,14 @@ public class BankAccountTests {
 	
 	@Test
 	public void testChangeAccountName() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		account.setAccountHolderName("Jane Smith");
 		assertEquals(account.getAccountName(), "Jane Smith");
 	}
 	
 	@Test
 	public void testChangeAccountNameToEmpty() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		account.setAccountHolderName("");
 		assertEquals(account.getAccountName(), "");
 	}
@@ -203,14 +204,14 @@ public class BankAccountTests {
 
 //	@Test
 //	public void testChangeAccountNameToLong() {
-//		BankAccount account = new BankAccount("John Doe");
+//		BankAccount account = new CheckingsAccount("John Doe");
 //		account.setAccountHolderName("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 //		assertEquals(account.getAccountName(), "John Doe");
 //	}
 
 //	@Test
 //	public void testChangeAccountNameToSpecialCharacters() {
-//		BankAccount account = new BankAccount("John Doe");
+//		BankAccount account = new CheckingsAccount("John Doe");
 //		for (char c : "!@#$%^&*()_+-=[]{}|;':,.<>?/".toCharArray()) {
 //			account.setAccountHolderName("John Doe" + c);
 //			assertEquals("John Doe", account.getAccountName());
@@ -220,7 +221,7 @@ public class BankAccountTests {
 	public void testRemoveAccount() {
 		String filePath = determineFilePathExampleInfo();
         Bank bank = new Bank(filePath);
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		bank.addAccount(account);
 		bank.removeAccount(account);
 		assertEquals(0, bank.getAccounts().size());
@@ -231,7 +232,7 @@ public class BankAccountTests {
 		String filePath = determineFilePathExampleInfo();
         Bank bank = new Bank(filePath);
 		
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		try {
 			bank.removeAccount(account);
 			fail();
@@ -244,8 +245,8 @@ public class BankAccountTests {
 
 	@Test
 	public void testSimpleTransfer() {
-		BankAccount source = new BankAccount("Source");
-		BankAccount target = new BankAccount("Target");
+		BankAccount source = new CheckingsAccount("Source");
+		BankAccount target = new CheckingsAccount("Target");
 		source.deposit(100);
 		
 		source.transfer(target, 50);
@@ -256,8 +257,8 @@ public class BankAccountTests {
 
 	@Test
 	public void testTransferNegativeAmount() {
-		BankAccount source = new BankAccount("Source");
-		BankAccount target = new BankAccount("Target");
+		BankAccount source = new CheckingsAccount("Source");
+		BankAccount target = new CheckingsAccount("Target");
 		source.deposit(100);
 		
 		try {
@@ -272,8 +273,8 @@ public class BankAccountTests {
 
 	@Test
 	public void testTransferInsufficientFunds() {
-		BankAccount source = new BankAccount("Source");
-		BankAccount target = new BankAccount("Target");
+		BankAccount source = new CheckingsAccount("Source");
+		BankAccount target = new CheckingsAccount("Target");
 		source.deposit(50);
 		
 		try {
@@ -288,7 +289,7 @@ public class BankAccountTests {
 
 	@Test
 	public void testTransferToSameAccount() {
-		BankAccount account = new BankAccount("Account");
+		BankAccount account = new CheckingsAccount("Account");
 		account.deposit(100);
 		
 		try {
@@ -303,26 +304,27 @@ public class BankAccountTests {
 	
 	@Test
 	public void testTransactionHistory() {
-		BankAccount account = new BankAccount("John Doe", 12345, 0.0);
+		BankAccount account = new CheckingsAccount("John Doe", 12345, 0.0);
+		List<String> previousHistory = account.getTransactionHistory();
 		account.deposit(50);
 		account.withdraw(25);
 		
 		List<String> history = account.getTransactionHistory();
-		assertEquals(2,history.size());
+		assertEquals(2+previousHistory.size(),history.size());
 		assertTrue(history.get(0).contains("Deposit"));
 		assertTrue(history.get(1).contains("Withdraw"));
 	}
 	
 	@Test
 	public void testTransactionHistoryEmpty() {
-		BankAccount account = new BankAccount("John Doe",123456,0.0);
+		BankAccount account = new CheckingsAccount("John Doe",123456,0.0);
 		List<String> history = account.getTransactionHistory();
 		assertEquals(history.size(), 0);
 	}
 	
 	@Test
 	public void testTransactionHistoryTime() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
 		account.deposit(50);
 		account.withdraw(25);
 
@@ -333,7 +335,7 @@ public class BankAccountTests {
 	
 	@Test
 	public void testInitializeBalance() {
-		BankAccount account = new BankAccount("John Doe");
+		BankAccount account = new CheckingsAccount("John Doe");
         account.initializeAccountBalance(100);
 		List<String> history = account.getTransactionHistory();
 		
