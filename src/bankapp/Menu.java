@@ -409,10 +409,10 @@ public void viewRates() {
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	String date = LocalDateTime.now().format(dtf);
 	System.out.println("=== Account Rates Summary for " + date + " ===\n");
-	System.out.println("Account Type           | Savings (Default) | Checking         | Money Market");
+	System.out.println("Account Type           | Checking (Default)| Savings          | Money Market");
 	System.out.println("------------------------+--------------------+------------------+----------------");
-	System.out.println("Interest Rate (%)      | 0.001             | 0.0              | 1 ");
-	System.out.println("Min. Opening Balance   | $0                | $100             | $10,000\n");
+	System.out.println("Interest Rate (%)      | 0.0               | 0.001            | 0.5 ");
+	System.out.println("Min. Opening Balance   | $0                | $100             | $1,000\n");
 	System.out.println();
 	System.out.println("CD Rates (Compounded Daily):\n");
 	System.out.println("Term                   | 1 Hour | 3 Hour | 6 Hour | 9 Hour | 12 Hour Promo | 24 Hour | 1 Week");
