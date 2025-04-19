@@ -6,14 +6,14 @@ public class Menu {
 
 	private Scanner inputScanner;
 	private List<BankAccount> userAccounts;
-	private BankAccount currentUserAccount;
+	public BankAccount currentUserAccount;
 	private final Bank bank;
-	private User user;
-	private Teller teller;
-	private Boolean isTeller = false;
+	public User user;
+	
 	private LoginMenu login;
 	private Boolean active = true;
-	private enum InvalidNameReason {
+
+	public enum InvalidNameReason {
 		EMPTY,
 		LONG,
 		SAME_NAME,
@@ -21,41 +21,31 @@ public class Menu {
 		NONE
 	}
 
-	public static void main(String[] args) {
-		Menu menu = new Menu();
-		Boolean loggedIn = false;
-		
-		while(menu.active) {
-			if(!loggedIn) {
-				loggedIn = menu.loginInputChoices();
-			}
-			else {
-				if (menu.isTeller) {
-					TellerMenu tellerMenu = new TellerMenu(menu.bank, menu.teller);
-					tellerMenu.operateMenu();
-					loggedIn = false;
-					menu.isTeller = false;
-				}
-				else {
-					System.out.println("Welcome: " + menu.user.getUsername());
-					menu.provideUserChoices();
-					String userInput = menu.getUserInput();
-					loggedIn = menu.processUserInput(userInput);
-					
-				}
-			}
+
+	public Menu(Bank bank, User user) {
+		this.user = user;
+	    this.inputScanner = new Scanner(System.in);
+		this.bank = bank;// Initialize the bank object
+		this.login = new LoginMenu(bank.getUsers(), bank.getTellers(), bank);
+		checkUserHasAccounts(user);
+		setCurrentUserAccount(user.getAccounts().get(0));
+	    System.out.println("Hello! Welcome to our bank app!");
+	
+	}
+	void setUser(User user) {
+    this.user = user;
+	}
+
+	void setCurrentUserAccount(BankAccount acc) {
+		this.currentUserAccount = acc;
+	}
+	
+	public void operateMenu() {
+		while(active) {
+			provideUserChoices();
+			active = processUserInput(getUserInput());
 		}
 	}
-
-	
-	public Menu() {
-	    this.inputScanner = new Scanner(System.in);
-		this.bank = new Bank();// Initialize the bank object
-
-		this.login = new LoginMenu(bank.getUsers(), bank.getTellers());
-	    System.out.println("Hello! Welcome to our bank app!");
-	}
-
 	public void provideUserChoices(){
 		System.out.println();
 		System.out.println(" -- Welcome to Bear Banks! -- ");
@@ -115,10 +105,11 @@ public class Menu {
 				changePassword();
 				return true;
 			case "l":
-				updateProfile();
-				return true;
-			case "x":
-				return logout();
+            	updateProfile();
+            	return true;
+      		case "x":
+				logout();
+				return false;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 				return true;
@@ -292,168 +283,17 @@ public class Menu {
         return InvalidNameReason.NONE;
 	}
 	
-	//Login Code
-	public Boolean loginInputChoices() {
-		login.displayChoices();
-		String userInput = getUserInput();
-		switch(userInput.toLowerCase()) {
-			case "a":
-				return loginToAccount();
-			case "b":
-				System.out.println("Creating a new account...");
-				return createProfile();
-			case "c":
-				return loginToTellerAccount();
-			case "x":
-				System.out.println("Thank you for using Bear Banks! Hope to see you again soon!");
-				System.out.println("Exiting the program...");
-				active = false;
-				return false;
-			default:
-				System.out.println("Invalid Input");
-				return false;
-		}
-		
-	}
-	
-	public Boolean loginToAccount() {
-		System.out.println("Enter Username:");
-		String username = getUserInput();
-		User profile = login.searchForProfile(username);
-		if(profile == null) {
-			System.out.println("Profile does not exist");
-			return false;
-		}
-		else {
-			System.out.println("Enter Password:");
-			String password = getUserInput();
-			if(login.checkPassword(profile, password)) {
-				this.user = profile;
-				if(checkUserHasAccounts(user)){
-					this.currentUserAccount = user.getAccounts().get(0);
-					this.userAccounts = user.getAccounts();
-				}
-				return true;
-			}
-			System.out.println("Passwords do not match");
-			return false;
-		}
-	}
-	public Boolean loginToTellerAccount(){
-		System.out.println("Enter Username:");
-		String username = getUserInput();
-		if(login.searchForTeller(username) == null) {
-			System.out.println("Teller does not exist");
-			return false;
-		}
-		else {
-			Teller teller = login.searchForTeller(username);
-			System.out.println("Enter Password:");
-			String password = getUserInput();
-			Boolean correctPassword = login.checkPassword(teller, password);
-			if(correctPassword) {
-				this.teller = teller;
-				this.isTeller = true;
-				return true;
-			}
-			System.out.println("Passwords do not match");
-			return false;
-		}
-		
-	}
 
-	public Boolean checkUserHasAccounts(User user){
+	
+	
+
+	public void checkUserHasAccounts(User user){
 		if(user.getAccounts().isEmpty()) {
 			System.out.println("You do not have any accounts. Making one for you!");
 			createAccount();
-			return true;
 		}
-		return true;
 	}
 
-	//creating new Profile
-	public Boolean createProfile(){
-		System.out.println("Welcome! Let's get you set up with a profile!");
-		System.out.println("Enter a username: ");
-		String username = getUserInput();
-		if(login.searchForProfile(username) != null) {
-			System.out.println("Username already exists");
-			System.out.println("Cancelling account creation...");
-			return false;
-		}
-		else if(username.isBlank() || username.length()>15) {
-			System.out.println("Invalid Username");
-			System.out.println("Cancelling account creation...");
-			return false;
-		}
-		System.out.println("Enter a password:");
-		String password = getUserInput();
-		if(password.isBlank()) {
-			System.out.println("Password may not be empty");
-			System.out.println("Cancelling account creation...");
-			return false;
-		}
-
-    System.out.println("Do you want to complete account set up now? (y/n)");
-    if(getUserInput().toLowerCase().equals("y")) {
-        System.out.println("Enter your full name:");
-        String name = getUserInput();
-		String phone;
-		while(true) {
-			System.out.println("Enter phone number (10 digits):");
-			phone = getUserInput();
-			if(phone.matches("\\d{10}")) {
-				break;
-			}
-			System.out.println("Invalid phone number. Must be 10 digits.");
-		}
-        System.out.println("Enter your email:");
-        String email = getUserInput();
-        System.out.println("Enter your address:");
-        String address = getUserInput();
-        System.out.println("Enter your SSN:");
-		String ssn;
-		while(true) {
-			System.out.println("Enter SSN (9 digits):");
-			ssn = getUserInput();
-			if(ssn.matches("\\d{9}")) {
-				break;
-			}
-			System.out.println("Invalid SSN. Must be 9 digits.");
-		}
-        User newUser = new User(username, password);
-        newUser.setName(name);
-        newUser.setPhone(phone);
-        newUser.setEmail(email);
-        newUser.setAddress(address);
-        newUser.setSsn(ssn);
-
-        System.out.println("Profile created successfully!");
-        this.user = newUser;
-        BankAccount newAccount = new BankAccount(newUser.getName() + "'s Account");
-        newUser.addAccount(newAccount);
-        bank.addUser(newUser);
-        this.currentUserAccount = newAccount;
-        return true;
-	} else {
-
-		System.out.println("Please confirm the information below is correct (y/n)");
-		System.out.println("Username: " + username + " Password: " + password);
-		if(getUserInput().toLowerCase().equals("y")){
-			System.out.println("Your profile has been created! Logging you in...");
-			User newUser = new User(username,password);
-			this.user = newUser;
-			BankAccount newAccount = new BankAccount(newUser.getUsername() + " Account");
-			newUser.addAccount(newAccount);
-			bank.addUser(newUser);
-			this.currentUserAccount = newAccount;
-			return true;
-		} else {
-			System.out.println("Cancelling account creation...");
-		}
-		return false;
-	}
-	}
 
 	public void viewTransactionHistory() {
 		BankAccount userAccount = findAccount();
@@ -485,10 +325,7 @@ public class Menu {
 			}
 			else {
 				if(isInvalidAccountName(newUsername)==InvalidNameReason.NONE) {
-					int index =login.existingUsers.indexOf(user);
 					user.changeUsername(newUsername);
-					login.existingUsers.remove(index);
-					login.existingUsers.add(index, user);
 					System.out.println("Username successfully changed to: " + user.getUsername());
 					bank.saveAccountsToFile(); // Save the updated account info to file
 				}
@@ -504,10 +341,7 @@ public class Menu {
 		if(getUserInput().equals(user.getPassword())) {
 			System.out.println("Enter new Password");
 			String newPassword = getUserInput();
-			int index =login.existingUsers.indexOf(user);
 			user.changePassword(newPassword);
-			login.existingUsers.remove(index);
-			login.existingUsers.add(index, user);
 			System.out.println("Password successfully changed");
 			bank.saveAccountsToFile(); // Save the updated account info to file
 		}
@@ -567,91 +401,138 @@ public class Menu {
     } catch (NumberFormatException e) {
         System.out.println("❌ Please enter valid numbers");
     }
-}
+	}
+
 	public void updateProfile() {
-		System.out.println("\n-- Update your profile --");
-		System.out.println("Current Information:" + 
-			"\nName: " + user.getName() + "\nPhone Number: " + user.getPhone() + 
-			"\nEmail: " + user.getEmail() + "\nAddress: " + user.getAddress() + 
-			"\nSSN: " + user.getSsn());
-		
-		System.out.println("Please enter your current password to update your profile");
-		if(getUserInput().equals(user.getPassword())) {
-			System.out.println("What would you like to update?");
-			System.out.println("a.) Name");
-			System.out.println("b.) Phone Number");
-			System.out.println("c.) Email");
-			System.out.println("d.) Address");
-			System.out.println("e.) SSN");
-			System.out.println("f.) Back to the main menu");
-			
-			String choice = getUserInput();
-			switch(choice.toLowerCase()) {
-				case "a":
-					System.out.println("Enter new name:");
-					String newName = getUserInput();
-						user.setName(newName);
-						bank.saveAccountsToFile();
-					 //else {
-						//System.out.println("Name cannot contain special characters");
-					//}
-					break;
-				case "b":
+    if (user == null) {
+        System.out.println("No user logged in!");
+        return;
+    }
+
+    System.out.println("\n-- Update Profile --");
+    System.out.println("Current Information:");
+    System.out.println("1. Name: " + user.getName());
+    System.out.println("2. Phone: " + user.getPhone());
+    System.out.println("3. Email: " + user.getEmail());
+    System.out.println("4. Address: " + user.getAddress());
+    System.out.println("5. SSN: " + user.getMaskedSsn());
+    System.out.println("6. T-Shirt Size: " + user.getTshirtSize());
+
+    System.out.println("\nEnter your current password to continue:");
+    if (!getUserInput().equals(user.getPassword())) {
+        System.out.println("Incorrect password!");
+        return;
+    }
+
+    boolean updated = false;
+    while (true) {
+        System.out.println("\nWhat would you like to update? (Enter number)");
+        System.out.println("a. Name");
+        System.out.println("b. Phone");
+        System.out.println("c. Email");
+        System.out.println("d. Address");
+        System.out.println("e. SSN");
+        System.out.println("f. Save changes and return");
+        System.out.println("x. Cancel without saving");
+
+        String choice = getUserInput();
+        
+        if (choice.equals("g")) {
+            if (updated) {
+                bank.saveAccountsToFile();
+                bank.saveCustomerInfoToFile();
+                System.out.println("Profile updated successfully!");
+            }
+            break;
+        }
+        
+        if (choice.equals("x")) {
+            System.out.println("Update cancelled.");
+            break;
+        }
+
+        switch (choice) {
+            case "a":
+                System.out.println("Enter new name:");
+                String newName = getUserInput().trim();
+                if (!newName.isEmpty()) {
+                    user.setName(newName);
+                    updated = true;
+                    System.out.println("Name updated.");
+                }
+                break;
+                
+            case "b":
+				boolean validPhone = false;
+				while (!validPhone) {
 					System.out.println("Enter new phone number:");
-					String newPhone;
-					while (true) {
-						System.out.println("Enter new phone number (10 digits):");
-						newPhone = getUserInput();
-						if (newPhone.matches("\\d{10}")) {
-							user.setPhone(newPhone);
-							bank.saveAccountsToFile();
-							break;
-						} else {
-							System.out.println("Invalid phone number. Must be 10 digits.");
-						}
+					String phoneInput = getUserInput().trim();
+					String digitsOnly = phoneInput.replaceAll("-", "");
+					if (digitsOnly.matches("\\d{10}")) {
+						user.setFormattedPhone(phoneInput);
+						updated = true;
+						System.out.println("Phone updated to: " + user.getPhone());
+						validPhone = true;
+					} else {
+						System.out.println("Invalid phone number. Try again.");
 					}
-					break;
-				case "c":
-					System.out.println("Enter new email:");
-					user.setEmail(getUserInput());
-					bank.saveAccountsToFile();
-					break;
-				case "d":
-					System.out.println("Enter new address:");
-					user.setAddress(getUserInput());
-					bank.saveAccountsToFile();
-					break;
-			    case "e":
-					String newSSN;
-					while (true) {
-						System.out.println("Enter new SSN (9 digits):");
-						newSSN = getUserInput();
-						if (newSSN.matches("\\d{9}")) {
-							user.setSsn(newSSN);
-							bank.saveAccountsToFile();
-							break;
-						} else {
-							System.out.println("Invalid SSN. Must be 9 digits.");
-						}
-					}
-					break;
+				}			
+				break;
 
-				case "f":
-					System.out.println("Returning to main menu...");
-					break;
-				default:
-					System.out.println("Invalid choice. Please try again.");
-					break;
-			}
-		} else {
-			System.out.println("Password is not correct");
-		}
-		System.out.println("Your profile has been updated!");
+                
+            case "c":
+                System.out.println("Enter new email:");
+                String newEmail = getUserInput().trim();
+                if (!newEmail.isEmpty()) {
+                    user.setEmail(newEmail);
+                    updated = true;
+                    System.out.println("Email updated.");
+                }
+                break;
+                
+            case "d":
+                System.out.println("Enter new address:");
+                String newAddress = getUserInput().trim();
+                if (!newAddress.isEmpty()) {
+                    user.setAddress(newAddress);
+                    updated = true;
+                    System.out.println("Address updated.");
+                }
+                break;
+                
+            case "e":
+                boolean validSSN = false;
+				while (!validSSN) {
+					System.out.println("Enter new SSN (9 digits):");
+					String newSSN = getUserInput().trim();
+					if (user.isValidSsn(newSSN)) {
+						user.setSsn(newSSN);
+						updated = true;
+						System.out.println("SSN updated.");
+						validSSN = true;
+					} else {
+						System.out.println("Invalid SSN. Must be exactly 9 digits. Try again.");
+					}
+				}
+                break;
+                
+                
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
 	}
 
-	public LoginMenu getLogin() {
-    return this.login;
+	public void setLogin(LoginMenu login) {
+		this.login = login;
 	}
+
+	public static void main(String[] args) {
+    Bank bank = new Bank();
+    LoginMenu loginMenu = new LoginMenu(bank.getUsers(), bank.getTellers(), bank);
+    loginMenu.operateMenu();
+}
+
 
 
 }

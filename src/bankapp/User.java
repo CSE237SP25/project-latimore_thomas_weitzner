@@ -67,6 +67,10 @@ public class User {
 		this.phone = phone;
 	}
 
+	public void setFormattedPhone (String phone){
+		this.phone = phone.replaceAll("[^0-9]", "");
+	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -77,6 +81,15 @@ public class User {
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+
+	public String getMaskedSsn(){
+		if (ssn == null || ssn.length() < 4) return "***-**-****";
+		return "***-**-" + ssn.substring(ssn.length() - 4);
+	}
+
+	public boolean isValidSsn(String ssn) {
+    return ssn != null && ssn.matches("^\\d{9}$");
 	}
 	
 	public void setTshirtSize(String tshirtSize) {

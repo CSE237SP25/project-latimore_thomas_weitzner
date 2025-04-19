@@ -23,7 +23,8 @@ public class Bank {
 		this.bankFilePath = determineFilePath();
 		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
-		loadCustomerInfoFromFile();
+		loadCustomerInfoFromFile(); // Load customer info from file when the bank is created
+
 	}
 
 	public Bank(String filePath) {
@@ -31,7 +32,7 @@ public class Bank {
 		this.bankFilePath = filePath; // Use provided file path for account info
 		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
-		loadCustomerInfoFromFile();
+		loadCustomerInfoFromFile(); // Load customer info from file when the bank is created
 	}
 	
 	private String determineFilePath() {
@@ -94,8 +95,6 @@ public class Bank {
 		for (BankAccount account : user.getAccounts()) { // Add user's accounts to the bank
 			addAccount(account);
 		}
-		saveCustomerInfoToFile(); // Save the customer info
-    	saveAccountsToFile(); // Save the accounts
 	}
 	
 	public void addTeller(Teller teller) {
@@ -112,12 +111,18 @@ public class Bank {
 			        for (BankAccount account : user.getAccounts()) {
 			            writer.write("User,"+user.getUsername() + "," + user.getPassword() + "," +
 			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
-			                         account.getCurrentBalance() + "\n");
+			                         account.getCurrentBalance()+"\n");
 			        }
 			    }
 			}
+			int i=0;
 			for(Teller teller:tellers) {
-			    writer.write("Teller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0\n");
+				if(i==0) {
+			    	writer.write("Teller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
+				}else{
+			    	writer.write("\nTeller,"+teller.getUsername() + "," + teller.getPassword() + ",EMPTY,0,0.0");
+				}
+				i++;
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving accounts to file: " + e.getMessage());
@@ -191,11 +196,6 @@ public class Bank {
 		return userAccounts;
 	}
 	
-	private String getCustomerInfoFilePath() {
-    if (bankFilePath == null) return null;
-    return bankFilePath.replace("bankPastInfo.txt", "customerInfo.txt");
-	}
-
 	public List<BankAccount> getAccounts() {
 		return this.accounts;
 	}
@@ -204,31 +204,45 @@ public class Bank {
 		return this.users;
 	}
 
-	public void saveCustomerInfoToFile() {
-    String customerFilePath = getCustomerInfoFilePath();
-    if (customerFilePath == null) return;
-    
-    try (FileWriter writer = new FileWriter(customerFilePath)) {
-        for (User user : users) {
-            writer.write(String.join(",",
-                user.getUsername(),
-                user.getName(),
-                user.getPhone(),
-                user.getEmail(),
-                user.getAddress(),
-                user.getSsn(),
-                user.getTshirtSize() + "\n"));
-        }
-    } catch (IOException e) {
-        System.out.println("Error saving customer info: " + e.getMessage());
-    	}
-	}
 	
+	public List<Teller> getTellers(){
+		return this.tellers;
+	}
+
+	private String getCustomerInfoFilePath() {
+    if (bankFilePath == null) return null;
+    return bankFilePath.replace("bankPastInfo.txt", "customerInfo.txt");
+	}
+
+	public void saveCustomerInfoToFile() {
+		String customerFilePath = getCustomerInfoFilePath();
+		if (customerFilePath == null) return;
+		
+		try (FileWriter writer = new FileWriter(customerFilePath)) {
+			for (User user : users) {
+				writer.write(String.join(",",
+					user.getUsername(),
+					user.getName(),
+					user.getPhone(),
+					user.getEmail(),
+					user.getAddress(),
+					user.getSsn(),
+					user.getTshirtSize() + "\n"));
+			}
+		} catch (IOException e) {
+			System.out.println("Error saving customer info: " + e.getMessage());
+		}
+	}
+
 	public void loadCustomerInfoFromFile() {
 		String customerFilePath = getCustomerInfoFilePath();
 		if (customerFilePath == null) return;
 		
 		try {
+			if (!Files.exists(Paths.get(customerFilePath))) {
+				return; // File doesn't exist yet
+			}
+			
 			List<String> lines = Files.readAllLines(Paths.get(customerFilePath));
 			for (String line : lines) {
 				String[] parts = line.split(",");
@@ -249,10 +263,6 @@ public class Bank {
 		} catch (IOException e) {
 			System.out.println("Error loading customer info: " + e.getMessage());
 		}
-	}
-
-	public List<Teller> getTellers(){
-		return this.tellers;
 	}
 
 }

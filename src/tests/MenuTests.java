@@ -10,6 +10,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MenuTests {
+
     private Menu menu;
     private User testUser;
     private BankAccount account1;

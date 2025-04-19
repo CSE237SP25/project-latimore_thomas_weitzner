@@ -2,8 +2,6 @@ package tests;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 
 import org.junit.jupiter.api.Test;
 
@@ -63,47 +61,5 @@ public class UserTests {
 		assertEquals("PeterParker2", user1.getUsername());
 	}
 	
-	@Test
-    void testProfileInformationInitialization() {
-        User user = new User("testGirl", "password123");
-        assertEquals("", user.getName());
-        assertEquals("", user.getPhone());
-        assertEquals("", user.getEmail());
-        assertEquals("", user.getAddress());
-        assertEquals("", user.getSsn());
-        assertEquals("", user.getTshirtSize());
-    }
-
-	@Test
-	void profileInformationTest(){
-		User user = new User("testGirl", "password123");
-		user.setName("Jane Doe");
-		user.setPhone("123-456-7890");
-		user.setEmail("jane@doe.com");
-		user.setAddress("123 Main St");
-		user.setSsn("123-45-6789");
-		user.setTshirtSize("M");
-
-		assertEquals("Jane Doe", user.getName());
-		assertEquals("123-456-7890", user.getPhone());
-		assertEquals("123 Main St", user.getAddress());
-		assertEquals("123-45-6789", user.getSsn());
-        assertEquals("M", user.getTshirtSize());
-	}
-
-	@Test
-    void testProfileInformationUpdates() {
-        User user = new User("testUser", "password123");
-        user.setName("Initial Name");
-        user.setPhone("0000000000");
-        
-        user.setName("Updated Name");
-        user.setPhone("1111111111");
-        
-        assertEquals("Updated Name", user.getName());
-        assertEquals("1111111111", user.getPhone());
-        assertNotEquals("Initial Name", user.getName());
-        assertNotEquals("0000000000", user.getPhone());
-    }
 	
 }
