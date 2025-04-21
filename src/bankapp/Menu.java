@@ -44,8 +44,15 @@ public class Menu {
 	
 	public void operateMenu() {
 		while(active) {
-			provideUserChoices();
-			active = processUserInput(getUserInput());
+			if(user.getAccounts().isEmpty()) {
+				provideEmptyChoices();
+				active = processEmptyInput(getUserInput());
+			}
+			else {
+				provideUserChoices();
+				active = processUserInput(getUserInput());
+			}
+			
 		}
 	}
 	public void provideUserChoices(){
@@ -65,6 +72,17 @@ public class Menu {
 		System.out.println("(k) Change password");
 		System.out.println("(l) View Todays Rates");
     	System.out.println("(x) Logout");
+	}
+	
+	public void provideEmptyChoices() {
+		System.out.println();
+		System.out.println(" -- Welcome to Bear Banks! -- ");
+		System.out.println("Would you like to: ");
+		System.out.println("(a) Create a new account");
+		System.out.println("(b) Change username");
+		System.out.println("(c) Change password");
+    	System.out.println("(x) Logout");
+		
 	}
 
 	public String getUserInput(){
@@ -115,6 +133,26 @@ public class Menu {
 			default:
 				System.out.println("Invalid choice. Please try again.");
 				return true;
+		}
+	}
+	
+	public boolean processEmptyInput(String userInput) {
+		switch(userInput.toLowerCase()) {
+		case "a":
+			createAccount();
+			return true;
+		case "b":
+			changeUsername();
+			return true;
+		case "c":
+			changePassword();
+			return true;
+		case "x":
+			logout();
+			return false;
+		default:
+			System.out.println("Invalid choice. Please try again.");
+			return true;
 		}
 	}
 	
