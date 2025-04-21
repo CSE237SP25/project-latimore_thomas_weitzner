@@ -407,21 +407,21 @@ public class Menu {
 
 	public BankAccount selectAccountType(){
 		System.out.println("What type of account do you wish to create?");
-		System.out.println("1. Checkings Account");
-		System.out.println("2. Savings Account");
-		System.out.println("3. Money Market Account");
+		System.out.println("(a) Checkings Account");
+		System.out.println("(b) Savings Account");
+		System.out.println("(c) Money Market Account");
 		String response = getUserInput();
 		switch(response) {
-			case "1":
+			case "a":
 				return new CheckingsAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
-			case "2":
+			case "b":
 				try {
 					return new SavingsAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
 				} catch (Exception e) {
 					System.out.println("Error creating Savings Account: " + e.getMessage());
 					return null;
 				}
-			case "3":
+			case "c":
 				try {
 					return new MoneyMarketAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
 				} catch (Exception e) {
