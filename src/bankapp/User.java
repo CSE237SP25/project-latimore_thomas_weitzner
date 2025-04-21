@@ -42,7 +42,11 @@ public class User {
 			System.out.println("Enter a name for the new account:");
 			String newAccountName = this.inputScanner.nextLine();
 			account.setAccountHolderName(newAccountName);
+		}
+		if(isInvalidAccountName(account.getAccountName()) != InvalidNameReason.NONE) {
+			System.out.println("Invalid account name. Please try again.");
 			addAccount(account);
+			return;
 		}
 		accounts.add(account);
 	}

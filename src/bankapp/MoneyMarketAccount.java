@@ -52,7 +52,7 @@ public class MoneyMarketAccount extends BankAccount{
 		}
 		//apply the interest before checking if you have enough money
 		getCurrentBalance();
-		System.out.println("Note that withdrawing from a savings account will incur a penalty of 7% of the amount withdrawn.");
+		System.out.println("Note that withdrawing from a money market account will incur a penalty of 7% of the amount withdrawn.");
 		System.out.println("Do you still want to continue with the transaction? Please indicate y or n below.");
 		String response = sc.nextLine();
 		if (response.equalsIgnoreCase("y")){
