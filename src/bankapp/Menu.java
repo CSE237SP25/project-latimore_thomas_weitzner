@@ -1,4 +1,6 @@
 package bankapp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,8 +44,15 @@ public class Menu {
 	
 	public void operateMenu() {
 		while(active) {
-			provideUserChoices();
-			active = processUserInput(getUserInput());
+			if(user.getAccounts().isEmpty()) {
+				provideEmptyChoices();
+				active = processEmptyInput(getUserInput());
+			}
+			else {
+				provideUserChoices();
+				active = processUserInput(getUserInput());
+			}
+			
 		}
 	}
 	public void provideUserChoices(){
@@ -61,7 +70,19 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
+		System.out.println("(l) View Todays Rates");
     	System.out.println("(x) Logout");
+	}
+	
+	public void provideEmptyChoices() {
+		System.out.println();
+		System.out.println(" -- Welcome to Bear Banks! -- ");
+		System.out.println("Would you like to: ");
+		System.out.println("(a) Create a new account");
+		System.out.println("(b) Change username");
+		System.out.println("(c) Change password");
+    	System.out.println("(x) Logout");
+		
 	}
 
 	public String getUserInput(){
@@ -106,9 +127,32 @@ public class Menu {
       		case "x":
 				logout();
 				return false;
+			case "l":
+				viewRates();
+				return true;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 				return true;
+		}
+	}
+	
+	public boolean processEmptyInput(String userInput) {
+		switch(userInput.toLowerCase()) {
+		case "a":
+			createAccount();
+			return true;
+		case "b":
+			changeUsername();
+			return true;
+		case "c":
+			changePassword();
+			return true;
+		case "x":
+			logout();
+			return false;
+		default:
+			System.out.println("Invalid choice. Please try again.");
+			return true;
 		}
 	}
 	
@@ -433,6 +477,17 @@ public class Menu {
 				return selectAccountType();
 		}
 	}
+
+public void viewRates() {
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	String date = LocalDateTime.now().format(dtf);
+	System.out.println("=== Account Rates Summary for " + date + " ===\n");
+	System.out.println("Account Type           | Checking (Default)| Savings          | Money Market");
+	System.out.println("------------------------+--------------------+------------------+----------------");
+	System.out.println("Interest Rate (%)      | 0.0               | 0.001            | 0.5 ");
+	System.out.println("Min. Opening Balance   | $0                | $100             | $1,000\n");
+	System.out.println();
+}
 
 	public LoginMenu getLogin() {
     return this.login;
