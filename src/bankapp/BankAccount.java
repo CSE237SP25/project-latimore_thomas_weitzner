@@ -96,12 +96,13 @@ public abstract class BankAccount {
 
 		this.withdraw(amount);
 		targetAccount.deposit(amount);
-
-		String transferOut = String.format("Transfer to #%d: -$%.2f", targetAccount.getAccountNumber(), amount);
-		String transferIn = String.format("Transfer from #%d: +$%.2f", this.accountNumber, amount);
-    
-    	this.addTransactionHistory(transferOut + "Balance: $" + this.balance);
-		targetAccount.addTransactionHistory(transferIn + "Balance: $" + targetAccount.getCurrentBalance());
+		
+		String dateTime = LocalDateTime.now().format(dtf);
+		String transferOut = String.format("Time: %s | Transfer to #%d: -$%.2f | Balance: $%.2f", dateTime,  targetAccount.getAccountNumber(),amount, this.balance);
+		String transferIn = String.format("Time: %s | Transfer from #%d: +$%.2f | Balance: $%.2f", dateTime, this.accountNumber, amount, targetAccount.getCurrentBalance());
+		
+    	this.addTransactionHistory(transferOut);
+		targetAccount.addTransactionHistory(transferIn);
 	}
 	
 	public void addTransactionHistory(String transaction) {
