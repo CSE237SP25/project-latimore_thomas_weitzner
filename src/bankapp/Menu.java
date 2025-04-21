@@ -61,6 +61,7 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
+		System.out.println("(m) Forgot password");
     	System.out.println("(x) Logout");
 	}
 
@@ -102,6 +103,9 @@ public class Menu {
 				return true;
 			case "k":
 				changePassword();
+				return true;
+			case "m":
+				login.resetPassword(user);
 				return true;
       		case "x":
 				logout();

@@ -111,6 +111,10 @@ public class Bank {
 			                         account.getCurrentBalance()+"\n");
 			        }
 			    }
+				for (SecurityQuestion question : user.getSecurityQuestions()) {
+					writer.write("SecurityQuestion," + user.getUsername() + "," + question.getQuestion() + "," + question.getAnswer() + "\n");
+				}
+				writer.write("\n");
 			}
 			int i=0;
 			for(Teller teller:tellers) {
@@ -152,6 +156,14 @@ public class Bank {
 			if (!accountName.equals("EMPTY")) {
 				BankAccount account = createAccount(accountName, accountNumber, balance);
 				currentUser.addAccount(account);
+			}
+
+			for (int i = 6; i < parts.length; i += 2) {
+				if (i + 1 < parts.length) {
+					String question = parts[i];
+					String answer = parts[i + 1];
+					currentUser.addSecurityQuestions(question, answer);
+				}
 			}
 		}
 		saveAccountsToFile();

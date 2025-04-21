@@ -6,11 +6,13 @@ public class User {
 	private String username;
 	private String password;
 	private ArrayList<BankAccount> accounts;
+	private ArrayList<SecurityQuestion> securityQuestions;
 	
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
 		accounts = new ArrayList<BankAccount>();
+		securityQuestions = new ArrayList<SecurityQuestion>();
 	}
 	
 	public String getUsername() {
@@ -39,6 +41,23 @@ public class User {
 	
 	public void removeAccount(BankAccount account) {
 		accounts.remove(account);
+	}
+
+	public void addSecurityQuestions(String question, String answer) {
+		securityQuestions.add(new SecurityQuestion(question, answer));
+	}
+
+	public ArrayList<SecurityQuestion> getSecurityQuestions() {
+		return securityQuestions;
+	}
+
+	public boolean verifySecurityQuestion(String question, String answer) {
+		for (SecurityQuestion sq : securityQuestions) {
+			if (sq.getQuestion().equals(question)) {
+				return sq.verifyAnswer(answer);
+			}
+		}
+		return false;
 	}
 	
 	
