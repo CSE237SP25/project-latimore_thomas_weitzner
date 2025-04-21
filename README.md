@@ -10,52 +10,26 @@ Team Members:
 For each iteration you should answer the following:
 
 What user stories were completed this iteration?
-* Customers should be able to exit (from the login page) which will stop the running of the program https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/45
-* refactor bank and menu classes into smaller methods https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/69
-* Teller should be able to create an account https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/21
-* General debug small issues https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/87
-* Teller should be able to log out of profile https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/90
-* Transaction history should be saved between sessions https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/74
-* All unit tests should pass https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/91
-* A customer is not able to log back in immediatley after logging out (Fix this issue) https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/73
-* Users should be able to access their previous accounts https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/75
-* Bank customers should be able to check account balance https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/3
-* Customers can reset their username https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/36
-* The date/time of a transaction should appear in the transaction history https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/62
-* Menu should display bank name: Bear Banks https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/61
-* Menu format should be the same for the login and account menus https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/49
-* Users should be able to select which account they want to review the transaction history for https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/67
-* customers should be able to select which account should be renamed https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/66
-* User should be able to select which account they deposit into https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/52
-* user should be able to select which account they are withdrawing from https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/53
-* Teller should be able to see all user accounts and amounts in them https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/22
-* Customer should be able to log out https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/44
-* Customers shouldn't be able to put in or have an overflowing amount of money https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/38
-
-
-
+* Users should be able to open a savings, checking, or money market account. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/54
+* Savings and money market accounts earn a specific amount of interest, which is compounded once daily. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/7
+* Users should be able to see the interest rates for savings and money market accounts. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/58
+* Savings and money market accounts have some specified minimum balance. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/55
+* Main menu is subdivided into multiple different menus which are linked to from the main menu. Specifically, we have the login menu, the teller menu, and the user menu. All of these redirect back to the main menu. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/51
+* When a user has no accounts open, they can not make a deposit and in general have limited menu options. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/26 https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/32
+* We added more tests of the main user menu. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/70
+* The bank and menu classes in general are refactored so that the methods and files are smaller. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/69
+* TENTATIVE: A customer should be asked to create security questions when setting up a profile which are then used when the password is reset https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/60
+* TENTATIVE: Users can add personal information such as phone number, email address, etc. that is saved and can be added to later. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/50
 
 
 
 What user stories do you intend to complete next iteration?
+* N/A
 
-* Accounts should earn interest on any deposited funds at a specified rate	https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/7
-* Different account types [savings, checking, money markets] should be offered to the customer when opening an account https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/54
-* Accounts should earn interest on any deposited funds at a specified rate https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/7
-*  There should be a high minimum balance to open a money market account and it should earn more interest https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/55
-* Customers should only be able to view a balance of an account when an accounts are open https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/32
-* Customers should have to open an account BEFORE making a deposit https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/26
-* Main menu should be subdivided into mutliple different menus which are linked to from the main menu. Submenus should be able to navigate back to the main menu. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/51
-* The bank should offer a loan based on the personal information in your profile https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/56
-* Customers should be able to open an adjunct or dependent account with its own login information (for a kid, old person, etc) https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/57
-* A customer should be asked to create security questions when setting up a profile which are then used when the password is reset https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/60
   
-
-
 
 Is there anything that you implemented but doesn't currently work?
 * All code on the development branch works as intended. We have a few pull requests open that might not be merged in by the time of the peer review on some of the issues in "next iteration".
-* Creating a new teller logs current Teller out, this has been fixed in a pull request that is currently open
 * Some users might need to create a folder `bankapp.bankResources.transactionHistoryStore` for the saving transaction history between sessions to operate properly.
 
 What commands are needed to compile and run your code from the command line (please provide a script that users can run to launch your program)?
@@ -63,6 +37,9 @@ What commands are needed to compile and run your code from the command line (ple
 Make sure you are in the root of the repo then run:
 chmod +x runBearBanks.sh
 ./runBearBanks.sh
+
+
+NOTE: In order to initialize the environment and clear previously compiled files you must run ./runBearBanks.sh once and then exit out of the command. During this very first run you may get errors, however after this initialization, future runs of the command should perform properly.
 
 Below are usernames and passwords for testing purposes (or create your own):
 `USERNAME`: testedUser2
