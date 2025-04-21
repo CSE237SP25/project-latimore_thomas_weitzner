@@ -414,12 +414,6 @@ public void viewRates() {
 	System.out.println("Interest Rate (%)      | 0.0               | 0.001            | 0.5 ");
 	System.out.println("Min. Opening Balance   | $0                | $100             | $1,000\n");
 	System.out.println();
-	System.out.println("CD Rates (Compounded Daily):\n");
-	System.out.println("Term                   | 1 Hour | 3 Hour | 6 Hour | 9 Hour | 12 Hour Promo | 24 Hour | 1 Week");
-	System.out.println("------------------------+--------+--------+--------+--------+----------------+---------+--------");
-	System.out.println("Interest Rate (%)      | 0.00011| 0.00016| 0.00021| 0.00029| 0.00045       | 0.00033 | 0.00038");
-	System.out.println("Min. Opening Balance   | $0.00  | $0.00  | $100   | $1000  | $500          | $1000   | $1000");
-
 }
 
 	public LoginMenu getLogin() {
