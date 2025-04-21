@@ -392,14 +392,14 @@ public class Menu {
         try {
             userAccount.transfer(targetAccount, amount);
             bank.saveAccountsToFile();
-            System.out.printf("\n✅ $%.2f successfully transferred to account #%d\n", 
+            System.out.printf("\n$%.2f successfully transferred to account #%d\n", 
                 amount, targetAccountNum);
             System.out.printf("Your new balance: $%.2f\n", userAccount.getCurrentBalance());
         } catch (IllegalArgumentException e) {
-            System.out.println("❌ Transfer failed: " + e.getMessage());
+            System.out.println("Transfer failed: " + e.getMessage());
         }
     } catch (NumberFormatException e) {
-        System.out.println("❌ Please enter valid numbers");
+        System.out.println("Please enter valid numbers");
     }
 	}
 
@@ -408,6 +408,11 @@ public class Menu {
         System.out.println("No user logged in!");
         return;
     }
+	String originalName = user.getName();
+    String originalPhone = user.getPhone();
+    String originalEmail = user.getEmail();
+    String originalAddress = user.getAddress();
+    String originalSsn = user.getMaskedSsn();
 
     System.out.println("\n-- Update Profile --");
     System.out.println("Current Information:");
@@ -416,7 +421,6 @@ public class Menu {
     System.out.println("3. Email: " + user.getEmail());
     System.out.println("4. Address: " + user.getAddress());
     System.out.println("5. SSN: " + user.getMaskedSsn());
-    System.out.println("6. T-Shirt Size: " + user.getTshirtSize());
 
     System.out.println("\nEnter your current password to continue:");
     if (!getUserInput().equals(user.getPassword())) {
@@ -425,7 +429,14 @@ public class Menu {
     }
 
     boolean updated = false;
-    while (true) {
+	boolean cancelled = false;
+    while (!cancelled) {
+		System.out.println("Current Information:");
+		System.out.println("Name: " + user.getName());
+		System.out.println("Phone: " + user.getPhone());
+		System.out.println("Email: " + user.getEmail());
+		System.out.println("Address: " + user.getAddress());
+		System.out.println("SSN: " + user.getMaskedSsn());
         System.out.println("\nWhat would you like to update? (Enter number)");
         System.out.println("a. Name");
         System.out.println("b. Phone");
@@ -435,27 +446,14 @@ public class Menu {
         System.out.println("f. Save changes and return");
         System.out.println("x. Cancel without saving");
 
-        String choice = getUserInput();
+        String choice = getUserInput().toLowerCase();
         
-        if (choice.equals("g")) {
-            if (updated) {
-                bank.saveAccountsToFile();
-                bank.saveCustomerInfoToFile();
-                System.out.println("Profile updated successfully!");
-            }
-            break;
-        }
         
-        if (choice.equals("x")) {
-            System.out.println("Update cancelled.");
-            break;
-        }
-
         switch (choice) {
             case "a":
                 System.out.println("Enter new name:");
                 String newName = getUserInput().trim();
-                if (!newName.isEmpty()) {
+                if (isInvalidAccountName(newName) == InvalidNameReason.NONE) {
                     user.setName(newName);
                     updated = true;
                     System.out.println("Name updated.");
@@ -481,14 +479,24 @@ public class Menu {
 
                 
             case "c":
-                System.out.println("Enter new email:");
-                String newEmail = getUserInput().trim();
-                if (!newEmail.isEmpty()) {
-                    user.setEmail(newEmail);
-                    updated = true;
-                    System.out.println("Email updated.");
-                }
-                break;
+				boolean validEmail = false;
+				while (!validEmail) {
+					System.out.println("enter new email:");
+					String emailInput = getUserInput().trim();
+					try {
+						user.setEmail(emailInput);
+						updated = true;
+						validEmail = true;
+						System.out.println("email updated successfully.");
+					} catch (IllegalArgumentException e) {
+						System.out.println("Invalid email format. Please include:");
+						System.out.println("1. an @ symbol");
+						System.out.println("2. a valid domain (something.com)");
+						System.out.println("- no spaces or special characters except ._-+");
+						System.out.println("please try again.");
+					}
+				}
+				break;
                 
             case "d":
                 System.out.println("Enter new address:");
@@ -515,12 +523,35 @@ public class Menu {
 					}
 				}
                 break;
-                
-                
+
+			case "f":
+				if (updated) {
+					bank.saveAccountsToFile();
+					bank.saveCustomerInfoToFile();
+					System.out.println("Changes saved!");
+				}
+				return;
+
+			case "x":
+				cancelled = true;
+				break;
+           
             default:
                 System.out.println("Invalid choice. Please try again.");
         }
     }
+
+	if (!updated) {
+		System.out.println("No changes made.");
+	} else {
+		System.out.println("Profile updated successfully!");
+		System.out.println("Updated Information:");
+		System.out.println("Name: " + user.getName());
+		System.out.println("Phone: " + user.getPhone());
+		System.out.println("Email: " + user.getEmail());
+		System.out.println("Address: " + user.getAddress());
+		System.out.println("SSN: " + user.getMaskedSsn());
+	}
 	}
 
 	public void setLogin(LoginMenu login) {

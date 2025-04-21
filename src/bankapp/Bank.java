@@ -226,8 +226,7 @@ public class Bank {
 					user.getPhone(),
 					user.getEmail(),
 					user.getAddress(),
-					user.getSsn(),
-					user.getTshirtSize() + "\n"));
+					user.getSsn() + "\n"));
 			}
 		} catch (IOException e) {
 			System.out.println("Error saving customer info: " + e.getMessage());
@@ -246,7 +245,7 @@ public class Bank {
 			List<String> lines = Files.readAllLines(Paths.get(customerFilePath));
 			for (String line : lines) {
 				String[] parts = line.split(",");
-				if (parts.length == 7) {
+				if (parts.length == 6) {
 					for (User user : users) {
 						if (user.getUsername().equals(parts[0])) {
 							user.setName(parts[1]);
@@ -254,7 +253,6 @@ public class Bank {
 							user.setEmail(parts[3]);
 							user.setAddress(parts[4]);
 							user.setSsn(parts[5]);
-							user.setTshirtSize(parts[6]);
 							break;
 						}
 					}

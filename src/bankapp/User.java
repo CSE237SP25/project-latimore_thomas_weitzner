@@ -11,7 +11,6 @@ public class User {
     private String email;
     private String address;
     private String ssn;
-    private String tshirtSize;
 	
 	public User(String username, String password) {
 		this.username = username;
@@ -22,7 +21,6 @@ public class User {
         this.email = "";
         this.address = "";
         this.ssn = "";
-        this.tshirtSize = "";
 	}
 	
 	public String getUsername() {
@@ -55,9 +53,7 @@ public class User {
     public String getSsn() {
         return ssn;
     }
-	public String getTshirtSize() {
-		return tshirtSize;
-	}
+
 
 	public void setName(String name) {
 		this.name = name;
@@ -71,12 +67,28 @@ public class User {
 		this.phone = phone.replaceAll("[^0-9]", "");
 	}
 
+	public boolean isValidEmail(String email) {
+    return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+	}
+
 	public void setEmail(String email) {
-		this.email = email;
+    if (isValidEmail(email)) {
+        this.email = email;
+    } else {
+        throw new IllegalArgumentException("Invalid email format");
+    	}
+	}
+
+	public boolean isValidAddress(String address) {
+		return address != null && !address.isEmpty() && address.matches("^[\\w\\s\\d\\-\\,\\.#]+$");
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		if(isValidAddress(address)) {
+			this.address = address;
+		} else {
+			throw new IllegalArgumentException("Invalid address format");
+		}
 	}
 
 	public void setSsn(String ssn) {
@@ -92,9 +104,7 @@ public class User {
     return ssn != null && ssn.matches("^\\d{9}$");
 	}
 	
-	public void setTshirtSize(String tshirtSize) {
-		this.tshirtSize = tshirtSize;
-	}
+	
 	
 	public void changePassword(String newPassword) {
 		this.password = newPassword;
