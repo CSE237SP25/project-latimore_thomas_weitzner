@@ -1,4 +1,6 @@
 package bankapp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -61,6 +63,7 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
+		System.out.println("(l) View Todays Rates");
     	System.out.println("(x) Logout");
 	}
 
@@ -106,6 +109,9 @@ public class Menu {
       		case "x":
 				logout();
 				return false;
+			case "l":
+				viewRates();
+				return true;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 				return true;
@@ -397,6 +403,17 @@ public class Menu {
     } catch (NumberFormatException e) {
         System.out.println("❌ Please enter valid numbers");
     }
+}
+	
+public void viewRates() {
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+	String date = LocalDateTime.now().format(dtf);
+	System.out.println("=== Account Rates Summary for " + date + " ===\n");
+	System.out.println("Account Type           | Checking (Default)| Savings          | Money Market");
+	System.out.println("------------------------+--------------------+------------------+----------------");
+	System.out.println("Interest Rate (%)      | 0.0               | 0.001            | 0.5 ");
+	System.out.println("Min. Opening Balance   | $0                | $100             | $1,000\n");
+	System.out.println();
 }
 
 	public LoginMenu getLogin() {
