@@ -174,7 +174,7 @@ public class Menu {
 	    }
 	    System.out.println("Here are all of your accounts: ");
 		for (BankAccount account : user.getAccounts()) {
-			System.out.println("Account number: " + account.getAccountNumber() + ", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
+			System.out.println("Account number: " + account.getAccountNumber() +", Account type: "+account.getAccountType() +", Account name: " + account.getAccountName() + ", Balance: " + account.getCurrentBalance());
 		}
 		System.out.println();
 	}
@@ -197,11 +197,16 @@ public class Menu {
 	}
 	
 	public void createAccount() {
-		this.currentUserAccount = new BankAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
-		bank.addAccount(currentUserAccount); // Add the new account to the bank
-		this.user.addAccount(currentUserAccount);
-		System.out.println("Your new account has been created");
-		System.out.println("Your account number is: " + currentUserAccount.getAccountNumber());
+		BankAccount newAccount = selectAccountType();
+		if(newAccount !=null){
+			this.currentUserAccount = newAccount;
+			bank.addAccount(currentUserAccount); // Add the new account to the bank
+			this.user.addAccount(currentUserAccount);
+			System.out.println("Your new account has been created");
+			System.out.println("Your account number is: " + currentUserAccount.getAccountNumber());
+		}else{
+			System.out.println("Account creation failed. Please try again.");
+		}
 	}
 	
 	private BankAccount findAccount() {
@@ -281,6 +286,7 @@ public class Menu {
 				} catch (IllegalArgumentException e) {
 					double currentBalance = userAccount.getCurrentBalance();
 					System.out.println("Invalid withdrawal amount. Please enter a positive withdrawal amount less than or equal to your current balance of: $" + currentBalance);
+					System.out.println(e.getMessage());
 				}
 			}
 
@@ -391,58 +397,87 @@ public class Menu {
 	}
 
 	public void transferBetweenAccounts() {
-    if (user.getAccounts().size() < 2) {
-        System.out.println("You need to have more than one account to transfer between");
-        return;
-    }
-    
-    try {
-		System.out.println("Select the account you want to transfer from:");
-		BankAccount userAccount = findAccount();
-		this.currentUserAccount = userAccount;
-        System.out.println("Your current account:");
-        System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
-        System.out.println("Accounts available: ");
-		displayAccounts();
-        
-        System.out.print("\nEnter account number to transfer to: ");
-        int targetAccountNum = Integer.parseInt(getUserInput());
-        
-        BankAccount targetAccount = null;
-        for (BankAccount account : user.getAccounts()) {
-            if (account.getAccountNumber() == targetAccountNum) {
-                targetAccount = account;
-                break;
-            }
-        }
-        
-        if (targetAccount == null) {
-            System.out.println("Invalid account number");
-            return;
-        }
-        
-        if (targetAccount.getAccountNumber() == userAccount.getAccountNumber()) {
-            System.out.println("Cannot transfer to the same account");
-            return;
-        }
-        
-        System.out.print("Enter amount to transfer: $");
-        double amount = Double.parseDouble(getUserInput());
-        
-        try {
-            userAccount.transfer(targetAccount, amount);
-            bank.saveAccountsToFile();
-            System.out.printf("\n✅ $%.2f successfully transferred to account #%d\n", 
-                amount, targetAccountNum);
-            System.out.printf("Your new balance: $%.2f\n", userAccount.getCurrentBalance());
-        } catch (IllegalArgumentException e) {
-            System.out.println("❌ Transfer failed: " + e.getMessage());
-        }
-    } catch (NumberFormatException e) {
-        System.out.println("❌ Please enter valid numbers");
-    }
-}
-	
+		if (user.getAccounts().size() < 2) {
+			System.out.println("You need to have more than one account to transfer between");
+			return;
+		}
+		
+		try {
+			System.out.println("Select the account you want to transfer from:");
+			BankAccount userAccount = findAccount();
+			this.currentUserAccount = userAccount;
+			System.out.println("Your current account:");
+			System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
+			System.out.println("Accounts available: ");
+			displayAccounts();
+			
+			System.out.print("\nEnter account number to transfer to: ");
+			int targetAccountNum = Integer.parseInt(getUserInput());
+			
+			BankAccount targetAccount = null;
+			for (BankAccount account : user.getAccounts()) {
+				if (account.getAccountNumber() == targetAccountNum) {
+					targetAccount = account;
+					break;
+				}
+			}
+			
+			if (targetAccount == null) {
+				System.out.println("Invalid account number");
+				return;
+			}
+			
+			if (targetAccount.getAccountNumber() == userAccount.getAccountNumber()) {
+				System.out.println("Cannot transfer to the same account");
+				return;
+			}
+			
+			System.out.print("Enter amount to transfer: $");
+			double amount = Double.parseDouble(getUserInput());
+			
+			try {
+				userAccount.transfer(targetAccount, amount);
+				bank.saveAccountsToFile();
+				System.out.printf("\n✅ $%.2f successfully transferred to account #%d\n", 
+					amount, targetAccountNum);
+				System.out.printf("Your new balance: $%.2f\n", userAccount.getCurrentBalance());
+			} catch (IllegalArgumentException e) {
+				System.out.println("❌ Transfer failed: " + e.getMessage());
+			}
+		} catch (NumberFormatException e) {
+			System.out.println("❌ Please enter valid numbers");
+		}
+	}
+
+	public BankAccount selectAccountType(){
+		System.out.println("What type of account do you wish to create?");
+		System.out.println("(a) Checkings Account");
+		System.out.println("(b) Savings Account");
+		System.out.println("(c) Money Market Account");
+		String response = getUserInput();
+		switch(response) {
+			case "a":
+				return new CheckingsAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
+			case "b":
+				try {
+					return new SavingsAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
+				} catch (Exception e) {
+					System.out.println("Error creating Savings Account: " + e.getMessage());
+					return null;
+				}
+			case "c":
+				try {
+					return new MoneyMarketAccount("Unnamed Account"); //NOTE: replace the name with the actual persons name from their profile
+				} catch (Exception e) {
+					System.out.println("Error creating Money Market Account: " + e.getMessage());
+					return null;
+				}
+			default:
+				System.out.println("Invalid choice. Please try again.");
+				return selectAccountType();
+		}
+	}
+
 public void viewRates() {
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	String date = LocalDateTime.now().format(dtf);

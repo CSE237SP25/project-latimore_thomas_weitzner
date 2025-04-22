@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import bankapp.BankAccount;
 import bankapp.Menu;
+import bankapp.CheckingsAccount;
 import bankapp.User;
 
 public class UserTests {
@@ -27,8 +28,8 @@ public class UserTests {
 	@Test
 	void addingAccountsTest(){
 		User user1 = new User("JohnSmith1", "JaneDoe!");
-		BankAccount newAccount = new BankAccount("SampleAccount");
-		BankAccount anotherAccount = new BankAccount("SecondSample");
+		BankAccount newAccount = new CheckingsAccount("SampleAccount");
+		BankAccount anotherAccount = new CheckingsAccount("SecondSample");
 		user1.addAccount(newAccount);
 		assertEquals(1, user1.getAccounts().size());
 		user1.addAccount(anotherAccount);
@@ -39,8 +40,8 @@ public class UserTests {
 	@Test
 	void removingAccountsTest() {
 		User user1 = new User("JohnSmith1", "JaneDoe!");
-		BankAccount newAccount = new BankAccount("SampleAccount");
-		BankAccount anotherAccount = new BankAccount("SecondSample");
+		BankAccount newAccount = new CheckingsAccount("SampleAccount");
+		BankAccount anotherAccount = new CheckingsAccount("SecondSample");
 		user1.addAccount(newAccount);
 		assertEquals(1, user1.getAccounts().size());
 		user1.addAccount(anotherAccount);

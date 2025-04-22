@@ -193,7 +193,8 @@ public class LoginMenu{
 			System.out.println("Your profile has been created! Logging you in...");
 			User newUser = new User(username,password);
 			user = newUser;
-			BankAccount newAccount = new BankAccount(newUser.getUsername() + " Account");
+			//by default we create a checkings account for the user 
+			BankAccount newAccount = new CheckingsAccount(newUser.getUsername() + " Account");
 			newUser.addAccount(newAccount);
 			bank.addUser(newUser);
 			type = "user";
