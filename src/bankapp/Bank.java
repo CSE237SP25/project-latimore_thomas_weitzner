@@ -108,11 +108,12 @@ public class Bank {
 			        for (BankAccount account : user.getAccounts()) {
 			            writer.write("User,"+user.getUsername() + "," + user.getPassword() + "," +
 			                         account.getAccountName() + "," + account.getAccountNumber() + "," +
-			                         account.getCurrentBalance()+"\n");
+			                         account.getCurrentBalance());
 			        }
 			    }
+				
 				for (SecurityQuestion question : user.getSecurityQuestions()) {
-					writer.write("SecurityQuestion," + user.getUsername() + "," + question.getQuestion() + "," + question.getAnswer() + "\n");
+					writer.write(","+"SecurityQuestion," + user.getUsername() + "," + question.getQuestion() + "," + question.getAnswer());
 				}
 				writer.write("\n");
 			}
