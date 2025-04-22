@@ -138,7 +138,7 @@ public class Bank {
 	
 	public void makeAccountFromFile(String accountInfo){
 		String[] parts = accountInfo.split(",");
-		if (parts.length != 7) {
+		if (parts.length < 6) {
 			throw new IllegalArgumentException("Invalid account info format");
 		}
 		String type = parts[0];
