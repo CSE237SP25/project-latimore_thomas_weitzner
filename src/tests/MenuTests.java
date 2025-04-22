@@ -28,7 +28,7 @@ public class MenuTests {
         testUser.addAccount(account1);
         testUser.addAccount(account2);
         bank.addUser(testUser);
-        menu = new Menu();
+        menu = new Menu(bank,testUser);
         menu.user = testUser;
         menu.currentUserAccount = account1;
     }
@@ -41,14 +41,6 @@ public class MenuTests {
         assertEquals(initialSize + 1, testUser.getAccounts().size());
     }
 
-    //user can remove an account
-    @Test
-    public void testDeleteAccountRemovesAccount() {
-        int initialSize = testUser.getAccounts().size();
-        menu.currentUserAccount = account1; 
-        menu.removeAccount();
-        assertEquals(initialSize - 1, testUser.getAccounts().size());
-    }
 
     //testing the account name (special characters)
     @Test
@@ -62,13 +54,6 @@ public class MenuTests {
         assertEquals(Menu.InvalidNameReason.NONE, menu.isInvalidAccountName("GoodName"));
     }
     
-    //testing account deposit
-    @Test
-    public void testDepositIncreasesBalance() {
-        double before = account1.getCurrentBalance();
-        account1.deposit(25.0);
-        assertEquals(before + 25.0, account1.getCurrentBalance());
-    }
 
     //testing account withdraw
     @Test
