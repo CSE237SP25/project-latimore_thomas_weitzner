@@ -443,7 +443,7 @@ public class Menu {
         }
     } catch (NumberFormatException e) {
         System.out.println("Please enter valid numbers");
-    }
+    	}
 	}
 
 	public void updateProfile() {
@@ -586,7 +586,8 @@ public class Menu {
 
 	if (!updated) {
 		System.out.println("No changes made.");
-	} else {
+	} 
+	else {
 		System.out.println("Profile updated successfully!");
 		System.out.println("Updated Information:");
 		System.out.println("Name: " + user.getName());
@@ -594,7 +595,7 @@ public class Menu {
 		System.out.println("Email: " + user.getEmail());
 		System.out.println("Address: " + user.getAddress());
 		System.out.println("SSN: " + user.getMaskedSsn());
-	}
+		}
 	}
 
 	public void setLogin(LoginMenu login) {
@@ -605,14 +606,10 @@ public class Menu {
     Bank bank = new Bank();
     LoginMenu loginMenu = new LoginMenu(bank.getUsers(), bank.getTellers(), bank);
     loginMenu.operateMenu();
-}
-
-
-
-}
+	}
 
 	
-public void viewRates() {
+	public void viewRates() {
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	String date = LocalDateTime.now().format(dtf);
 	System.out.println("=== Account Rates Summary for " + date + " ===\n");
