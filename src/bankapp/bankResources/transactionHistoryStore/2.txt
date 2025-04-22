@@ -1,0 +1,4 @@
+Time: 04/21/2025 10:35 AM | Initial Deposit: +$168.00 | Balance: $168.00
+Time: 04/21/2025 10:57 AM | Deposit: +$10.00 | Balance: $178.00
+Time: 04/21/2025 11:19 AM | Deposit: +$10.00 | Balance: $188.00
+Time: 04/21/2025 11:19 AM | Transfer from #1: +$10.00 | Balance: $188.00
