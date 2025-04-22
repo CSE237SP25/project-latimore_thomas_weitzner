@@ -23,6 +23,8 @@ public class Bank {
 		this.bankFilePath = determineFilePath();
 		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
+		loadCustomerInfoFromFile(); // Load customer info from file when the bank is created
+
 	}
 
 	public Bank(String filePath) {
@@ -30,6 +32,7 @@ public class Bank {
 		this.bankFilePath = filePath; // Use provided file path for account info
 		this.accountInfoList = readAccountInfoFromFile();
 		loadAccountsFromFile(); // Load accounts from file when the bank is created
+		loadCustomerInfoFromFile(); // Load customer info from file when the bank is created
 	}
 	
 	private String determineFilePath() {
@@ -229,6 +232,60 @@ public class Bank {
 	
 	public List<Teller> getTellers(){
 		return this.tellers;
+	}
+
+	private String getCustomerInfoFilePath() {
+    if (bankFilePath == null) return null;
+    return bankFilePath.replace("bankPastInfo.txt", "customerInfo.txt");
+	}
+
+	public void saveCustomerInfoToFile() {
+		String customerFilePath = getCustomerInfoFilePath();
+		if (customerFilePath == null) return;
+		
+		try (FileWriter writer = new FileWriter(customerFilePath)) {
+			for (User user : users) {
+				writer.write(String.join(",",
+					user.getUsername(),
+					user.getName(),
+					user.getPhone(),
+					user.getEmail(),
+					user.getAddress(),
+					user.getSsn() + "\n"));
+			}
+		} catch (IOException e) {
+			System.out.println("Error saving customer info: " + e.getMessage());
+		}
+	}
+
+	public void loadCustomerInfoFromFile() {
+		String customerFilePath = getCustomerInfoFilePath();
+		if (customerFilePath == null) return;
+		
+		try {
+			if (!Files.exists(Paths.get(customerFilePath))) {
+				return; // File doesn't exist yet
+			}
+			
+			List<String> lines = Files.readAllLines(Paths.get(customerFilePath));
+			for (String line : lines) {
+				String[] parts = line.split(",");
+				if (parts.length == 6) {
+					for (User user : users) {
+						if (user.getUsername().equals(parts[0])) {
+							user.setName(parts[1]);
+							user.setPhone(parts[2]);
+							user.setEmail(parts[3]);
+							user.setAddress(parts[4]);
+							user.setSsn(parts[5]);
+							break;
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("Error loading customer info: " + e.getMessage());
+		}
 	}
 
 }
