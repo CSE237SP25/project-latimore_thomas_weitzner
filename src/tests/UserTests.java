@@ -60,6 +60,18 @@ public class UserTests {
 		user1.changeUsername("PeterParker2");
 		assertEquals("PeterParker2", user1.getUsername());
 	}
+
+	@Test
+	void changeUsernameToOldTest(){
+		User user1 = new User("JohnSmith1","JaneDoe!" );
+		try {
+			user1.changeUsername("JohnSmith1");
+			fail();
+		} catch (Exception e) {
+			
+		}
+
+	}
 	
 	
 }
