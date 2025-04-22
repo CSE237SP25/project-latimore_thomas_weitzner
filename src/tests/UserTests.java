@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 
 import bankapp.BankAccount;
+import bankapp.CheckingsAccount;
 import bankapp.User;
 
 public class UserTests {
@@ -26,8 +27,8 @@ public class UserTests {
 	@Test
 	void addingAccountsTest(){
 		User user1 = new User("JohnSmith1", "JaneDoe!");
-		BankAccount newAccount = new BankAccount("SampleAccount");
-		BankAccount anotherAccount = new BankAccount("SecondSample");
+		BankAccount newAccount = new CheckingsAccount("SampleAccount");
+		BankAccount anotherAccount = new CheckingsAccount("SecondSample");
 		user1.addAccount(newAccount);
 		assertEquals(1, user1.getAccounts().size());
 		user1.addAccount(anotherAccount);
@@ -38,8 +39,8 @@ public class UserTests {
 	@Test
 	void removingAccountsTest() {
 		User user1 = new User("JohnSmith1", "JaneDoe!");
-		BankAccount newAccount = new BankAccount("SampleAccount");
-		BankAccount anotherAccount = new BankAccount("SecondSample");
+		BankAccount newAccount = new CheckingsAccount("SampleAccount");
+		BankAccount anotherAccount = new CheckingsAccount("SecondSample");
 		user1.addAccount(newAccount);
 		assertEquals(1, user1.getAccounts().size());
 		user1.addAccount(anotherAccount);
@@ -59,6 +60,18 @@ public class UserTests {
 		User user1 = new User("JohnSmith1", "JaneDoe!");
 		user1.changeUsername("PeterParker2");
 		assertEquals("PeterParker2", user1.getUsername());
+	}
+
+	@Test
+	void changeUsernameToOldTest(){
+		User user1 = new User("JohnSmith1","JaneDoe!" );
+		try {
+			user1.changeUsername("JohnSmith1");
+			fail();
+		} catch (Exception e) {
+			
+		}
+
 	}
 	
 	

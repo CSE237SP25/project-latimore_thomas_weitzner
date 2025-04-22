@@ -1,17 +1,17 @@
-User,testedUser1,password1,EMPTY,0,0.0
-User,testedUser2,password2,Placeholder Name,1,600.0
-User,testedUser2,password2,Placeholder Name,2,200.0
-User,testedUser3,password3,Placeholder Name,3,8.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,4,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,5,0.0
-User,PlaceholderUsername,PlaceholderPassword,ThomasAccount,6,8.0
-User,PlaceholderUsername,PlaceholderPassword,nina,7,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,8,100.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,9,0.0
-User,PlaceholderUsername,PlaceholderPassword,nina,10,150.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,11,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,12,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,13,0.0
-User,PlaceholderUsername,PlaceholderPassword,Placeholder Name,14,0.0
-Teller,Teller1,Password1,EMPTY,0,0.0
-Teller,teller2,tellerpw2,EMPTY,0,0.0
+User,NONE,testedUser1,password1,EMPTY,0,0.0
+User,Checkings,testedUser2,password2,Placeholder Name 1,1,620.0
+User,Savings,testedUser2,password2,Placeholder Name 2,2,178.0
+User,Money Market,testedUser3,password3,Placeholder Name,3,1089.3
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 1,4,0.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 2,5,0.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,ThomasAccount,6,8.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,nina,7,0.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 3,8,100.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 4,9,0.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,nina 2,10,150.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 5,11,0.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 6,12,0.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 7,13,0.0
+User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 8,14,0.0
+Teller,NONE,Teller1,Password1,EMPTY,0,0.0
+Teller,NONE,teller2,tellerpw2,EMPTY,0,0.0
