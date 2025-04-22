@@ -28,3 +28,4 @@ replay_pid*
 README.md
 *.project
 /bin/
+/src/bankapp/bankResources/transactionHistoryStore/
