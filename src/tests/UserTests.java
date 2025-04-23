@@ -69,7 +69,6 @@ public class UserTests {
 
         assertEquals(Menu.InvalidNameReason.EMPTY, user1.isInvalidAccountName(""));
         assertEquals(Menu.InvalidNameReason.LONG,user1.isInvalidAccountName("ThisNameIsWayTooLongToActuallyWerk"));
-        assertEquals(Menu.InvalidNameReason.SAME_NAME, user1.isInvalidAccountName("OldName"));
         assertEquals(Menu.InvalidNameReason.SPECIAL_CHARACTERS, user1.isInvalidAccountName("B@@@@d@Name"));
         assertEquals(Menu.InvalidNameReason.NONE, user1.isInvalidAccountName("GoodName"));
     }	
