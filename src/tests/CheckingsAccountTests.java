@@ -311,8 +311,8 @@ public class CheckingsAccountTests {
 		
 		List<String> history = account.getTransactionHistory();
 		assertEquals(2+previousHistory.size(),history.size());
-		assertTrue(history.get(0).contains("Deposit"));
-		assertTrue(history.get(1).contains("Withdraw"));
+		assertTrue(history.get(previousHistory.size()).contains("Deposit"));
+		assertTrue(history.get(previousHistory.size()+1).contains("Withdraw"));
 	}
 	
 	@Test

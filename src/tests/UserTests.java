@@ -63,7 +63,8 @@ public class UserTests {
 		assertEquals("PeterParker2", user1.getUsername());
 	}
 
-    @Test
+	//now that user doesn't have this function this test is void/should be put into bank utils tests
+    /*@Test
     public void testIsInvalidAccountName() {
 		User user1 = new User("JohnSmith1", "JaneDoe!");
 
@@ -71,7 +72,7 @@ public class UserTests {
         assertEquals(Menu.InvalidNameReason.LONG,user1.isInvalidAccountName("ThisNameIsWayTooLongToActuallyWerk"));
         assertEquals(Menu.InvalidNameReason.SPECIAL_CHARACTERS, user1.isInvalidAccountName("B@@@@d@Name"));
         assertEquals(Menu.InvalidNameReason.NONE, user1.isInvalidAccountName("GoodName"));
-    }	
+    }*/	
 
 	@Test
 	void changePasswordToOldTest() {

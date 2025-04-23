@@ -12,7 +12,7 @@ public class Menu {
 	private final Bank bank;
 	public User user;
 	
-	
+	private LoginMenu login;
 	private Boolean active = true;
 
 	public Menu(Bank bank, User user) {
@@ -21,6 +21,7 @@ public class Menu {
 		this.bank = bank;// Initialize the bank object
 		checkUserHasAccounts(user);
 		setCurrentUserAccount(user.getAccounts().get(0));
+		this.login = new LoginMenu(bank.getUsers(), bank.getTellers(), bank);
 	    System.out.println("Hello! Welcome to our bank app!");
 	
 	}
@@ -140,7 +141,7 @@ public class Menu {
 			case "l":
 				login.resetPassword(user);
 				return true;
-      case "x":
+      		case "x":
 				logout();
 				return false;
 			default:
