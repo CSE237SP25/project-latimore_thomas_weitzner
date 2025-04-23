@@ -52,7 +52,6 @@ public class Menu {
 				provideUserChoices();
 				active = processUserInput(getUserInput());
 			}
-			
 		}
 	}
 	public void provideUserChoices(){
@@ -70,8 +69,9 @@ public class Menu {
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) Change username");
 		System.out.println("(k) Change password");
-		System.out.println("(l) View Todays Rates");
-    	System.out.println("(x) Logout");
+		System.out.println("(l) Update profile information");
+		System.out.println("(m) View Todays Rates");
+    System.out.println("(x) Logout");
 	}
 	
 	public void provideEmptyChoices() {
@@ -124,10 +124,13 @@ public class Menu {
 			case "k":
 				changePassword();
 				return true;
-      		case "x":
+			case "l":
+            updateProfile();
+            return true;
+      	case "x":
 				logout();
 				return false;
-			case "l":
+			case "m":
 				viewRates();
 				return true;
 			default:
@@ -397,6 +400,7 @@ public class Menu {
 	}
 
 	public void transferBetweenAccounts() {
+
 		if (user.getAccounts().size() < 2) {
 			System.out.println("You need to have more than one account to transfer between");
 			return;
@@ -479,6 +483,223 @@ public class Menu {
 	}
 
 public void viewRates() {
+    if (user.getAccounts().size() < 2) {
+        System.out.println("You need to have more than one account to transfer between");
+        return;
+    }
+    
+    try {
+		System.out.println("Select the account you want to transfer from:");
+		BankAccount userAccount = findAccount();
+		this.currentUserAccount = userAccount;
+        System.out.println("Your current account:");
+        System.out.println("Account #"+userAccount.getAccountNumber()+ " Balance: "+ userAccount.getCurrentBalance());
+        System.out.println("Accounts available: ");
+		displayAccounts();
+        
+        System.out.print("\nEnter account number to transfer to: ");
+        int targetAccountNum = Integer.parseInt(getUserInput());
+        
+        BankAccount targetAccount = null;
+        for (BankAccount account : user.getAccounts()) {
+            if (account.getAccountNumber() == targetAccountNum) {
+                targetAccount = account;
+                break;
+            }
+        }
+        
+        if (targetAccount == null) {
+            System.out.println("Invalid account number");
+            return;
+        }
+        
+        if (targetAccount.getAccountNumber() == userAccount.getAccountNumber()) {
+            System.out.println("Cannot transfer to the same account");
+            return;
+        }
+        
+        System.out.print("Enter amount to transfer: $");
+        double amount = Double.parseDouble(getUserInput());
+        
+        try {
+            userAccount.transfer(targetAccount, amount);
+            bank.saveAccountsToFile();
+            System.out.printf("\n$%.2f successfully transferred to account #%d\n", 
+                amount, targetAccountNum);
+            System.out.printf("Your new balance: $%.2f\n", userAccount.getCurrentBalance());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Transfer failed: " + e.getMessage());
+        }
+    } catch (NumberFormatException e) {
+        System.out.println("Please enter valid numbers");
+    	}
+	}
+
+	public void updateProfile() {
+    if (user == null) {
+        System.out.println("No user logged in!");
+        return;
+    }
+	String originalName = user.getName();
+    String originalPhone = user.getPhone();
+    String originalEmail = user.getEmail();
+    String originalAddress = user.getAddress();
+    String originalSsn = user.getMaskedSsn();
+
+    System.out.println("\n-- Update Profile --");
+    System.out.println("Current Information:");
+    System.out.println("1. Name: " + user.getName());
+    System.out.println("2. Phone: " + user.getPhone());
+    System.out.println("3. Email: " + user.getEmail());
+    System.out.println("4. Address: " + user.getAddress());
+    System.out.println("5. SSN: " + user.getMaskedSsn());
+
+    System.out.println("\nEnter your current password to continue:");
+    if (!getUserInput().equals(user.getPassword())) {
+        System.out.println("Incorrect password!");
+        return;
+    }
+
+    boolean updated = false;
+	boolean cancelled = false;
+    while (!cancelled) {
+		System.out.println("Current Information:");
+		System.out.println("Name: " + user.getName());
+		System.out.println("Phone: " + user.getPhone());
+		System.out.println("Email: " + user.getEmail());
+		System.out.println("Address: " + user.getAddress());
+		System.out.println("SSN: " + user.getMaskedSsn());
+        System.out.println("\nWhat would you like to update? (Enter number)");
+        System.out.println("a. Name");
+        System.out.println("b. Phone");
+        System.out.println("c. Email");
+        System.out.println("d. Address");
+        System.out.println("e. SSN");
+        System.out.println("f. Save changes and return");
+        System.out.println("x. Cancel without saving");
+
+        String choice = getUserInput().toLowerCase();
+        
+        
+        switch (choice) {
+            case "a":
+                System.out.println("Enter new name:");
+                String newName = getUserInput().trim();
+                if (isInvalidAccountName(newName) == InvalidNameReason.NONE) {
+                    user.setName(newName);
+                    updated = true;
+                    System.out.println("Name updated.");
+                }
+                break;
+                
+            case "b":
+				boolean validPhone = false;
+				while (!validPhone) {
+					System.out.println("Enter new phone number:");
+					String phoneInput = getUserInput().trim();
+					String digitsOnly = phoneInput.replaceAll("-", "");
+					if (digitsOnly.matches("\\d{10}")) {
+						user.setFormattedPhone(phoneInput);
+						updated = true;
+						System.out.println("Phone updated to: " + user.getPhone());
+						validPhone = true;
+					} else {
+						System.out.println("Invalid phone number. Try again.");
+					}
+				}			
+				break;
+
+                
+            case "c":
+				boolean validEmail = false;
+				while (!validEmail) {
+					System.out.println("enter new email:");
+					String emailInput = getUserInput().trim();
+					try {
+						user.setEmail(emailInput);
+						updated = true;
+						validEmail = true;
+						System.out.println("email updated successfully.");
+					} catch (IllegalArgumentException e) {
+						System.out.println("Invalid email format. Please include:");
+						System.out.println("1. an @ symbol");
+						System.out.println("2. a valid domain (something.com)");
+						System.out.println("- no spaces or special characters except ._-+");
+						System.out.println("please try again.");
+					}
+				}
+				break;
+                
+            case "d":
+                System.out.println("Enter new address:");
+                String newAddress = getUserInput().trim();
+                if (!newAddress.isEmpty()) {
+                    user.setAddress(newAddress);
+                    updated = true;
+                    System.out.println("Address updated.");
+                }
+                break;
+                
+            case "e":
+                boolean validSSN = false;
+				while (!validSSN) {
+					System.out.println("Enter new SSN (9 digits):");
+					String newSSN = getUserInput().trim();
+					if (user.isValidSsn(newSSN)) {
+						user.setSsn(newSSN);
+						updated = true;
+						System.out.println("SSN updated.");
+						validSSN = true;
+					} else {
+						System.out.println("Invalid SSN. Must be exactly 9 digits. Try again.");
+					}
+				}
+                break;
+
+			case "f":
+				if (updated) {
+					bank.saveAccountsToFile();
+					bank.saveCustomerInfoToFile();
+					System.out.println("Changes saved!");
+				}
+				return;
+
+			case "x":
+				cancelled = true;
+				break;
+           
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
+
+	if (!updated) {
+		System.out.println("No changes made.");
+	} 
+	else {
+		System.out.println("Profile updated successfully!");
+		System.out.println("Updated Information:");
+		System.out.println("Name: " + user.getName());
+		System.out.println("Phone: " + user.getPhone());
+		System.out.println("Email: " + user.getEmail());
+		System.out.println("Address: " + user.getAddress());
+		System.out.println("SSN: " + user.getMaskedSsn());
+		}
+	}
+
+	public void setLogin(LoginMenu login) {
+		this.login = login;
+	}
+
+	public static void main(String[] args) {
+    Bank bank = new Bank();
+    LoginMenu loginMenu = new LoginMenu(bank.getUsers(), bank.getTellers(), bank);
+    loginMenu.operateMenu();
+	}
+
+	
+	public void viewRates() {
+
 	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	String date = LocalDateTime.now().format(dtf);
 	System.out.println("=== Account Rates Summary for " + date + " ===\n");
@@ -494,4 +715,3 @@ public void viewRates() {
 	}
 
 }
-
