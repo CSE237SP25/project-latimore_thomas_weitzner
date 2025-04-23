@@ -62,13 +62,7 @@ public class UserTests {
 		user1.changeUsername("PeterParker2");
 		assertEquals("PeterParker2", user1.getUsername());
 	}
-	
-	//possibly implement that no two users should be able to have the same usernam (but they can have the same account name)
-	//in general though put tests here 
 
-
-	//also add isInvalideAccountName test
-	//testing the account name (special characters)
     @Test
     public void testIsInvalidAccountName() {
 		User user1 = new User("JohnSmith1", "JaneDoe!");
@@ -79,4 +73,15 @@ public class UserTests {
         assertEquals(Menu.InvalidNameReason.SPECIAL_CHARACTERS, user1.isInvalidAccountName("B@@@@d@Name"));
         assertEquals(Menu.InvalidNameReason.NONE, user1.isInvalidAccountName("GoodName"));
     }	
+
+	@Test
+	void changePasswordToOldTest() {
+		User user1 = new User("JohnSmith1", "JaneDoe!");
+		user1.changePassword("JaneDoe!");
+		try {
+			user1.changePassword("JaneDoe!");
+		} catch (IllegalArgumentException e) {
+			assertEquals("New password must be different from the old password.", e.getMessage());
+		}
+	}
 }
