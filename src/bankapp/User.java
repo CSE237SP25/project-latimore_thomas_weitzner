@@ -113,10 +113,16 @@ public class User {
 	
 	
 	public void changePassword(String newPassword) {
-		this.password = newPassword;
+		if(this.password.equals(newPassword)) {
+			System.out.println("New password must be different from the old password.");
+		}else{
+			this.password = newPassword;
+			System.out.println("Password successfully changed");
+		}
 	}
 	
 	public void changeUsername(String newUsername) {
+		//the checks for this are already handled in the menu class
 		this.username = newUsername;
 	}
 	

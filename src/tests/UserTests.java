@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 
 import bankapp.BankAccount;
+import bankapp.Menu;
 import bankapp.CheckingsAccount;
 import bankapp.User;
 
@@ -61,6 +62,25 @@ public class UserTests {
 		user1.changeUsername("PeterParker2");
 		assertEquals("PeterParker2", user1.getUsername());
 	}
-	
-	
+
+    @Test
+    public void testIsInvalidAccountName() {
+		User user1 = new User("JohnSmith1", "JaneDoe!");
+
+        assertEquals(Menu.InvalidNameReason.EMPTY, user1.isInvalidAccountName(""));
+        assertEquals(Menu.InvalidNameReason.LONG,user1.isInvalidAccountName("ThisNameIsWayTooLongToActuallyWerk"));
+        assertEquals(Menu.InvalidNameReason.SPECIAL_CHARACTERS, user1.isInvalidAccountName("B@@@@d@Name"));
+        assertEquals(Menu.InvalidNameReason.NONE, user1.isInvalidAccountName("GoodName"));
+    }	
+
+	@Test
+	void changePasswordToOldTest() {
+		User user1 = new User("JohnSmith1", "JaneDoe!");
+		user1.changePassword("JaneDoe!");
+		try {
+			user1.changePassword("JaneDoe!");
+		} catch (IllegalArgumentException e) {
+			assertEquals("New password must be different from the old password.", e.getMessage());
+		}
+	}
 }
