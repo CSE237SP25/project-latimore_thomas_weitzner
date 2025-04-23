@@ -1,7 +1,9 @@
 User,NONE,testedUser1,password1,EMPTY,0,0.0
+SecurityQuestion,testedUser1,What is your mom's maiden name?,marie
 User,Checkings,testedUser2,password2,Placeholder Name 1,1,620.0
-User,Savings,testedUser2,password2,Placeholder Name 2,2,178.0
-User,Money Market,testedUser3,password3,Placeholder Name,3,1089.3
+User,Savings,testedUser2,password2,Placeholder Name 2,2,356.00178000000005
+SecurityQuestion,testedUser2,What was the name of your first pet?,dexter
+User,Money Market,testedUser3,password3,Placeholder Name,3,2200.549940330812
 User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 1,4,0.0
 User,Checkings,PlaceholderUsername,PlaceholderPassword,Placeholder Name 2,5,0.0
 User,Checkings,PlaceholderUsername,PlaceholderPassword,ThomasAccount,6,8.0

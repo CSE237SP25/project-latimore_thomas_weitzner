@@ -109,6 +109,9 @@ public class Bank {
 			                         account.getCurrentBalance()+"\n");
 			        }
 			    }
+				for (SecurityQuestion question : user.getSecurityQuestions()) {
+					writer.write("SecurityQuestion," + user.getUsername() + "," + question.getQuestion() + "," + question.getAnswer()+"\n");
+				}
 			}
 			int i=0;
 			for(Teller teller:tellers) {
@@ -129,9 +132,13 @@ public class Bank {
 			makeAccountFromFile(accountInfo);
 		}
 	}
-	
+
 	public void makeAccountFromFile(String accountInfo){
 		String[] parts = accountInfo.split(",");
+		if("SecurityQuestion".equals(parts[0])){
+			makeSecurityQuestionFromFile(accountInfo);
+			return;
+		}
 		if (parts.length != 7) {
 			throw new IllegalArgumentException("Invalid account info format");
 		}
@@ -151,6 +158,14 @@ public class Bank {
 			if (!accountName.equals("EMPTY")) {
 				BankAccount account = createAccount(accountType,accountName, accountNumber, balance);
 				currentUser.addAccount(account);
+			}
+
+			for (int i = 6; i < parts.length; i += 2) {
+				if (i + 1 < parts.length) {
+					String question = parts[i];
+					String answer = parts[i + 1];
+					currentUser.addSecurityQuestions(question, answer);
+				}
 			}
 		}
 		saveAccountsToFile();
@@ -285,6 +300,26 @@ public class Bank {
 			}
 		} catch (IOException e) {
 			System.out.println("Error loading customer info: " + e.getMessage());
+		}
+	}
+	public void makeSecurityQuestionFromFile(String securityLine){
+		String[] parts = securityLine.split(",");
+		if(parts.length != 4) {
+			throw new IllegalArgumentException("Invalid security question format");
+		}
+		String type = parts[0];
+		String username = parts[1];
+		String question = parts[2];
+		String answer = parts[3];
+		if("SecurityQuestion".equals(type)) {
+			for (User user : this.users) {
+				if (user.getUsername().equals(username)) {
+					user.addSecurityQuestions(question, answer);
+					break;
+				}
+			}
+		}else{
+			throw new IllegalArgumentException("Invalid security question type");
 		}
 	}
 

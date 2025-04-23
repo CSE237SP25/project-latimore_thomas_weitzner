@@ -63,8 +63,10 @@ public class Menu {
 		System.out.println("(h) View transaction history");
 		System.out.println("(i) Make a transfer between accounts");
 		System.out.println("(j) " + user.getUsername() + " profile options");
-		System.out.println("(m) View Todays Rates");
-		System.out.println("(x) Logout");
+		System.out.println("(k) View Todays Rates");
+		System.out.println("(l) Forgot password");
+    System.out.println("(x) Logout");
+
 	}
 	
 	public void provideEmptyChoices() {
@@ -132,10 +134,13 @@ public class Menu {
 					userProfile = processProfileInput(getUserInput());
 				}
 				return true;
-			case "m":
+			case "k":
 				viewRates();
 				return true;
-			case "x":
+			case "l":
+				login.resetPassword(user);
+				return true;
+      case "x":
 				logout();
 				return false;
 			default:
@@ -685,6 +690,7 @@ public class Menu {
 	System.out.println("Min. Opening Balance   | $0                | $100             | $1,000\n");
 	System.out.println();
 }
+
 
 	
 
