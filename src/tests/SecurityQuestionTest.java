@@ -1,8 +1,8 @@
-package bankapp;
+package tests;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
+import bankapp.SecurityQuestion;
 public class SecurityQuestionTest {
 
     @Test
