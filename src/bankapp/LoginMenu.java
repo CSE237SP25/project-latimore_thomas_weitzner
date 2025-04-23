@@ -197,6 +197,7 @@ public class LoginMenu{
 			BankAccount newAccount = new CheckingsAccount(newUser.getUsername() + " Account");
 			newUser.addAccount(newAccount);
 			bank.addUser(newUser);
+			setupSecurityQuestions(newUser);
 			type = "user";
 			return true;
 		}
@@ -227,6 +228,45 @@ public class LoginMenu{
 			return false;
 		}
 		
+	}
+	// i can change so they have to pick two to answer?
+	private void setupSecurityQuestions (User user){
+		System.out.println("Please set up your security questions.");
+		String[] questions = {
+			"What is your mother's maiden name?",
+			"What was the name of your first pet?",
+			"What city were you born in?",
+			"What is your favorite color?",
+		};
+		for (String question : questions) {
+			System.out.println(question);
+			String answer = getUserInput();
+			user.addSecurityQuestions(question, answer);
+		}
+		System.out.println("Security questions set up successfully!");
+		System.out.println("Please remember your answers, as they will be used for account recovery.");
+	}
+
+	public Boolean resetPassword(User user){
+		if (user == null || user.getSecurityQuestions().isEmpty()) {
+			System.out.println("No security questions set up. Cannot reset password.");
+			return false;
+		}
+		System.out.println("Please answer your security questions to reset your password.");
+		for (SecurityQuestion sq : user.getSecurityQuestions()) {
+			System.out.println(sq.getQuestion());
+			String answer = getUserInput();
+			if (!sq.verifyAnswer(answer)) {
+				System.out.println("Incorrect answer. Please try again.");
+				return false;
+			}
+		}
+		System.out.println("All answers are correct! Please enter your new password:");
+		String newPassword = getUserInput();
+		user.changePassword(newPassword);
+	    bank.saveAccountsToFile();
+		System.out.println("Password reset successfully!");
+		return true;
 	}
 	
 }

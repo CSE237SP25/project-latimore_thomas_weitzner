@@ -8,6 +8,7 @@ public class User {
 	private String username;
 	private String password;
 	private ArrayList<BankAccount> accounts;
+	private ArrayList<SecurityQuestion> securityQuestions;
 	private Scanner inputScanner;
 
  	private String name;
@@ -21,6 +22,7 @@ public class User {
 		this.username = username;
 		this.password = password;
 		accounts = new ArrayList<BankAccount>();
+		securityQuestions = new ArrayList<SecurityQuestion>();
 		this.inputScanner = new Scanner(System.in);
 		this.name = "";
         this.phone = "";
@@ -142,6 +144,23 @@ public class User {
 	
 	public void removeAccount(BankAccount account) {
 		accounts.remove(account);
+	}
+
+	public void addSecurityQuestions(String question, String answer) {
+		securityQuestions.add(new SecurityQuestion(question, answer));
+	}
+
+	public ArrayList<SecurityQuestion> getSecurityQuestions() {
+		return securityQuestions;
+	}
+
+	public boolean verifySecurityQuestion(String question, String answer) {
+		for (SecurityQuestion sq : securityQuestions) {
+			if (sq.getQuestion().equals(question)) {
+				return sq.verifyAnswer(answer);
+			}
+		}
+		return false;
 	}
 	
 	public InvalidNameReason isInvalidAccountName(String name) {
