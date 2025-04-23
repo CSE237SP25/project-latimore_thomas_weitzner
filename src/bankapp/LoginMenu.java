@@ -24,17 +24,10 @@ public class LoginMenu{
 		
 	}
 	
-	public User searchForProfile(String username) {
-		
-		for(User user : existingUsers) {
-			if (user.getUsername().equals(username)){
-				return user;
-			}
-		}
-		return null;
-	}
+
+	
 	public Boolean doesProfileExist(String username){
-		if(searchForProfile(username) == null) {
+		if(BankUtils.searchForProfile(username, existingUsers) == null) {
 			return false;
 		}
 		else {
@@ -43,31 +36,15 @@ public class LoginMenu{
 	}
 	
 	
-	public Teller searchForTeller(String username) {
-		for(Teller teller : existingTellers) {
-			if(teller.getUsername().equals(username)) {
-				return teller;
-			}
-		}
-		return null;
-	}
 	
+	//checks Password
 	public Boolean checkPassword(User user, String password){
-		if(user.getPassword().equals(password)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return user.getPassword().equals(password);
+		
 	}
 	
 	public Boolean checkPassword(Teller teller, String password) {
-		if(teller.getPassword().equals(password)) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return teller.getPassword().equals(password);
 		
 	}
 	
@@ -93,6 +70,7 @@ public class LoginMenu{
 		
 	}
 	
+	//Logs into menu with correct type of account
 	public void loginToMenu(String type){
 		switch(type) {
 		case "teller":
@@ -109,7 +87,7 @@ public class LoginMenu{
 	}
 
 	
-	
+	//displays options
 	public void displayChoices() {
 		System.out.println("\n -- Welcome to Bear Banks! -- \n");
 		System.out.println("Welcome! Would you like to:");
@@ -119,11 +97,12 @@ public class LoginMenu{
 		System.out.println("(x) Exit program");
 	}
 	
+	//process login choices
 	public Boolean loginInputChoices() {
 		String userInput = getUserInput();
 		switch(userInput.toLowerCase()) {
 			case "a":
-				return loginToAccount();
+				return loginToProfile();
 			case "b":
 				System.out.println("Creating a new account...");
 				return createProfile();
@@ -140,11 +119,11 @@ public class LoginMenu{
 		}
 		
 	}
-	
-	public Boolean loginToAccount() {
+	//login to a user profile
+	public Boolean loginToProfile() {
 		System.out.println("Enter Username:");
 		String username = getUserInput();
-		User profile = searchForProfile(username);
+		User profile = BankUtils.searchForProfile(username, existingUsers);
 		if(profile == null) {
 			System.out.println("Profile does not exist");
 			return false;
@@ -166,6 +145,8 @@ public class LoginMenu{
 		return this.inputScanner.nextLine();
 	}
 	
+	//creates a new profile
+	
 	public Boolean createProfile(){
 		System.out.println("Welcome! Let's get you set up with a profile!");
 		System.out.println("Enter a username: ");
@@ -175,7 +156,7 @@ public class LoginMenu{
 			System.out.println("Cancelling account creation...");
 			return false;
 		}
-		else if(username.isBlank() || username.length()>15) {
+		else if(BankUtils.isInvalidAccountName(username, " ") != BankUtils.InvalidNameReason.NONE) {
 			System.out.println("Invalid Username");
 			System.out.println("Cancelling account creation...");
 			return false;
@@ -207,15 +188,16 @@ public class LoginMenu{
 		return false;
 	}
 	
+	// logs into teller account;
 	public Boolean loginToTellerAccount(){
 		System.out.println("Enter Username:");
 		String username = getUserInput();
-		if(searchForTeller(username) == null) {
+		if(BankUtils.searchForTeller(username, existingTellers) == null) {
 			System.out.println("Teller does not exist");
 			return false;
 		}
 		else {
-			Teller teller = searchForTeller(username);
+			Teller teller = BankUtils.searchForTeller(username, existingTellers);
 			System.out.println("Enter Password:");
 			String password = getUserInput();
 			Boolean correctPassword = checkPassword(teller, password);
