@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import bankapp.Bank;
 import bankapp.BankAccount;
+import bankapp.CheckingsAccount;
 import bankapp.Teller;
 
 public class BankTests {
@@ -122,7 +123,7 @@ public class BankTests {
 		Bank bank = new Bank(filePathBlankInfo);
         int initialSize = bank.getAccounts().size();
 
-        BankAccount newAccount = new BankAccount("New Account Holder");
+        BankAccount newAccount = new CheckingsAccount("New Account Holder");
         bank.addAccount(newAccount);
         assertEquals(initialSize + 1, bank.getAccounts().size());
         assertEquals("New Account Holder", bank.getAccounts().get(initialSize).getAccountName());

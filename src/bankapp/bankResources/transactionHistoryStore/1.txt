@@ -1,0 +1,5 @@
+Time: 04/17/2025 06:33 PM | Deposit: +$10.00 | Balance: $610.00
+Time: 04/17/2025 06:54 PM | Deposit: +$30.00 | Balance: $640.00
+Transfer from #2: +$30.00Balance: $640.0
+Time: 04/17/2025 06:55 PM | Withdraw: +$10.00 | Balance: $630.00
+Transfer to #2: -$10.00Balance: $630.0

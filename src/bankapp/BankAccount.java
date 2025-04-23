@@ -1,23 +1,25 @@
 package bankapp;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankAccount {
+public abstract class BankAccount {
 	
-	private static int nextAccountNumber = 1;
-	private int accountNumber;
-	private double balance;
-	private String accountName;
-	private List<String> transactionHistory;
-	private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
-    private static final String FILE_PATH = "bankResources/transactionHistoryStore/";
+	protected static int nextAccountNumber = 1;
+	protected int accountNumber;
+	protected double balance;
+	protected String accountName;
+	protected List<String> transactionHistory;
+	protected static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
+    protected static final String FILE_PATH = "src/bankapp/bankResources/transactionHistoryStore/";
 	
     public BankAccount(String accountName) {
         this.accountNumber = nextAccountNumber++;
@@ -50,6 +52,7 @@ public class BankAccount {
 		this.balance = savedBalance;
 	}
 
+	//typically for all types of accounts depositing is the same so it's fine
 	public void deposit(double amount) {
 		if(amount < 0) {
 			throw new IllegalArgumentException();
@@ -61,18 +64,8 @@ public class BankAccount {
 		addTransactionHistory(String.format("Time: %s | Deposit: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
 	}
 
-	public void withdraw(double amount){
-		if (amount < 0){
-			throw new IllegalArgumentException("cannot complete a negative withdrawal");
-		}
-		if (this.balance - amount < 0){
-			throw new IllegalArgumentException("insufficient funds");
-		}
-		this.balance -= amount;
-		String dateTime = LocalDateTime.now().format(dtf);
-		addTransactionHistory(String.format("Time: %s | Withdraw: +$%.2f | Balance: $%.2f", dateTime, amount, this.balance));
-
-	}
+	//different types of accounts will have different withdraw methods since they have different rules for withdrawing
+	abstract public void withdraw(double amount);
 
     private void loadTransactionHistory() {
          File file = new File(FILE_PATH + getAccountNumber() + ".txt");
@@ -89,7 +82,8 @@ public class BankAccount {
          }
      }
 
-	public void transfer(BankAccount targetAccount, double amount){
+	 public void transfer(BankAccount targetAccount, double amount){
+		this.balance = getCurrentBalance();
 		if (amount <= 0) {
 			throw new IllegalArgumentException("Must transfer positive amount");
 		}
@@ -102,21 +96,45 @@ public class BankAccount {
 
 		this.withdraw(amount);
 		targetAccount.deposit(amount);
-
-		String transferOut = String.format("Transfer to #%d: -$%.2f", targetAccount.getAccountNumber(), amount);
-		String transferIn = String.format("Transfer from #%d: +$%.2f", this.accountNumber, amount);
-    
-    	this.transactionHistory.add(transferOut + "Balance: $" + this.balance);
-		targetAccount.addTransactionHistory(transferIn + "Balance: $" + targetAccount.getCurrentBalance());
+		
+		String dateTime = LocalDateTime.now().format(dtf);
+		String transferOut = String.format("Time: %s | Transfer to #%d: -$%.2f | Balance: $%.2f", dateTime,  targetAccount.getAccountNumber(),amount, this.balance);
+		String transferIn = String.format("Time: %s | Transfer from #%d: +$%.2f | Balance: $%.2f", dateTime, this.accountNumber, amount, targetAccount.getCurrentBalance());
+		
+    	this.addTransactionHistory(transferOut);
+		targetAccount.addTransactionHistory(transferIn);
 	}
 	
 	public void addTransactionHistory(String transaction) {
 		this.transactionHistory.add(transaction);
+		System.out.println(transaction);
+		this.saveTransactionHistory();
 	}
+
+	private void saveTransactionHistory() {
+        File directory = new File(FILE_PATH);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        File file = new File(FILE_PATH + getAccountNumber() + ".txt");
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.out.println("could not create transaction file");
+			}
+		}
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (String transaction : transactionHistory) {
+                writer.write(transaction);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
-	public double getCurrentBalance() {
-		return this.balance;
-	}
+	abstract public double getCurrentBalance();
 	
 	public int getAccountNumber() {
 		return this.accountNumber;
@@ -125,6 +143,8 @@ public class BankAccount {
 	public String getAccountName() {
 		return this.accountName;
 	}
+
+	abstract public String getAccountType();
 	
 	public String setAccountHolderName(String accountHolderName) {
 		String dateTime = LocalDateTime.now().format(dtf);
@@ -133,6 +153,6 @@ public class BankAccount {
 	}
 
 	public String getAccountHolderName() {
-    return this.accountName;
-}
+    	return this.accountName;
+	}
 }
