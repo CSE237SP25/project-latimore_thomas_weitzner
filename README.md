@@ -20,6 +20,8 @@ What user stories were completed this iteration?
 * The bank and menu classes in general are refactored so that the methods and files are smaller. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/69
 * A customer should be asked to create security questions when setting up a profile which are then used when the password is reset https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/60
 * Users can add personal information such as phone number, email address, etc. that is saved and can be added to later. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/50
+* More tests were added for the functions determining if a username or password we want to switch to is valid. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/98
+* Code was refactored to be more readable and manageable, mostly through the implementation of a BankUtils class. The code should also be generally neat. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/104
 
 
 
@@ -44,5 +46,6 @@ NOTE: In order to initialize the environment and clear previously compiled files
 Below are usernames and passwords for testing purposes (or create your own):
 `USERNAME`: testedUser2
 `USER_PASS`: password2
+`SECURITY_QUESTION_ANSWER`: dexter 
 `TELLER_NAME`:Teller1
 `TELLER_PASS`:Password1
