@@ -18,8 +18,8 @@ What user stories were completed this iteration?
 * When a user has no accounts open, they can not make a deposit and in general have limited menu options. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/26 https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/32
 * We added more tests of the main user menu. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/70
 * The bank and menu classes in general are refactored so that the methods and files are smaller. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/69
-* TENTATIVE: A customer should be asked to create security questions when setting up a profile which are then used when the password is reset https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/60
-* TENTATIVE: Users can add personal information such as phone number, email address, etc. that is saved and can be added to later. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/50
+* A customer should be asked to create security questions when setting up a profile which are then used when the password is reset https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/60
+* Users can add personal information such as phone number, email address, etc. that is saved and can be added to later. https://github.com/CSE237SP25/project-latimore_thomas_weitzner/issues/50
 
 
 
@@ -29,7 +29,7 @@ What user stories do you intend to complete next iteration?
   
 
 Is there anything that you implemented but doesn't currently work?
-* All code on the development branch works as intended. We have a few pull requests open that might not be merged in by the time of the peer review on some of the issues in "next iteration".
+* All code on the development branch works as intended.
 * Some users might need to create a folder `bankapp.bankResources.transactionHistoryStore` for the saving transaction history between sessions to operate properly.
 
 What commands are needed to compile and run your code from the command line (please provide a script that users can run to launch your program)?
