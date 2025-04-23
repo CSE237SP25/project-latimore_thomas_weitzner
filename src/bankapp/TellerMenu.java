@@ -7,14 +7,12 @@ import java.util.Scanner;
 public class TellerMenu{
 	private Teller teller;
 	private Bank bank;
-	private LoginMenu login;
 	private Scanner inputScanner;
 	private Boolean active;
 	
 	public TellerMenu(Bank bank, Teller teller) {
 		this.bank = bank;
 		this.teller = teller;
-		login = new LoginMenu(bank.getUsers(), bank.getTellers(), this.bank);
 		inputScanner = new Scanner(System.in);
 		active = true;
 	}
@@ -23,7 +21,7 @@ public class TellerMenu{
 		while(active) {
 			tellerOption();
 			String input = inputScanner.nextLine();
-			tellerProccessChoice(input);
+			tellerProcessChoice(input);
 		}
 		
 	}
@@ -34,28 +32,29 @@ public class TellerMenu{
 	}
 	
 	public User selectUser(String username){
-		return login.searchForProfile(username);
+		return BankUtils.searchForProfile(username, bank.getUsers());
 	}
 	
+	//displays teller options
 	public void tellerOption() {
-		System.out.println("Hello! Would you like to:");
-		System.out.println("a.) View active bank accounts?");
-		System.out.println("b.) Create New Teller?");
-    System.out.println("c.) Deposit into account");
-		System.out.println("x.) Logout");
+		System.out.println("Hello " + teller.getUsername() + "! Would you like to:");
+		System.out.println("(a) View active bank accounts?");
+		System.out.println("(b) Create New Teller?");
+		System.out.println("(c) Deposit into account");
+		System.out.println("(x) Logout");
 	}
-	
-	public void tellerProccessChoice(String userInput) {
+	//processes teller options
+	public void tellerProcessChoice(String userInput) {
 		switch(userInput.toLowerCase()) {
 		case "a":
 			showcaseAccounts();
 			break;
 		case "b":
 			createTeller();
-      break;
-    case "c":
+			break;
+		case "c":
 		  depositIntoAccount();
-      break;
+		  break;
 		case "x":
 			logout();
 			break;
@@ -64,13 +63,13 @@ public class TellerMenu{
 		}
 		
 	}
-	
+	//logout code
 	public void logout() {
 		System.out.println("Logging Out...");
 		active = false;
 		
 	}
-	
+	//showcases accounts
 	public User showcaseAccounts() {
 		System.out.println("Which user's account would you like to see?");
 		List<User> users = bank.getUsers();
@@ -100,9 +99,9 @@ public class TellerMenu{
 				System.out.println("---------------------------------------------");
 			}
 			return currentUser;
-			
 		}
 	}
+	//searches for an account;
 	public BankAccount searchForAccount(User user,int input) {
 	  
 	    for (BankAccount account : user.getAccounts()) {
@@ -112,8 +111,9 @@ public class TellerMenu{
 	    }
 	    return null;
 	}
+	//deposits into a users account
 	public void depositIntoAccount(){
-		System.out.println("Select an account to deposit into");
+		System.out.println("Select a user's account to deposit into");
 		User user = showcaseAccounts();
 		if(user == null || user.getAccounts().isEmpty()) {
 			System.out.println("Cancelling deposit...");
@@ -158,20 +158,20 @@ public class TellerMenu{
 	    		bank.saveAccountsToFile();
 	    		System.out.println("Your new balance is: " + account.getCurrentBalance());
 	    	}
-	    	
 	    }
-	    
 	}
 
+	//creates a new teller
+	
 	public void createTeller(){
 		System.out.println("Enter new teller username: ");
 		String username = getUserInput();
-		if(login.searchForTeller(username) != null) {
+		if(BankUtils.searchForTeller(username, bank.getTellers()) != null) {
 			System.out.println("Teller username already exists");
 			System.out.println("Cancelling account creation...");
 			return;
 		}
-		else if(!validInput(username)) {
+		else if(BankUtils.isInvalidAccountName(username, " ") != BankUtils.InvalidNameReason.NONE) {
 			System.out.println("Invalid Username");
 			System.out.println("Cancelling account creation...");
 			return;
@@ -194,48 +194,4 @@ public class TellerMenu{
 		
 	}
 	
-	//valid Input will be moved to a different file next cycle. For now I will make a copy of it here for testing purposes.
-	
-	public boolean validInput(String input) {
-		if(input.length() > 15) {
-			System.out.println("Input is too long");
-			return false;
-		}
-		else if(input.isBlank()){
-			System.out.println("Input must not be blank");
-			return false;
-			
-		}
-		else if (input.contains("(") || 
-				input.contains(")") || 
-				input.contains(",") || 
-				input.contains(";") ||
-				input.contains(":") ||
-				input.contains("[") ||
-				input.contains("]") ||
-				input.contains("{") ||
-				input.contains("}") ||
-				input.contains("<") ||
-				input.contains(">") ||
-				input.contains("=") ||
-				input.contains("?") ||
-				input.contains("!") ||
-				input.contains("@") ||
-				input.contains("#") ||
-				input.contains("$") ||
-				input.contains("%") ||
-				input.contains("^") ||
-				input.contains("*") ||
-				input.contains("+") ||
-				input.contains("/") ||
-				input.contains("`") ||
-				input.contains("~")) 
-		{
-			System.out.println("Input Contains Invalid Characters");
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
 }
