@@ -1,4 +1,4 @@
-User,Checkings,testedUser1,newPassword,newCheckings,15,0.0
+User,NONE,testedUser1,password1,EMPTY,0,0.0
 SecurityQuestion,testedUser1,What is your mom's maiden name?,marie
 User,Checkings,testedUser2,password2,Placeholder Name 1,1,620.0
 User,Savings,testedUser2,password2,Placeholder Name 2,2,356.00178000000005
